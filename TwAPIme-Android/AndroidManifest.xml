@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.twapime.app" android:versionCode="1" android:versionName="1.0">
+	<uses-sdk android:minSdkVersion="7" />
+
+	<uses-permission android:name="android.permission.INTERNET" />
+
+	<application android:icon="@drawable/icon" android:label="@string/app_name"
+		android:name=".TwAPImeApplication">
+		<activity android:name=".TwAPImeActivity" android:label="@string/app_name"
+			android:noHistory="true">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+
+		<activity android:name=".activity.AuthActivity"
+			android:label="@string/app_name" android:noHistory="true" />
+		<activity android:name=".activity.HomeActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.HomeTimelineActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.MentionTimelineActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.DirectMessageTimelineActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.ListActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.NewTweetActivity"
+			android:label="@string/app_name" />
+	</application>
+</manifest>
