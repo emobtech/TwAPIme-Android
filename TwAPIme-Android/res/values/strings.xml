@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Enter your credentials</string>
+    <string name="app_name">TwAPIme</string>
+    <string name="sign_in">Sing In</string>
+    <string name="username">Username:</string>
+    <string name="password">Password:</string>
+    <string name="credentials_required">Username and password must be filled in.</string>
+    <string name="ok">OK</string>
+    <string name="credentials_invalid">Invalid username and/or password.</string>
+    <string name="authenticating">Authenticating. Please wait...</string>
+    <string name="rate_limit_exceeded">Your hourly access limit is exceeded. Try again later.</string>
+    <string name="network_access_failure">It was not possible to access the network. Try again?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="home">Home</string>
+    <string name="mentions">Mentions</string>
+    <string name="direct_message">DM</string>
+    <string name="lists">Lists</string>
+    <string name="refreshing">Refreshing. Please wait...</string>
+    <string name="hour">hour</string>
+    <string name="hours">hours</string>
+    <string name="minute">mins</string>
+    <string name="minutes">mins</string>
+    <string name="second">sec</string>
+    <string name="seconds">secs</string>
+    <string name="refresh">Refresh</string>
+    <string name="new_tweet">New Tweet</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="about">About</string>
+    <string name="my_profile">My Profile</string>
+    <string name="post">Post</string>
+    <string name="posting_tweet">Posting tweet. Please wait...</string>
+    <string name="confirm_sign_out">Are you sure you want to sign out?</string>
+</resources>
