@@ -49,9 +49,7 @@ public final class UIUtil {
 	}
 	
 	/**
-	 * <p>
-	 * Private constructor to avoid object instantiation.
-	 * </p>
+	 * 
 	 */
 	private UIUtil() {
 	}

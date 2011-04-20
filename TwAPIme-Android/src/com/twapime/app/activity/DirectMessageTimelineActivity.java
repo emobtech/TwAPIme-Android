@@ -23,4 +23,11 @@ public class DirectMessageTimelineActivity extends TimelineActivity {
 		//
 		timeline.startGetDirectMessages(sinceID, true, this);
 	}
+	
+	/**
+	 * @see com.twapime.app.activity.TimelineActivity#viewTweet(int)
+	 */
+	@Override
+	public void viewTweet(int index) {
+	}
 }

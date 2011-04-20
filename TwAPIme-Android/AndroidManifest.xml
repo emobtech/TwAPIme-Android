@@ -29,5 +29,9 @@
 			android:label="@string/app_name" />
 		<activity android:name=".activity.NewTweetActivity"
 			android:label="@string/app_name" />
+		<activity android:name=".activity.ViewTweetActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.NewDirectMessageActivity"
+			android:label="@string/app_name" />
 	</application>
 </manifest>

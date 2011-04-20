@@ -25,11 +25,20 @@
     <string name="second">sec</string>
     <string name="seconds">secs</string>
     <string name="refresh">Refresh</string>
-    <string name="new_tweet">New Tweet</string>
+    <string name="message">Message</string>
     <string name="sign_out">Sign Out</string>
     <string name="about">About</string>
     <string name="my_profile">My Profile</string>
     <string name="post">Post</string>
     <string name="posting_tweet">Posting tweet. Please wait...</string>
     <string name="confirm_sign_out">Are you sure you want to sign out?</string>
+    <string name="loading_tweet">Loading tweet. Please wait...</string>
+    <string name="retweet">Retweet</string>
+    <string name="retweeting">Retweeting. Please wait...</string>
+    <string name="comment">Comment</string>
+    <string name="send">Send</string>
+    <string name="sending_dm">Sending direct message. Please wait...</string>
+    <string name="new_dm">New DM</string>
+    <string name="new_tweet">New Tweet</string>
+    <string name="recipient">Recipient</string>
 </resources>

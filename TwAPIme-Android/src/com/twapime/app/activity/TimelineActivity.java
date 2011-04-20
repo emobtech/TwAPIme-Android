@@ -9,7 +9,12 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
@@ -17,6 +22,7 @@ import com.twapime.app.util.UIUtil;
 import com.twapime.app.widget.TimelineArrayAdapter;
 import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.Timeline;
+import com.twitterapime.rest.TweetER;
 import com.twitterapime.search.Query;
 import com.twitterapime.search.QueryComposer;
 import com.twitterapime.search.SearchDeviceListener;
@@ -68,6 +74,17 @@ public class TimelineActivity extends ListActivity implements
 		adapter = new TimelineArrayAdapter(this, R.layout.tweet_row, tweets);
 		setListAdapter(adapter);
 		//
+		registerForContextMenu(getListView());
+		//
+		getListView().setOnItemClickListener(
+			new AdapterView.OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+					viewTweet(position);
+				}
+			});
+		//
 		notifyNewTweet = new Runnable() {
 			@Override
 			public void run() {
@@ -90,6 +107,87 @@ public class TimelineActivity extends ListActivity implements
 		progressDialog =
 			ProgressDialog.show(
 				this, "", getString(R.string.refreshing), false);
+	}
+	
+	/**
+	 * @param index
+	 */
+	public void viewTweet(int index) {
+		Tweet tweet = tweets.get(index);
+		//
+		Intent intent = new Intent(this, ViewTweetActivity.class);
+		intent.putExtra(
+			ViewTweetActivity.PARAM_KEY_TWEET_ID,
+			tweet.getString(MetadataSet.TWEET_ID));
+		//
+		startActivity(intent);
+	}
+	
+	/**
+	 * 
+	 */
+	public void retweet(final Tweet tweet) {
+		final ProgressDialog progressDialog =
+			ProgressDialog.show(
+				this, "", getString(R.string.retweeting), false);
+		//
+		new Thread() {
+			@Override
+			public void run() {
+				TwAPImeApplication app = (TwAPImeApplication)getApplication();
+				TweetER ter = TweetER.getInstance(app.getUserAccountManager());
+				//
+				try {
+					ter.repost(tweet);
+					//
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							progressDialog.dismiss();
+						}
+					});
+				} catch (final Exception e) {
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							progressDialog.dismiss();
+							//
+							UIUtil.showAlertDialog(TimelineActivity.this, e);
+						}
+					});
+				}
+			};
+		}.start();
+	}
+	
+	/**
+	 * @param tweet
+	 */
+	public void comment(Tweet tweet) {
+		String content =
+			"RT @" +
+			tweet.getUserAccount().getString(MetadataSet.USERACCOUNT_USER_NAME)+
+			": " +
+			tweet.getString(MetadataSet.TWEET_CONTENT);
+		//
+		Intent intent = new Intent(this, NewTweetActivity.class);
+		intent.putExtra(NewTweetActivity.PARAM_KEY_TWEET_CONTENT, content);
+		//
+		startActivity(intent);
+	}
+	
+	/**
+	 * @param tweet
+	 */
+	public void newDM(Tweet tweet) {
+		String repicient =
+			tweet.getUserAccount().getString(MetadataSet.USERACCOUNT_USER_NAME);
+		//
+		Intent intent = new Intent(this, NewDirectMessageActivity.class);
+		intent.putExtra(
+			NewDirectMessageActivity.PARAM_KEY_DM_RECIPIENT, repicient);
+		//
+		startActivity(intent);
 	}
 	
 	/**
@@ -125,9 +223,11 @@ public class TimelineActivity extends ListActivity implements
 				}
 			}
 		});
-		sinceID =
-			QueryComposer.sinceID(
-				tweets.get(0).getString(MetadataSet.TWEET_ID));
+		if (tweets.size() > 0) {
+			sinceID =
+				QueryComposer.sinceID(
+					tweets.get(0).getString(MetadataSet.TWEET_ID));
+		}
 	}
 
 	/**
@@ -165,6 +265,44 @@ public class TimelineActivity extends ListActivity implements
 	        return true;
 	    default:
 	        return super.onOptionsItemSelected(item);
+	    }
+	}
+	
+	/**
+	 * @see android.app.Activity#onCreateContextMenu(android.view.ContextMenu, android.view.View, android.view.ContextMenu.ContextMenuInfo)
+	 */
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+		ContextMenuInfo menuInfo) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.view_tweet, menu);
+	}
+	
+	/**
+	 * @see android.app.Activity#onContextItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info =
+			(AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+		//
+		Tweet tweet = tweets.get(info.position);
+		//
+	    switch (item.getItemId()) {
+	    case R.id.menu_item_retweet:
+	    	retweet(tweet);
+	    	//
+	        return true;
+	    case R.id.menu_item_comment:
+	    	comment(tweet);
+	    	//
+	        return true;
+	    case R.id.menu_item_new_dm:
+	    	newDM(tweet);
+	    	//
+	        return true;
+	    default:
+	        return super.onContextItemSelected(item);
 	    }
 	}
 }

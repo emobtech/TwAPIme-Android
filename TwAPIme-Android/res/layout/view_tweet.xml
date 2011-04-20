@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent" android:orientation="vertical">
+    <LinearLayout android:id="@+id/linearLayout1" android:orientation="horizontal" android:layout_width="fill_parent" android:layout_height="wrap_content">
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/icon" android:id="@+id/view_tweet_imgv_avatar" android:paddingLeft="2px" android:paddingTop="2px"></ImageView>
+        <LinearLayout android:layout_width="wrap_content" android:layout_height="fill_parent" android:id="@+id/linearLayout2" android:orientation="vertical">
+            <TextView android:text="TextView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textStyle="bold" android:id="@+id/view_tweet_txtv_name" android:paddingTop="2px" android:paddingRight="2px" android:paddingLeft="2px"></TextView>
+            <TextView android:text="TextView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/view_tweet_txtv_username" android:paddingLeft="2px" android:paddingRight="2px"></TextView>
+        </LinearLayout>
+    </LinearLayout>
+    <TextView android:text="TextView" android:layout_height="wrap_content" android:layout_width="fill_parent" android:minLines="3" android:id="@+id/view_tweet_txtv_content" android:paddingLeft="2px" android:paddingRight="2px" android:paddingTop="4px"></TextView>
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout3">
+        <TextView android:text="TextView" android:layout_height="wrap_content" android:layout_width="fill_parent" android:layout_weight="1" android:id="@+id/view_tweet_txtv_time" android:paddingLeft="2px" android:paddingTop="2px"></TextView>
+        <TextView android:text="TextView" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/view_tweet_txtv_app" android:paddingTop="2px" android:paddingRight="2px"></TextView>
+    </LinearLayout>
+</LinearLayout>

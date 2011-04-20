@@ -2,6 +2,7 @@ package com.twapime.app.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +21,16 @@ import com.twitterapime.search.Tweet;
  * @author ernandes@gmail.com
  */
 public class NewTweetActivity extends Activity {
+	/**
+	 * 
+	 */
+	static final String PARAM_KEY_TWEET_CONTENT = "PARAM_KEY_TWEET_CONTENT";
+	
+	/**
+	 * 
+	 */
+	protected TweetER ter;
+
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
@@ -59,6 +70,25 @@ public class NewTweetActivity extends Activity {
 				btnPost.setEnabled(s.length() > 0);
 			}
 		});
+		//
+		Intent intent = getIntent();
+		//
+		if (intent.hasExtra(PARAM_KEY_TWEET_CONTENT)) {
+			String content =
+				intent.getExtras().getString(PARAM_KEY_TWEET_CONTENT);
+			//
+			final int TWEET_LENGTH = 140;
+			//
+			if (content.trim().length() > TWEET_LENGTH) {
+				content = content.substring(0, TWEET_LENGTH - 3) + "...";
+			}
+			//
+			t.setText(content);
+			t.setSelection(0);
+		}
+		//
+		TwAPImeApplication app = (TwAPImeApplication)getApplication();
+		ter = TweetER.getInstance(app.getUserAccountManager());
 	}
 	
 	/**
@@ -69,14 +99,12 @@ public class NewTweetActivity extends Activity {
 			ProgressDialog.show(
 				this, "", getString(R.string.posting_tweet), false);
 		//
-		final TwAPImeApplication app = (TwAPImeApplication)getApplication();
-		final EditText t = (EditText)findViewById(R.id.new_tweet_txtf_content);
-		//
 		new Thread() {
 			@Override
 			public void run() {
-				TweetER ter = TweetER.getInstance(app.getUserAccountManager());
-				Tweet tweet = new Tweet(t.getEditableText().toString());
+				EditText content =
+					(EditText)findViewById(R.id.new_tweet_txtf_content);
+				Tweet tweet = new Tweet(content.getEditableText().toString());
 				//
 				try {
 					ter.post(tweet);
