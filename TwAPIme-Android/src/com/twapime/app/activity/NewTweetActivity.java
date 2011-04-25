@@ -1,5 +1,7 @@
 package com.twapime.app.activity;
 
+import java.util.Hashtable;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -14,7 +16,9 @@ import android.widget.TextView;
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.util.UIUtil;
+import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.TweetER;
+import com.twitterapime.rest.UserAccount;
 import com.twitterapime.search.Tweet;
 
 /**
@@ -24,12 +28,27 @@ public class NewTweetActivity extends Activity {
 	/**
 	 * 
 	 */
+	static final String PARAM_KEY_REPLY_TWEET_ID = "PARAM_KEY_REPLY_TWEET_ID";
+
+	/**
+	 * 
+	 */
+	static final String PARAM_KEY_REPLY_USERNAME = "PARAM_KEY_REPLY_USERNAME";
+
+	/**
+	 * 
+	 */
 	static final String PARAM_KEY_TWEET_CONTENT = "PARAM_KEY_TWEET_CONTENT";
 	
 	/**
 	 * 
 	 */
-	protected TweetER ter;
+	private TweetER ter;
+	
+	/**
+	 * 
+	 */
+	private Tweet replyTweet;
 
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -87,6 +106,20 @@ public class NewTweetActivity extends Activity {
 			t.setSelection(0);
 		}
 		//
+		if (intent.hasExtra(PARAM_KEY_REPLY_TWEET_ID)
+				&& intent.hasExtra(PARAM_KEY_REPLY_USERNAME)) {
+			String tweetID =
+				intent.getExtras().getString(PARAM_KEY_REPLY_TWEET_ID);
+			String username =
+				intent.getExtras().getString(PARAM_KEY_REPLY_USERNAME);
+			//
+			Hashtable<String, Object> data = new Hashtable<String, Object>();
+			data.put(MetadataSet.TWEET_ID, tweetID);
+			data.put(MetadataSet.TWEET_USER_ACCOUNT, new UserAccount(username));
+			//
+			replyTweet = new Tweet(data);
+		}
+		//
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		ter = TweetER.getInstance(app.getUserAccountManager());
 	}
@@ -104,7 +137,8 @@ public class NewTweetActivity extends Activity {
 			public void run() {
 				EditText content =
 					(EditText)findViewById(R.id.new_tweet_txtf_content);
-				Tweet tweet = new Tweet(content.getEditableText().toString());
+				Tweet tweet =
+					new Tweet(content.getEditableText().toString(), replyTweet);
 				//
 				try {
 					ter.post(tweet);
@@ -116,7 +150,6 @@ public class NewTweetActivity extends Activity {
 						}
 					});
 					//
-					setResult(HomeActivity.NEW_TWEET_RESULT);
 					finish();
 				} catch (final Exception e) {
 					//

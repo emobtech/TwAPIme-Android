@@ -160,14 +160,86 @@ public class ViewTweetActivity extends Activity {
 	 * 
 	 */
 	public void newDM() {
-		String repicient =
+		String recipient =
 			tweet.getUserAccount().getString(MetadataSet.USERACCOUNT_USER_NAME);
 		//
 		Intent intent = new Intent(this, NewDirectMessageActivity.class);
+		//
 		intent.putExtra(
-			NewDirectMessageActivity.PARAM_KEY_DM_RECIPIENT, repicient);
+			NewDirectMessageActivity.PARAM_KEY_DM_RECIPIENT, recipient);
 		//
 		startActivity(intent);
+	}
+	
+	/**
+	 * 
+	 */
+	public void reply() {
+		String tweetID = tweet.getString(MetadataSet.TWEET_ID);
+		String username =
+			tweet.getUserAccount().getString(MetadataSet.USERACCOUNT_USER_NAME);
+		//
+		Intent intent = new Intent(this, NewTweetActivity.class);
+		//
+		intent.putExtra(
+			NewTweetActivity.PARAM_KEY_REPLY_TWEET_ID, tweetID);
+		intent.putExtra(
+			NewTweetActivity.PARAM_KEY_REPLY_USERNAME, username);
+		intent.putExtra(
+			NewTweetActivity.PARAM_KEY_TWEET_CONTENT, "@" + username);
+		//
+		startActivity(intent);
+	}
+	
+	/**
+	 * 
+	 */
+	public void favorite() {
+		final ProgressDialog progressDialog =
+			ProgressDialog.show(
+				this, "",
+				getString(
+					isFavoriteTweet()
+						? R.string.unfavoriting : R.string.favoriting),
+				false);
+		//
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					ter.favorite(tweet);
+					//
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							progressDialog.dismiss();
+						}
+					});
+				} catch (final Exception e) {
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							progressDialog.dismiss();
+							//
+							UIUtil.showAlertDialog(ViewTweetActivity.this, e);
+						}
+					});
+				}
+			};
+		}.start();
+	}
+	
+	/**
+	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+	 */
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		boolean result = super.onPrepareOptionsMenu(menu);
+		//
+		menu.findItem(R.id.menu_item_favorite).setTitle(
+			isFavoriteTweet() ? R.string.unfavorite : R.string.favorite);	
+		//
+		return result;
 	}
 	
 	/**
@@ -196,6 +268,14 @@ public class ViewTweetActivity extends Activity {
 	        return true;
 	    case R.id.menu_item_new_dm:
 	    	newDM();
+	    	//
+	        return true;
+	    case R.id.menu_item_reply:
+	    	reply();
+	    	//
+	        return true;
+	    case R.id.menu_item_favorite:
+	    	favorite();
 	    	//
 	        return true;
 	    default:
@@ -227,5 +307,14 @@ public class ViewTweetActivity extends Activity {
         		Long.parseLong(
             		tweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
             		this));
+	}
+	
+	/**
+	 * @return
+	 */
+	private boolean isFavoriteTweet() {
+		String favorite = tweet.getString(MetadataSet.TWEET_FAVOURITE);
+		//
+		return favorite != null && "true".equals(favorite);
 	}
 }

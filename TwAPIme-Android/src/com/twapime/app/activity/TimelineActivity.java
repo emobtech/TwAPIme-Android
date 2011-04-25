@@ -191,14 +191,64 @@ public class TimelineActivity extends ListActivity implements
 	}
 	
 	/**
-	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+	 * @param tweet
 	 */
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode,
-		Intent data) {
-		if (resultCode == HomeActivity.NEW_TWEET_RESULT) {
-			refresh();
-		}
+	public void reply(Tweet tweet) {
+		String tweetID = tweet.getString(MetadataSet.TWEET_ID);
+		String username =
+			tweet.getUserAccount().getString(MetadataSet.USERACCOUNT_USER_NAME);
+		//
+		Intent intent = new Intent(this, NewTweetActivity.class);
+		//
+		intent.putExtra(
+			NewTweetActivity.PARAM_KEY_REPLY_TWEET_ID, tweetID);
+		intent.putExtra(
+			NewTweetActivity.PARAM_KEY_REPLY_USERNAME, username);
+		intent.putExtra(
+			NewTweetActivity.PARAM_KEY_TWEET_CONTENT, "@" + username);
+		//
+		startActivity(intent);
+	}
+	
+	/**
+	 * @param tweet
+	 */
+	public void favorite(final Tweet tweet) {
+		final ProgressDialog progressDialog =
+			ProgressDialog.show(
+				this, "",
+				getString(
+					isFavorite(tweet)
+						? R.string.unfavoriting : R.string.favoriting),
+				false);
+		//
+		new Thread() {
+			@Override
+			public void run() {
+				TwAPImeApplication app = (TwAPImeApplication)getApplication();
+				TweetER ter = TweetER.getInstance(app.getUserAccountManager());
+				//
+				try {
+					ter.favorite(tweet);
+					//
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							progressDialog.dismiss();
+						}
+					});
+				} catch (final Exception e) {
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							progressDialog.dismiss();
+							//
+							UIUtil.showAlertDialog(TimelineActivity.this, e);
+						}
+					});
+				}
+			};
+		}.start();
 	}
 
 	/**
@@ -206,8 +256,6 @@ public class TimelineActivity extends ListActivity implements
 	 */
 	@Override
 	public void searchCompleted() {
-		runOnUiThread(notifyNewTweet);
-		//
 		Collections.sort(tweets, new Comparator<Tweet>() {
 			@Override
 			public int compare(Tweet t1, Tweet t2) {
@@ -228,6 +276,8 @@ public class TimelineActivity extends ListActivity implements
 				QueryComposer.sinceID(
 					tweets.get(0).getString(MetadataSet.TWEET_ID));
 		}
+		//
+		runOnUiThread(notifyNewTweet);
 	}
 
 	/**
@@ -276,6 +326,13 @@ public class TimelineActivity extends ListActivity implements
 		ContextMenuInfo menuInfo) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.view_tweet, menu);
+		//
+		AdapterView.AdapterContextMenuInfo info =
+			(AdapterView.AdapterContextMenuInfo)menuInfo;
+		//
+		menu.findItem(R.id.menu_item_favorite).setTitle(
+			isFavorite(tweets.get(info.position))
+				? R.string.unfavorite : R.string.favorite);
 	}
 	
 	/**
@@ -301,8 +358,26 @@ public class TimelineActivity extends ListActivity implements
 	    	newDM(tweet);
 	    	//
 	        return true;
+	    case R.id.menu_item_reply:
+	    	reply(tweet);
+	    	//
+	        return true;
+	    case R.id.menu_item_favorite:
+	    	favorite(tweet);
+	    	//
+	        return true;
 	    default:
 	        return super.onContextItemSelected(item);
 	    }
+	}
+	
+	/**
+	 * @param tweet
+	 * @return
+	 */
+	private boolean isFavorite(Tweet tweet) {
+		String favorite = tweet.getString(MetadataSet.TWEET_FAVOURITE);
+		//
+		return favorite != null && "true".equals(favorite);
 	}
 }

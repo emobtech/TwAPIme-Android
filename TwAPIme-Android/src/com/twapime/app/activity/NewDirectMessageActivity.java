@@ -1,21 +1,26 @@
 package com.twapime.app.activity;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.twapime.app.R;
+import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.util.UIUtil;
+import com.twitterapime.rest.TweetER;
 import com.twitterapime.search.Tweet;
 
 /**
  * @author ernandes@gmail.com
  */
-public class NewDirectMessageActivity extends NewTweetActivity {
+public class NewDirectMessageActivity extends Activity {
 	/**
 	 * 
 	 */
@@ -24,7 +29,7 @@ public class NewDirectMessageActivity extends NewTweetActivity {
 	/**
 	 * 
 	 */
-	private EditText recipient;
+	private TweetER ter;
 
 	/**
 	 * @see com.twapime.app.activity.NewTweetActivity#onCreate(android.os.Bundle)
@@ -33,35 +38,63 @@ public class NewDirectMessageActivity extends NewTweetActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//
-		LinearLayout lnl = (LinearLayout)findViewById(R.id.new_tweet);
+		setContentView(R.layout.new_dm);
 		//
-		recipient = new EditText(this);
-		lnl.addView(recipient, 0);
+		final Button btnSend = (Button)findViewById(R.id.new_dm_btn_post);
+		btnSend.setEnabled(false);
+		btnSend.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				send();
+			}
+		});
 		//
-		TextView label = new TextView(this);
-		label.setText(getString(R.string.recipient));
-		lnl.addView(label, 0);
+		final EditText recipient =
+			(EditText)findViewById(R.id.new_dm_txtf_recipient);
+		final EditText content =
+			(EditText)findViewById(R.id.new_dm_txtf_content);
 		//
-		Button btnSend = (Button)findViewById(R.id.new_tweet_btn_post);
-		btnSend.setText(getString(R.string.send));
+		TextWatcher txtWatcher = new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				TextView numberOfChars =
+					(TextView)findViewById(R.id.new_dm_txtv_number_chars);
+				//
+				numberOfChars.setText(content.length() + "");
+				btnSend.setEnabled(
+					recipient.length() > 0 && content.length() > 0);
+			}
+		};
+		//
+		recipient.addTextChangedListener(txtWatcher);
+		content.addTextChangedListener(txtWatcher);
 		//
 		Intent intent = getIntent();
 		//
 		if (intent.hasExtra(PARAM_KEY_DM_RECIPIENT)) {
 			recipient.setText(
 				intent.getExtras().getString(PARAM_KEY_DM_RECIPIENT));
-			//
-			EditText content =
-				(EditText)findViewById(R.id.new_tweet_txtf_content);
 			content.requestFocus();
 		}
+		//
+		TwAPImeApplication app = (TwAPImeApplication)getApplication();
+		ter = TweetER.getInstance(app.getUserAccountManager());
 	}
 	
 	/**
-	 * @see com.twapime.app.activity.NewTweetActivity#post()
+	 * 
 	 */
-	@Override
-	public void post() {
+	public void send() {
 		final ProgressDialog progressDialog =
 			ProgressDialog.show(
 				this, "", getString(R.string.sending_dm), false);
@@ -69,8 +102,10 @@ public class NewDirectMessageActivity extends NewTweetActivity {
 		new Thread() {
 			@Override
 			public void run() {
+				EditText recipient =
+					(EditText)findViewById(R.id.new_dm_txtf_recipient);
 				EditText content =
-					(EditText)findViewById(R.id.new_tweet_txtf_content);
+					(EditText)findViewById(R.id.new_dm_txtf_content);
 				//
 				String username = recipient.getText().toString();
 				if (username.startsWith("@")) {

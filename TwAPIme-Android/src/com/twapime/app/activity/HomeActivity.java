@@ -18,11 +18,6 @@ import com.twapime.app.TwAPImeApplication;
  */
 public class HomeActivity extends TabActivity {
 	/**
-	 * 
-	 */
-	static final int NEW_TWEET_RESULT = 1;
-
-	/**
 	 * @see android.app.ActivityGroup#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -59,8 +54,7 @@ public class HomeActivity extends TabActivity {
 	 * 
 	 */
 	public void newTweet() {
-		startActivityForResult(
-			new Intent(this, NewTweetActivity.class), NEW_TWEET_RESULT);
+		startActivity(new Intent(this, NewTweetActivity.class));
 	}
 	
 	/**
@@ -117,6 +111,18 @@ public class HomeActivity extends TabActivity {
 		getMenuInflater().inflate(R.menu.timeline, menu);
 	    //
 	    return true;
+	}
+	
+	/**
+	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+	 */
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		boolean result = super.onPrepareOptionsMenu(menu);
+		//
+		menu.findItem(R.id.menu_item_new_tweet).setTitle(R.string.new_tweet);
+		//
+		return result;
 	}
 	
 	/**

@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,13 +38,13 @@ public class AuthActivity extends Activity {
 	/**
 	 * 
 	 */
-	public static final String CONSUMER_KEY = "KQlYF5kzKrBHm6s9gOyAVQ";
+	public static final String CONSUMER_KEY = "gJT21KgpjtJvFrvkcsL5w";
 	
 	/**
 	 * 
 	 */
 	public static final String CONSUMER_SECRET =
-		"yv57uIvC8CMNo6NPyebwyDwbbw306xuXew4U5x81Ljw";
+		"uRM24w1KnN5Hno3cgsf77gkeRNQSzd1atLFzLlsk";
 	
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -52,24 +54,42 @@ public class AuthActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.auth);
 		//
-		Button b = (Button)findViewById(R.id.auth_btn_sign_in);
-		b.setOnClickListener(new View.OnClickListener() {
+		final Button btnSignIn = (Button)findViewById(R.id.auth_btn_sign_in);
+		btnSignIn.setEnabled(false);
+		btnSignIn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (isFieldsFilledIn()) {
-					signIn();
-				} else {
-					UIUtil.showAlertDialog(
-						AuthActivity.this,
-						getString(R.string.credentials_required));
-				}
+				signIn();
 			}
 		});
 		//
-		EditText username = (EditText)findViewById(R.id.auth_txtf_username);
-		EditText password = (EditText)findViewById(R.id.auth_txtf_password);
+		final EditText username =
+			(EditText)findViewById(R.id.auth_txtf_username);
+		final EditText password =
+			(EditText)findViewById(R.id.auth_txtf_password);
 		//
-		username.setText("ernandesmjr");
+		TextWatcher txtWatcher = new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				btnSignIn.setEnabled(
+					username.length() > 0 && password.length() > 0);
+			}
+		};
+		//
+		username.addTextChangedListener(txtWatcher);
+		password.addTextChangedListener(txtWatcher);
+		//
+		username.setText("twiterapimetest");
 		password.setText("password");
 	}
 	
@@ -101,8 +121,8 @@ public class AuthActivity extends Activity {
 				//
 				Token token =
 					new Token(
-						"55935824-Zlv4RPJqUtDNDUsJIReG8Epw7OEzKtii1sRkvRuN0",
-						"tsasOzIZj03KW4xZoXOLQZf32AZSigbJrBWEvKBz8");
+						"100090763-iEaRN7aUH589CnBEDVd4HxzIcEeYWkq8Yk0dSJyG",
+						"OuV7m01mALwksfsNghk5r4Jo1LGhSIS54nR9rPeE");
 				c =
 					new Credential(
 						username.getText().toString(),
@@ -171,22 +191,5 @@ public class AuthActivity extends Activity {
 		editor.putString(PREFS_KEY_TOKEN_SECRET, token.getSecret());
 		//
 		editor.commit();
-	}
-
-	/**
-	 * @return
-	 */
-	public boolean isFieldsFilledIn() {
-		EditText txtf = (EditText)findViewById(R.id.auth_txtf_username);
-		if (txtf.getText().toString().trim().length() == 0) {
-			return false;
-		}
-		//
-		txtf = (EditText)findViewById(R.id.auth_txtf_password);
-		if (txtf.getText().toString().trim().length() == 0) {
-			return false;
-		}
-		//
-		return true;
 	}
 }

@@ -2,10 +2,9 @@
 <resources>
     <string name="hello">Enter your credentials</string>
     <string name="app_name">TwAPIme</string>
-    <string name="sign_in">Sing In</string>
+    <string name="sign_in">Sign In</string>
     <string name="username">Username:</string>
     <string name="password">Password:</string>
-    <string name="credentials_required">Username and password must be filled in.</string>
     <string name="ok">OK</string>
     <string name="credentials_invalid">Invalid username and/or password.</string>
     <string name="authenticating">Authenticating. Please wait...</string>
@@ -41,4 +40,9 @@
     <string name="new_dm">New DM</string>
     <string name="new_tweet">New Tweet</string>
     <string name="recipient">Recipient</string>
+    <string name="reply">Reply</string>
+    <string name="favorite">Favorite</string>
+    <string name="unfavorite">Unfavorite</string>
+    <string name="favoriting">Favoriting tweet. Please wait...</string>
+    <string name="unfavoriting">Unfavoriting tweet. Please wait...</string>
 </resources>
