@@ -33,5 +33,11 @@
 			android:label="@string/app_name" />
 		<activity android:name=".activity.NewDirectMessageActivity"
 			android:label="@string/app_name" />
+		<activity android:name=".activity.ListTimelineActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.MemberListActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.ListHomeActivity"
+			android:label="@string/app_name" />
 	</application>
 </manifest>

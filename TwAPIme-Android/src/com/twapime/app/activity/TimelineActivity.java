@@ -83,7 +83,8 @@ public class TimelineActivity extends ListActivity implements
 					int position, long id) {
 					viewTweet(position);
 				}
-			});
+			}
+		);
 		//
 		notifyNewTweet = new Runnable() {
 			@Override

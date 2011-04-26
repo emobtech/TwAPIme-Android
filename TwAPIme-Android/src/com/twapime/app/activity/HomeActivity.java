@@ -28,22 +28,22 @@ public class HomeActivity extends TabActivity {
 		//
 		TabHost tabHost = getTabHost();
 	    TabHost.TabSpec spec;
-
+	    //
 	    spec = tabHost.newTabSpec("home");
 	    spec.setIndicator(getString(R.string.home), null);
 	    spec.setContent(new Intent(this, HomeTimelineActivity.class));
 	    tabHost.addTab(spec);
-	    
+	    //
 	    spec = tabHost.newTabSpec("mention");
 	    spec.setIndicator(getString(R.string.mentions), null);
 	    spec.setContent(new Intent(this, MentionTimelineActivity.class));
 	    tabHost.addTab(spec);
-
+	    //
 	    spec = tabHost.newTabSpec("dm");
 	    spec.setIndicator(getString(R.string.direct_message), null);
 	    spec.setContent(new Intent(this, DirectMessageTimelineActivity.class));
 	    tabHost.addTab(spec);
-	    
+	    //
 	    spec = tabHost.newTabSpec("list");
 	    spec.setIndicator(getString(R.string.lists), null);
 	    spec.setContent(new Intent(this, ListActivity.class));

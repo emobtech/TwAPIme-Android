@@ -45,4 +45,6 @@
     <string name="unfavorite">Unfavorite</string>
     <string name="favoriting">Favoriting tweet. Please wait...</string>
     <string name="unfavoriting">Unfavoriting tweet. Please wait...</string>
+    <string name="members">Members</string>
+    <string name="tweets">Tweets</string>
 </resources>
