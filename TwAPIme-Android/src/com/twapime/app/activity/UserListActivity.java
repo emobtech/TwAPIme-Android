@@ -2,8 +2,6 @@ package com.twapime.app.activity;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import android.app.ListActivity;
@@ -14,11 +12,13 @@ import android.widget.AdapterView;
 
 import com.twapime.app.R;
 import com.twapime.app.util.UIUtil;
+import com.twapime.app.widget.LoadingScrollListener;
 import com.twapime.app.widget.UserArrayAdapter;
 import com.twitterapime.model.Cursor;
-import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.UserAccount;
 import com.twitterapime.search.LimitExceededException;
+import com.twitterapime.search.Query;
+import com.twitterapime.search.QueryComposer;
 
 /**
  * @author ernandes@gmail.com
@@ -33,6 +33,21 @@ public class UserListActivity extends ListActivity {
 	 * 
 	 */
 	private List<UserAccount> users;
+	
+	/**
+	 * 
+	 */
+	private boolean hasMorePages;
+	
+	/**
+	 * 
+	 */
+	private Runnable loadNextPageTask;
+	
+	/**
+	 * 
+	 */
+	protected Query nextPageQuery;
 	
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -57,53 +72,70 @@ public class UserListActivity extends ListActivity {
 			}
 		);
 		//
-		refresh();
-	}
-	
-	/**
-	 * 
-	 */
-	public void refresh() {
+		loadNextPageTask = new Runnable() {
+			@Override
+			public void run() {
+				if (hasMorePages) {
+					refresh();
+				}
+			}
+		};
+		//
+		getListView().setOnScrollListener(
+			new LoadingScrollListener(5, loadNextPageTask));
+		//
 		final ProgressDialog progressDialog =
 			ProgressDialog.show(
 				this, "", getString(R.string.refreshing), false);
 		//
 		new Thread() {
-			@Override
 			public void run() {
-				try {
-					Cursor cursor = loadUsers();
-					//
-					while (cursor.hasMoreElements()) {
-						users.add((UserAccount)cursor.nextElement());
+				refresh();
+				//
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						progressDialog.dismiss();
 					}
-					//
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							adapter.notifyDataSetChanged();
-							//
-							progressDialog.dismiss();
-						}
-					});
-				} catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-							//
-							UIUtil.showAlertDialog(UserListActivity.this, e);
-						}
-					});
-				}
+				});
 			};
 		}.start();
 	}
 	
 	/**
+	 * 
+	 */
+	protected void refresh() {
+		try {
+			Cursor cursor = loadNextPage();
+			//
+			while (cursor.hasMoreElements()) {
+				users.add((UserAccount)cursor.nextElement());
+			}
+			//
+			nextPageQuery = QueryComposer.cursor(cursor.getNextPageIndex());
+			hasMorePages = cursor.hasMorePages();
+			//
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					adapter.notifyDataSetChanged();
+				}
+			});
+		} catch (final Exception e) {
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					UIUtil.showAlertDialog(UserListActivity.this, e);
+				}
+			});
+		}
+	}
+	
+	/**
 	 * @param index
 	 */
-	public void viewUser(int index) {
+	protected void viewUser(int index) {
 //		Tweet tweet = users.get(index);
 //		//
 //		Intent intent = new Intent(this, ViewTweetActivity.class);
@@ -115,24 +147,9 @@ public class UserListActivity extends ListActivity {
 	}
 
 	/**
-	 * 
-	 */
-	public void sort() {
-		Collections.sort(users, new Comparator<UserAccount>() {
-			@Override
-			public int compare(UserAccount u1, UserAccount u2) {
-				String un1 = u1.getString(MetadataSet.USERACCOUNT_NAME);
-				String un2 = u2.getString(MetadataSet.USERACCOUNT_NAME);
-				//
-				return un1.compareTo(un2);
-			}
-		});
-	}
-
-	/**
 	 * @return
 	 */
-	protected Cursor loadUsers() throws IOException, LimitExceededException {
+	protected Cursor loadNextPage() throws IOException, LimitExceededException {
 		return new Cursor(new Object[0], 0, 0);
 	}
 }

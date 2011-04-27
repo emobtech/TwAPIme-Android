@@ -47,4 +47,14 @@
     <string name="unfavoriting">Unfavoriting tweet. Please wait...</string>
     <string name="members">Members</string>
     <string name="tweets">Tweets</string>
+    <string name="bio">Bio</string>
+    <string name="web">Web</string>
+    <string name="friends">Friends</string>
+    <string name="followers">Followers</string>
+    <string name="member_since">Member Since</string>
+    <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="options">Options</string>
+    <string name="last_tweet">Last Tweet</string>
+    <string name="profile">Profile</string>
 </resources>

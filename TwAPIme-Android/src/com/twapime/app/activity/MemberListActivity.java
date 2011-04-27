@@ -57,10 +57,10 @@ public class MemberListActivity extends UserListActivity {
 	}
 
 	/**
-	 * @see com.twapime.app.activity.UserListActivity#loadUsers()
+	 * @see com.twapime.app.activity.UserListActivity#loadNextPage()
 	 */
 	@Override
-	protected Cursor loadUsers() throws IOException, LimitExceededException {
+	protected Cursor loadNextPage() throws IOException, LimitExceededException {
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		UserAccountManager uam = app.getUserAccountManager();
 		ListManager lm = ListManager.getInstance(uam);
