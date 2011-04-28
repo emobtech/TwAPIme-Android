@@ -39,5 +39,11 @@
 			android:label="@string/app_name" />
 		<activity android:name=".activity.ListHomeActivity"
 			android:label="@string/app_name" />
+		<activity android:name=".activity.UserHomeActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.UserProfileActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.UserTimelineActivity"
+			android:label="@string/app_name" />
 	</application>
 </manifest>

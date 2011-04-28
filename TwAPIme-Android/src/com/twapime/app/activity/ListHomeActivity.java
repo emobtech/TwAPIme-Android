@@ -30,16 +30,10 @@ public class ListHomeActivity extends TabActivity {
 		//
 		setContentView(R.layout.home);
 		//
-		String listID = null;
-		String listOwner = null;
-		//
 		Intent intent = getIntent();
 		//
-		if (intent.hasExtra(PARAM_KEY_LIST_ID)
-				&& intent.hasExtra(PARAM_KEY_LIST_OWNER)) {
-			listID = intent.getExtras().getString(PARAM_KEY_LIST_ID);
-			listOwner = intent.getExtras().getString(PARAM_KEY_LIST_OWNER);
-		}
+		String listID = intent.getExtras().getString(PARAM_KEY_LIST_ID);
+		String listOwner = intent.getExtras().getString(PARAM_KEY_LIST_OWNER);
 		//
 		TabHost tabHost = getTabHost();
 	    TabHost.TabSpec spec;
@@ -48,11 +42,8 @@ public class ListHomeActivity extends TabActivity {
 	    spec.setIndicator(getString(R.string.tweets), null);
 	    //
 		intent = new Intent(this, ListTimelineActivity.class);
-		if (listID != null) {
-			intent.putExtra(ListTimelineActivity.PARAM_KEY_LIST_ID, listID);
-			intent.putExtra(
-				ListTimelineActivity.PARAM_KEY_LIST_OWNER, listOwner);
-		}
+		intent.putExtra(ListTimelineActivity.PARAM_KEY_LIST_ID, listID);
+		intent.putExtra(ListTimelineActivity.PARAM_KEY_LIST_OWNER, listOwner);
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);
@@ -60,12 +51,9 @@ public class ListHomeActivity extends TabActivity {
 	    spec = tabHost.newTabSpec("member");
 	    spec.setIndicator(getString(R.string.members), null);
 	    //
-	    //
 		intent = new Intent(this, MemberListActivity.class);
-		if (listID != null) {
-			intent.putExtra(MemberListActivity.PARAM_KEY_LIST_ID, listID);
-			intent.putExtra(MemberListActivity.PARAM_KEY_LIST_OWNER, listOwner);
-		}
+		intent.putExtra(MemberListActivity.PARAM_KEY_LIST_ID, listID);
+		intent.putExtra(MemberListActivity.PARAM_KEY_LIST_OWNER, listOwner);
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);

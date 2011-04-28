@@ -35,17 +35,14 @@ public class ListTimelineActivity extends TimelineActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		Intent intent = getIntent();
 		//
-		if (intent.hasExtra(PARAM_KEY_LIST_ID)
-				&& intent.hasExtra(PARAM_KEY_LIST_OWNER)) {
-			String id =	intent.getExtras().getString(PARAM_KEY_LIST_ID);
-			String owner = intent.getExtras().getString(PARAM_KEY_LIST_OWNER);
-			//
-			Hashtable<String, Object> data = new Hashtable<String, Object>();
-			data.put(MetadataSet.LIST_ID, id);
-			data.put(MetadataSet.LIST_USER_ACCOUNT, new UserAccount(owner));
-			//
-			list = new List(data);
-		}
+		String id =	intent.getExtras().getString(PARAM_KEY_LIST_ID);
+		String owner = intent.getExtras().getString(PARAM_KEY_LIST_OWNER);
+		//
+		Hashtable<String, Object> data = new Hashtable<String, Object>();
+		data.put(MetadataSet.LIST_ID, id);
+		data.put(MetadataSet.LIST_USER_ACCOUNT, new UserAccount(owner));
+		//
+		list = new List(data);
 		//
 		super.onCreate(savedInstanceState);
 	}

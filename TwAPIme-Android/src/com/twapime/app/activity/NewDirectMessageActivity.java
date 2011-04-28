@@ -81,11 +81,8 @@ public class NewDirectMessageActivity extends Activity {
 		//
 		Intent intent = getIntent();
 		//
-		if (intent.hasExtra(PARAM_KEY_DM_RECIPIENT)) {
-			recipient.setText(
-				intent.getExtras().getString(PARAM_KEY_DM_RECIPIENT));
-			content.requestFocus();
-		}
+		recipient.setText(intent.getExtras().getString(PARAM_KEY_DM_RECIPIENT));
+		content.requestFocus();
 		//
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		ter = TweetER.getInstance(app.getUserAccountManager());

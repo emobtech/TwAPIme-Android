@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.twapime.app.R;
@@ -48,6 +50,14 @@ public class ViewTweetActivity extends Activity {
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		ter = TweetER.getInstance(app.getUserAccountManager());
 		//
+		final Button btn = (Button)findViewById(R.id.view_tweet_btn_profile);
+		btn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				viewUserProfile();
+			}
+		});
+		//
 		TextView txtv = (TextView)findViewById(R.id.view_tweet_txtv_name);
 		txtv.setText("");
 		//
@@ -65,9 +75,7 @@ public class ViewTweetActivity extends Activity {
 		//
 		Intent intent = getIntent();
 		//
-		if (intent.hasExtra(PARAM_KEY_TWEET_ID)) {
-			loadTweet(intent.getExtras().getString(PARAM_KEY_TWEET_ID));
-		}
+		loadTweet(intent.getExtras().getString(PARAM_KEY_TWEET_ID));
 	}
 	
 	/**
@@ -227,6 +235,20 @@ public class ViewTweetActivity extends Activity {
 				}
 			};
 		}.start();
+	}
+	
+	/**
+	 * 
+	 */
+	protected void viewUserProfile() {
+		UserAccount ua = tweet.getUserAccount();
+		//
+		Intent intent = new Intent(this, UserHomeActivity.class);
+		intent.putExtra(
+			UserHomeActivity.PARAM_KEY_USER_NAME,
+			ua.getString(MetadataSet.USERACCOUNT_USER_NAME));
+		//
+		startActivity(intent);
 	}
 	
 	/**
