@@ -13,7 +13,7 @@ public class UserTimelineActivity extends TimelineActivity {
 	/**
 	 * 
 	 */
-	static final String PARAM_KEY_USER_NAME = "PARAM_KEY_USER_NAME";
+	static final String PARAM_KEY_USERNAME = "PARAM_KEY_USERNAME";
 
 	/**
 	 * 
@@ -27,7 +27,7 @@ public class UserTimelineActivity extends TimelineActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		Intent intent = getIntent();
 		//
-		username = intent.getExtras().getString(PARAM_KEY_USER_NAME);
+		username = intent.getExtras().getString(PARAM_KEY_USERNAME);
 		//
 		super.onCreate(savedInstanceState);
 	}

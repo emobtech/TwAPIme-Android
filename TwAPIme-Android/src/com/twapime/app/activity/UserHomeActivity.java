@@ -14,7 +14,7 @@ public class UserHomeActivity extends TabActivity {
 	/**
 	 * 
 	 */
-	static final String PARAM_KEY_USER_NAME = "PARAM_KEY_USER_NAME";
+	static final String PARAM_KEY_USERNAME = "PARAM_KEY_USERNAME";
 	
 	/**
 	 * @see android.app.ActivityGroup#onCreate(android.os.Bundle)
@@ -27,7 +27,7 @@ public class UserHomeActivity extends TabActivity {
 		//
 		Intent intent = getIntent();
 		//
-		String username = intent.getExtras().getString(PARAM_KEY_USER_NAME);
+		String username = intent.getExtras().getString(PARAM_KEY_USERNAME);
 		//
 		TabHost tabHost = getTabHost();
 	    TabHost.TabSpec spec;
@@ -36,7 +36,7 @@ public class UserHomeActivity extends TabActivity {
 	    spec.setIndicator(getString(R.string.profile), null);
 	    //
 		intent = new Intent(this, UserProfileActivity.class);
-		intent.putExtra(UserProfileActivity.PARAM_KEY_USER_NAME, username);
+		intent.putExtra(UserProfileActivity.PARAM_KEY_USERNAME, username);
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);
@@ -45,7 +45,7 @@ public class UserHomeActivity extends TabActivity {
 	    spec.setIndicator(getString(R.string.tweets), null);
 	    //
 		intent = new Intent(this, UserTimelineActivity.class);
-		intent.putExtra(UserTimelineActivity.PARAM_KEY_USER_NAME, username);
+		intent.putExtra(UserTimelineActivity.PARAM_KEY_USERNAME, username);
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);

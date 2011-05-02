@@ -50,7 +50,7 @@ public class AuthActivity extends Activity {
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.auth);
 		//
@@ -96,7 +96,7 @@ public class AuthActivity extends Activity {
 	/**
 	 * 
 	 */
-	public void signIn() {
+	protected void signIn() {
 		final ProgressDialog progressDialog =
 			ProgressDialog.show(
 				this,
@@ -181,7 +181,7 @@ public class AuthActivity extends Activity {
 	 * @param username
 	 * @param token
 	 */
-	public void saveCredentials(String username, Token token) {
+	protected void saveCredentials(String username, Token token) {
 		SharedPreferences.Editor editor =
 			getSharedPreferences(
 				TwAPImeApplication.PREFS_NAME, MODE_PRIVATE).edit();

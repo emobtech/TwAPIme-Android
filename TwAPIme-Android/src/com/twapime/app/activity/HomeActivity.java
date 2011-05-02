@@ -53,14 +53,14 @@ public class HomeActivity extends TabActivity {
 	/**
 	 * 
 	 */
-	public void newTweet() {
+	protected void newTweet() {
 		startActivity(new Intent(this, NewTweetActivity.class));
 	}
 	
 	/**
 	 * 
 	 */
-	public void signOut() {
+	protected void signOut() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(getString(R.string.app_name));
 		builder.setMessage(getString(R.string.confirm_sign_out));
@@ -92,7 +92,7 @@ public class HomeActivity extends TabActivity {
 	/**
 	 * 
 	 */
-	public void removeCredentials() {
+	protected void removeCredentials() {
 		SharedPreferences.Editor editor = getSharedPreferences(
 			TwAPImeApplication.PREFS_NAME, MODE_PRIVATE).edit();
 		//
@@ -101,6 +101,21 @@ public class HomeActivity extends TabActivity {
 		editor.remove(AuthActivity.PREFS_KEY_TOKEN_SECRET);
 		//
 		editor.commit();
+	}
+	
+	/**
+	 * 
+	 */
+	protected void viewMyProfile() {
+		SharedPreferences prefs =
+			getSharedPreferences(TwAPImeApplication.PREFS_NAME, MODE_PRIVATE);
+		//
+		Intent intent = new Intent(this, UserProfileActivity.class);
+		intent.putExtra(
+			UserHomeActivity.PARAM_KEY_USERNAME,
+			prefs.getString(AuthActivity.PREFS_KEY_USERNAME, null));
+		//
+		startActivity(intent);
 	}
 	
 	/**
@@ -136,6 +151,8 @@ public class HomeActivity extends TabActivity {
 	    	//
 	        return true;
 	    case R.id.menu_item_my_profile:
+	    	viewMyProfile();
+	    	//
 	        return true;
 	    case R.id.menu_item_about:
 	        return true;

@@ -245,7 +245,7 @@ public class ViewTweetActivity extends Activity {
 		//
 		Intent intent = new Intent(this, UserHomeActivity.class);
 		intent.putExtra(
-			UserHomeActivity.PARAM_KEY_USER_NAME,
+			UserHomeActivity.PARAM_KEY_USERNAME,
 			ua.getString(MetadataSet.USERACCOUNT_USER_NAME));
 		//
 		startActivity(intent);

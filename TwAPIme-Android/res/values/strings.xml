@@ -61,4 +61,9 @@
     <string name="block">Block</string>
     <string name="unblock">Unblock</string>
     <string name="report_spam">Report Spam</string>
+    <string name="following">Following. Please wait...</string>
+    <string name="unfollowing">Unfollowing. Please wait...</string>
+    <string name="reporting_spam">Reporting spam. Please wait...</string>
+    <string name="blocking">Blocking. Please wait...</string>
+    <string name="unblocking">Unblocking. Please wait...</string>
 </resources>
