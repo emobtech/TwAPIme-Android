@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +16,7 @@ import com.twapime.app.util.UIUtil;
 import com.twapime.app.widget.LoadingScrollListener;
 import com.twapime.app.widget.UserArrayAdapter;
 import com.twitterapime.model.Cursor;
+import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.UserAccount;
 import com.twitterapime.search.LimitExceededException;
 import com.twitterapime.search.Query;
@@ -136,14 +138,14 @@ public class UserListActivity extends ListActivity {
 	 * @param index
 	 */
 	protected void viewUser(int index) {
-//		Tweet tweet = users.get(index);
-//		//
-//		Intent intent = new Intent(this, ViewTweetActivity.class);
-//		intent.putExtra(
-//			ViewTweetActivity.PARAM_KEY_TWEET_ID,
-//			tweet.getString(MetadataSet.TWEET_ID));
-//		//
-//		startActivity(intent);
+		UserAccount user = users.get(index);
+		//
+		Intent intent = new Intent(this, UserHomeActivity.class);
+		intent.putExtra(
+			UserHomeActivity.PARAM_KEY_USERNAME,
+			user.getString(MetadataSet.USERACCOUNT_USER_NAME));
+		//
+		startActivity(intent);
 	}
 
 	/**

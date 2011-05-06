@@ -131,7 +131,11 @@ public class UserProfileActivity extends Activity {
 		if (userAccount != null) {
 			Tweet tweet = userAccount.getLastTweet();
 			//
-			txtv.setText(tweet.getString(MetadataSet.TWEET_CONTENT));	
+			if (tweet != null) {
+				txtv.setText(tweet.getString(MetadataSet.TWEET_CONTENT));	
+			} else {
+				txtv.setText("");
+			}
 		} else {
 			txtv.setText("");
 		}
@@ -140,11 +144,15 @@ public class UserProfileActivity extends Activity {
 		if (userAccount != null) {
 			Tweet tweet = userAccount.getLastTweet();
 			//
-			txtv.setText(
-				DateUtil.formatTweetDate(
-					Long.parseLong(
-						tweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
-				this));	
+			if (tweet != null) {
+				txtv.setText(
+					DateUtil.formatTweetDate(
+						Long.parseLong(
+							tweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
+					this));	
+			} else {
+				txtv.setText("");
+			}
 		} else {
 			txtv.setText("");
 		}

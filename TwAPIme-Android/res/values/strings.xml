@@ -66,4 +66,7 @@
     <string name="reporting_spam">Reporting spam. Please wait...</string>
     <string name="blocking">Blocking. Please wait...</string>
     <string name="unblocking">Unblocking. Please wait...</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Search for topic or name</string>
+    <string name="users">Users</string>
 </resources>

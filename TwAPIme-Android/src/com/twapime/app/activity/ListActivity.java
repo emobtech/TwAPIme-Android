@@ -17,7 +17,6 @@ import com.twapime.app.util.UIUtil;
 import com.twapime.app.widget.ListArrayAdapter;
 import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.ListManager;
-import com.twitterapime.rest.UserAccount;
 
 /**
  * @author ernandes@gmail.com
@@ -60,7 +59,7 @@ public class ListActivity extends android.app.ListActivity {
 	/**
 	 * 
 	 */
-	public void refreshLists() {
+	protected void refreshLists() {
 		final ProgressDialog progressDialog =
 			ProgressDialog.show(
 				this, "", getString(R.string.refreshing), false);
@@ -73,7 +72,7 @@ public class ListActivity extends android.app.ListActivity {
 					ListManager.getInstance(app.getUserAccountManager());
 				//
 				try {
-					com.twitterapime.rest.List[] l = lmgr.getLists(new UserAccount("ccalmendra"));
+					com.twitterapime.rest.List[] l = lmgr.getLists();
 					//
 					lists.clear();
 					lists.addAll(Arrays.asList(l));
@@ -103,7 +102,7 @@ public class ListActivity extends android.app.ListActivity {
 	/**
 	 * @param index
 	 */
-	public void viewListTweets(int index) {
+	protected void viewListTweets(int index) {
 		com.twitterapime.rest.List list = lists.get(index);
 		//
 		Intent intent = new Intent(this, ListHomeActivity.class);
