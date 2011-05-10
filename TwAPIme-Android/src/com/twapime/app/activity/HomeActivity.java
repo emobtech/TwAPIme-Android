@@ -154,6 +154,10 @@ public class HomeActivity extends TabActivity {
 	    	viewMyProfile();
 	    	//
 	        return true;
+	    case R.id.menu_item_search:
+	    	onSearchRequested();
+	    	//
+	        return true;
 	    case R.id.menu_item_about:
 	        return true;
 	    case R.id.menu_item_sign_out:
