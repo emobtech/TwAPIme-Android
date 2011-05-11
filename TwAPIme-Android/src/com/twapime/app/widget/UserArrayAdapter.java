@@ -54,7 +54,7 @@ public class UserArrayAdapter extends ArrayAdapter<UserAccount> {
 		this.context = context;
 		this.users = users;
 		//
-		imageLoader = new AsyncImageLoader();
+		imageLoader = AsyncImageLoader.getInstance(context);
 		callback =
 			new ImageViewCallback(
 				this, ((ListActivity)context).getListView());

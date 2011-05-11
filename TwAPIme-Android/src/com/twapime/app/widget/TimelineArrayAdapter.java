@@ -56,7 +56,7 @@ public class TimelineArrayAdapter extends ArrayAdapter<Tweet> {
 		this.context = context;
 		this.tweets = tweets;
 		//
-		imageLoader = new AsyncImageLoader();
+		imageLoader = AsyncImageLoader.getInstance(context);
 		callback =
 			new ImageViewCallback(
 				this, ((ListActivity)context).getListView());

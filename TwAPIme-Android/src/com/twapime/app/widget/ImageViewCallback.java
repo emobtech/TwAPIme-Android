@@ -34,18 +34,20 @@ public class ImageViewCallback implements ImageLoaderCallback {
 	 */
 	@Override
 	public void imageLoaded(Drawable drawable, String url) {
-        ImageView imageView = null;
-        //
-        if (parent != null) {
-        	imageView = (ImageView)parent.findViewWithTag(url);
-        }
-        //
-        if (imageView != null) {
-            imageView.setImageDrawable(drawable);
-            //
-            if (adapter != null) {
-                adapter.notifyDataSetChanged();
-            }
-        }
+		if (drawable != null) {
+	        ImageView imageView = null;
+	        //
+	        if (parent != null) {
+	        	imageView = (ImageView)parent.findViewWithTag(url);
+	        }
+	        //
+	        if (imageView != null) {
+	            imageView.setImageDrawable(drawable);
+	            //
+	            if (adapter != null) {
+	                adapter.notifyDataSetChanged();
+	            }
+	        }
+		}
 	}
 }

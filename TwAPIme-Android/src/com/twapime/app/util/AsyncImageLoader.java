@@ -1,13 +1,16 @@
 package com.twapime.app.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.SoftReference;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.http.HttpEntity;
@@ -17,212 +20,309 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
+import android.os.AsyncTask;
+import android.os.Environment;
 
 /**
  * @author ernandes@gmail.com
  */
-public class AsyncImageLoader {
+public final class AsyncImageLoader {
+	/**
+	 * 
+	 */
+	private static final int HARD_CACHE_CAPACITY = 20;
 	
-	private static final int HARD_CACHE_CAPACITY = 10;
+	/**
+	 * 
+	 */
+	private static AsyncImageLoader singleton;
 	
-    private final HashMap<String, Drawable> sHardBitmapCache =
-        new LinkedHashMap<String, Drawable>(HARD_CACHE_CAPACITY / 2, 0.75f, true) {
-			private static final long serialVersionUID = -4795168423098442895L;
-		@Override
-        protected boolean removeEldestEntry(LinkedHashMap.Entry<String, Drawable> eldest) {
-            if (size() > HARD_CACHE_CAPACITY) {
-                // Entries push-out of hard reference cache are transferred to soft reference cache
-                sSoftBitmapCache.put(eldest.getKey(), new SoftReference<Drawable>(eldest.getValue()));
-                return true;
-            } else
-                return false;
-        }
-    };
-
-    // Soft cache for bitmaps kicked out of hard cache
-    private final static ConcurrentHashMap<String, SoftReference<Drawable>> sSoftBitmapCache =
-        new ConcurrentHashMap<String, SoftReference<Drawable>>(HARD_CACHE_CAPACITY / 2);
-	
-    private List<Handler> queue = new ArrayList<Handler>(); 
-    
-    private List<String> downloading = new ArrayList<String>();
-    
-    private Runnable queueTask = new Runnable() {
-		@Override
-		public void run() {
-			while (true) {
-				synchronized (AsyncImageLoader.this) {
-					for (Handler callback : queue) {
-						String url = callback.toString();
-						//
-				    	Drawable drawable = getDrawableFromCache(url);
-				    	if (drawable != null) {
-			                Message message = callback.obtainMessage(0, drawable);
-			                callback.sendMessage(message);
-				    	}
-					}
-				}
-				//
-				try {
-					synchronized (this) {
-						wait();	
-					}
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
+    /**
+	 * @param context
+	 * @return
+	 */
+	public synchronized static AsyncImageLoader getInstance(Context context) {
+		if (singleton == null) {
+			singleton = new AsyncImageLoader(context);
 		}
-	};
- 
+		//
+		return singleton;
+	}
+	
     /**
      * 
      */
-    public AsyncImageLoader() {
-    	new Thread(queueTask).start();
+    private final ConcurrentHashMap<String, SoftReference<Drawable>> softCache;
+
+	/**
+	 * 
+	 */
+	private final HashMap<String, Drawable> hardCache;
+
+	/**
+	 * 
+	 */
+	private final List<String> urlsBeingDownloaded;
+	
+	/**
+	 * 
+	 */
+	private File cacheDir;
+	
+	/**
+	 * 
+	 */
+	private Context context;
+	
+    /**
+     * @param context
+     */
+    private AsyncImageLoader(Context context) {
+    	this.context = context;
+    	//
+    	urlsBeingDownloaded = new Vector<String>();
+    	hardCache =
+            new LinkedHashMap<String, Drawable>(
+            	HARD_CACHE_CAPACITY, 0.75f, true) {
+    			private static final long serialVersionUID =
+    				-4795168423098442895L;
+    		@Override
+            protected boolean removeEldestEntry(LinkedHashMap.Entry<String,
+            	Drawable> eldest) {
+                if (size() > HARD_CACHE_CAPACITY) {
+                    softCache.put(
+                    	eldest.getKey(),
+                    	new SoftReference<Drawable>(eldest.getValue()));
+                    //
+                    return true;
+                } else
+                    return false;
+            }
+        };
+        softCache =
+        	new ConcurrentHashMap<String, SoftReference<Drawable>>(
+        		HARD_CACHE_CAPACITY / 2);
+        //
+        loadCacheDir();
     }
     
-    private void addDrawableToCache(String url, Drawable drawable) {
-        if (drawable != null) {
-            synchronized (sHardBitmapCache) {
-                sHardBitmapCache.put(url, drawable);
-            }
-        }
-    }
-    
-    private Drawable getDrawableFromCache(String url) {
-        // First try the hard reference cache
-        synchronized (sHardBitmapCache) {
-            final Drawable drawable = sHardBitmapCache.get(url);
-            if (drawable != null) {
-                // Bitmap found in hard cache
-                // Move element to first position, so that it is removed last
-                sHardBitmapCache.remove(url);
-                sHardBitmapCache.put(url, drawable);
-                return drawable;
-            }
-        }
-
-        // Then try the soft reference cache
-        SoftReference<Drawable> drawableReference = sSoftBitmapCache.get(url);
-        if (drawableReference != null) {
-            final Drawable drawable = drawableReference.get();
-            if (drawable != null) {
-                // Bitmap found in soft cache
-                return drawable;
-            } else {
-                // Soft reference has been Garbage Collected
-                sSoftBitmapCache.remove(url);
-            }
-        }
-
-        return null;
-    }
- 
     /**
      * @param imageUrl
      * @param imageCallback
      * @return
      */
-    public synchronized Drawable loadDrawable(final String imageUrl, 
+    public Drawable loadDrawable(final String imageUrl, 
     	final ImageLoaderCallback imageCallback) {
     	Drawable drawable = getDrawableFromCache(imageUrl);
+    	//
     	if (drawable != null) {
     		return drawable;
     	}
     	//
-        final Handler handler = new Handler() {
-            @Override
-            public void handleMessage(Message message) {
-                imageCallback.imageLoaded((Drawable) message.obj, imageUrl);
-            }
-            
-            @Override
-            public String toString() {
-            	return imageUrl;
-            }
-        };
+        if (urlsBeingDownloaded.contains(imageUrl)) {
+        	return null;
+        }
         //
-    	if (downloading.contains(imageUrl)) {
-    		queue.add(handler);
-    		//
-    		return null;
-    	} else {
-    		downloading.add(imageUrl);
-    	}
+        urlsBeingDownloaded.add(imageUrl);
         //
-        new Thread() {
-            @Override
-            public void run() {
-            	Log.d("twapime", "imageUrl: " + imageUrl);
-            	//
-                Drawable drawable = loadImageFromUrl(imageUrl);
-                synchronized (AsyncImageLoader.this) {
-                	addDrawableToCache(imageUrl, drawable);
-                	downloading.remove(imageUrl);
-                }
-                Message message = handler.obtainMessage(0, drawable);
-                handler.sendMessage(message);
-                //
-                synchronized (queueTask) {
-                	queueTask.notifyAll();
-				}
-            }
-        }.start();
+        new AsyncTask<String, Void, Drawable>() {
+			@Override
+			protected Drawable doInBackground(String... params) {
+				return loadImageFromUrl(imageUrl);
+			}
+			
+	        @Override
+	        protected void onPostExecute(Drawable drawable) {
+	        	if (drawable != null) {
+	            	addDrawableToCache(imageUrl, drawable);
+	            	imageCallback.imageLoaded(drawable, imageUrl);
+	        	}
+	        	//
+	        	urlsBeingDownloaded.remove(imageUrl);
+	        }
+        }.execute();
         //
         return null;
     }
  
     /**
-     * @param url
-     * @return
-     */
-    public static Drawable loadImageFromUrl(String url) {
-        HttpClient client = new DefaultHttpClient();
-        HttpGet req = new HttpGet(url);
-        //
-        try {
-            HttpResponse res = client.execute(req);
-            //
-            if (res.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-                return null;
-            }
-            //
-            HttpEntity entity = res.getEntity();
-            //
-            if (entity != null) {
-                InputStream stream = null;
-                //
-                try {
-                    stream = new FlushedInputStream(entity.getContent());
-                    //
-                    return Drawable.createFromStream(stream, "src");
-                } finally {
-                    if (stream != null) {
-                        stream.close();
-                    }
-                    //
-                    entity.consumeContent();
-                }
-            }
-        } catch (IOException e) {
-            req.abort();
-        }
-        //
-        return null;
-    }
-    
-    /**
+	 * @param imageUrl
+	 * @return
+	 */
+	private Drawable getDrawableFromCache(String imageUrl) {
+	    synchronized (hardCache) {
+	        Drawable drawable = hardCache.get(imageUrl);
+	        //
+	        if (drawable != null) {
+	            // Drawable found in hard cache
+	            // Move element to first position, so that it is removed last
+	            hardCache.remove(imageUrl);
+	            hardCache.put(imageUrl, drawable);
+	            //
+	            return drawable;
+	        }
+	    }
+	    //
+	    SoftReference<Drawable> reference = softCache.get(imageUrl);
+	    //
+	    if (reference != null) {
+	        Drawable drawable = reference.get();
+	        //
+	        if (drawable != null) {
+	            return drawable;
+	        }
+	    }
+	    //
+	    return null;
+	}
+
+	/**
+	 * @param imageUrl
+	 * @param drawable
+	 */
+	private void addDrawableToCache(String imageUrl, Drawable drawable) {
+	    if (drawable != null) {
+	        synchronized (hardCache) {
+	            hardCache.put(imageUrl, drawable);
+	        }
+	    }
+	}
+
+	/**
+	 * @param imageUrl
+	 * @return
+	 */
+	private Drawable loadImageFromUrl(String imageUrl) {
+	    InputStream stream = null;
+	    //
+	    try {
+			stream = readFromFile(imageUrl);
+			//
+			if (stream != null) {
+				return Drawable.createFromStream(stream, "src");
+			}
+		} catch (IOException e) {
+		} finally {
+			if (stream != null) {
+				try {
+					stream.close();
+				} catch (IOException e) {
+				}
+			}
+		}
+		//
+	    HttpClient client = new DefaultHttpClient();
+	    HttpGet req = new HttpGet(imageUrl);
+	    //
+	    try {
+	        HttpResponse res = client.execute(req);
+	        //
+	        if (res.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+	            return null;
+	        }
+	        //
+	        HttpEntity entity = res.getEntity();
+	        //
+	        if (entity != null) {
+	            try {
+	                stream = new FlushedInputStream(entity.getContent());
+	                //
+	                writeToFile(imageUrl, stream);
+	                stream.close();
+	                stream = readFromFile(imageUrl);
+	                //
+	                return Drawable.createFromStream(stream, "src");
+	            } finally {
+	                if (stream != null) {
+	                    stream.close();
+	                }
+	                //
+	                entity.consumeContent();
+	            }
+	        }
+	    } catch (IOException e) {
+	        req.abort();
+	    }
+	    //
+	    return null;
+	}
+
+	/**
+	 * 
+	 */
+	private void loadCacheDir() {
+	    if (Environment.getExternalStorageState().equals(
+	    		Environment.MEDIA_MOUNTED)) {
+	        cacheDir =
+	        	new File(
+	        		Environment.getExternalStorageDirectory(), "TwAPIme");
+	    } else {
+	        cacheDir = context.getCacheDir();
+	    }
+	    //
+	    if (!cacheDir.exists()) {
+	        cacheDir.mkdirs();
+	    }
+	}
+	
+	/**
+	 * @param imageUrl
+	 * @return
+	 * @throws IOException 
+	 */
+	private InputStream readFromFile(String imageUrl)
+		throws IOException {
+		File file = getFileFromUrl(imageUrl);
+		//
+		if (file.exists()) {
+			return new FileInputStream(file);
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * @param imageUrl
+	 * @param imageStream
+	 * @throws IOException 
+	 */
+	private void writeToFile(String imageUrl, InputStream imageStream)
+		throws IOException {
+		File file = getFileFromUrl(imageUrl);
+		//
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+		//
+		FileOutputStream o = new FileOutputStream(file);
+		byte[] buffer = new byte[1024];  
+		int bytesRead;
+		//
+		while ((bytesRead = imageStream.read(buffer)) != -1) {  
+		  o.write(buffer, 0, bytesRead);  
+		}
+		//
+		o.close();
+	}
+	
+	/**
+	 * @param imageUrl
+	 * @return
+	 */
+	private File getFileFromUrl(String imageUrl) {
+        return new File(cacheDir, String.valueOf(imageUrl.hashCode()));
+	}
+
+	/**
      * <p>
      * An InputStream that skips the exact number of bytes provided, unless it
      * reaches EOF.
      * </p>
      * @author ernandes@gmail.com
      */
-    static class FlushedInputStream extends FilterInputStream {
+    private static class FlushedInputStream extends FilterInputStream {
         /**
          * @param inputStream
          */
