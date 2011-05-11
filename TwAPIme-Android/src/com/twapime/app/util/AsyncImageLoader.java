@@ -128,7 +128,7 @@ public class AsyncImageLoader {
      * @return
      */
     public synchronized Drawable loadDrawable(final String imageUrl, 
-    	final ImageCallback imageCallback) {
+    	final ImageLoaderCallback imageCallback) {
     	Drawable drawable = getDrawableFromCache(imageUrl);
     	if (drawable != null) {
     		return drawable;
@@ -259,7 +259,7 @@ public class AsyncImageLoader {
     /**
      * @author ernandes@gmail.com
      */
-    public interface ImageCallback {
+    public interface ImageLoaderCallback {
         public void imageLoaded(Drawable imageDrawable, String imageUrl);
     }
 }
