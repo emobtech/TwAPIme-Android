@@ -146,6 +146,21 @@ public final class AsyncImageLoader {
         //
         return null;
     }
+    
+    /**
+     * 
+     */
+    public void clearCache() {
+        synchronized (hardCache) {
+            hardCache.clear();
+		}
+        //
+    	softCache.clear();
+        //
+    	for (File f : cacheDir.listFiles()) {
+            f.delete();
+        }
+    }
  
     /**
 	 * @param imageUrl

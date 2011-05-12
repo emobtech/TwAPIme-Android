@@ -4,16 +4,20 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
+import com.twapime.app.util.AsyncImageLoader;
 import com.twapime.app.util.DateUtil;
 import com.twapime.app.util.UIUtil;
+import com.twapime.app.widget.ImageViewCallback;
 import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.UserAccount;
 import com.twitterapime.rest.UserAccountManager;
@@ -206,6 +210,28 @@ public class UserProfileActivity extends Activity {
 		} else {
 			txtv.setText("");
 		}
+		//
+		ImageView imgV = (ImageView)findViewById(R.id.user_profile_imgv_avatar);
+		//
+		String imgUrl = null;
+		Drawable cachedImage = null;
+		//
+        if (userAccount != null) {
+        	imgUrl = userAccount.getString(MetadataSet.USERACCOUNT_PICTURE_URI);
+        }
+        //
+        if (imgUrl != null) {
+        	imgV.setTag(imgUrl);
+            cachedImage =
+            	AsyncImageLoader.getInstance(this).loadDrawable(
+            		imgUrl, new ImageViewCallback(null, getCurrentFocus()));
+        }
+        //
+        if (cachedImage == null) {
+        	cachedImage = getResources().getDrawable(R.drawable.icon);
+        }
+        //
+        imgV.setImageDrawable(cachedImage);
 	}
 	
 	/**

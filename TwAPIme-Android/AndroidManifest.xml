@@ -61,5 +61,9 @@
 			android:label="@string/app_name" />
 		<activity android:name=".activity.UserSearchListActivity"
 			android:label="@string/app_name" />
+		<activity android:name=".activity.FriendListActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.FollowerListActivity"
+			android:label="@string/app_name" />
 	</application>
 </manifest>

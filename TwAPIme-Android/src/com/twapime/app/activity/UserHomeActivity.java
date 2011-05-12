@@ -49,5 +49,23 @@ public class UserHomeActivity extends TabActivity {
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);
+	    //
+	    spec = tabHost.newTabSpec("friends");
+	    spec.setIndicator(getString(R.string.friends), null);
+	    //
+		intent = new Intent(this, FriendListActivity.class);
+		intent.putExtra(FriendListActivity.PARAM_KEY_USERNAME, username);
+	    //
+	    spec.setContent(intent);
+	    tabHost.addTab(spec);
+	    //
+	    spec = tabHost.newTabSpec("followers");
+	    spec.setIndicator(getString(R.string.followers), null);
+	    //
+		intent = new Intent(this, FollowerListActivity.class);
+		intent.putExtra(FollowerListActivity.PARAM_KEY_USERNAME, username);
+	    //
+	    spec.setContent(intent);
+	    tabHost.addTab(spec);
 	}
 }

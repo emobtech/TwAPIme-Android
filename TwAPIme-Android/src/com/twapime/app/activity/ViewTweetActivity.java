@@ -3,17 +3,21 @@ package com.twapime.app.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
+import com.twapime.app.util.AsyncImageLoader;
 import com.twapime.app.util.DateUtil;
 import com.twapime.app.util.UIUtil;
+import com.twapime.app.widget.ImageViewCallback;
 import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.TweetER;
 import com.twitterapime.rest.UserAccount;
@@ -58,24 +62,9 @@ public class ViewTweetActivity extends Activity {
 			}
 		});
 		//
-		TextView txtv = (TextView)findViewById(R.id.view_tweet_txtv_name);
-		txtv.setText("");
+		displayTweet();
 		//
-		txtv = (TextView)findViewById(R.id.view_tweet_txtv_username);
-		txtv.setText("");
-		//
-		txtv = (TextView)findViewById(R.id.view_tweet_txtv_content);
-		txtv.setText("");
-		//
-		txtv = (TextView)findViewById(R.id.view_tweet_txtv_app);
-		txtv.setText("");
-		//
-		txtv = (TextView)findViewById(R.id.view_tweet_txtv_time);
-		txtv.setText("");
-		//
-		Intent intent = getIntent();
-		//
-		loadTweet(intent.getExtras().getString(PARAM_KEY_TWEET_ID));
+		loadTweet(getIntent().getExtras().getString(PARAM_KEY_TWEET_ID));
 	}
 	
 	/**
@@ -309,26 +298,74 @@ public class ViewTweetActivity extends Activity {
 	 * 
 	 */
 	public void displayTweet() {
-		UserAccount ua = tweet.getUserAccount();
+		UserAccount ua = null;
+		//
+		if (tweet != null) {
+			ua = tweet.getUserAccount();
+		}
 		//
 		TextView txtv = (TextView)findViewById(R.id.view_tweet_txtv_name);
-		txtv.setText(ua.getString(MetadataSet.USERACCOUNT_NAME));
+		if (ua != null) {
+			txtv.setText(ua.getString(MetadataSet.USERACCOUNT_NAME));	
+		} else {
+			txtv.setText("");
+		}
 		//
 		txtv = (TextView)findViewById(R.id.view_tweet_txtv_username);
-		txtv.setText("@" + ua.getString(MetadataSet.USERACCOUNT_USER_NAME));
+		if (ua != null) {
+			txtv.setText("@" + ua.getString(MetadataSet.USERACCOUNT_USER_NAME));	
+		} else {
+			txtv.setText("");
+		}
 		//
 		txtv = (TextView)findViewById(R.id.view_tweet_txtv_content);
-		txtv.setText(tweet.getString(MetadataSet.TWEET_CONTENT));
+		if (tweet != null) {
+			txtv.setText(tweet.getString(MetadataSet.TWEET_CONTENT));	
+		} else {
+			txtv.setText("");
+		}
 		//
 		txtv = (TextView)findViewById(R.id.view_tweet_txtv_app);
-		txtv.setText(tweet.getString(MetadataSet.TWEET_SOURCE));
+		if (tweet != null) {
+			txtv.setText(tweet.getString(MetadataSet.TWEET_SOURCE));	
+		} else {
+			txtv.setText("");
+		}
 		//
 		txtv = (TextView)findViewById(R.id.view_tweet_txtv_time);
-		txtv.setText(
-			DateUtil.formatTweetDate(
-        		Long.parseLong(
-            		tweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
-            		this));
+		if (tweet != null) {
+			txtv.setText(
+				DateUtil.formatTweetDate(
+	        		Long.parseLong(
+	            		tweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
+	            		this));
+		} else {
+			txtv.setText("");
+		}
+		//
+		ImageView imgV = (ImageView)findViewById(R.id.view_tweet_imgv_avatar);
+		//
+		String imgUrl = null;
+		Drawable cachedImage = null;
+		//
+        if (ua != null) {
+        	imgUrl = ua.getString(MetadataSet.USERACCOUNT_PICTURE_URI);
+        } else if (tweet != null) {
+        	imgUrl = tweet.getString(MetadataSet.TWEET_AUTHOR_PICTURE_URI);
+        }
+        //
+        if (imgUrl != null) {
+        	imgV.setTag(imgUrl);
+            cachedImage =
+            	AsyncImageLoader.getInstance(this).loadDrawable(
+            		imgUrl, new ImageViewCallback(null, getCurrentFocus()));
+        }
+        //
+        if (cachedImage == null) {
+        	cachedImage = getResources().getDrawable(R.drawable.icon);
+        }
+        //
+        imgV.setImageDrawable(cachedImage);
 	}
 	
 	/**
