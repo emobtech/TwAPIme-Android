@@ -1,3 +1,11 @@
+/*
+ * FollowerListActivity.java
+ * 25/05/2011
+ * TwAPIme for Android
+ * Copyright(c) Ernandes Mourao Junior (ernandes@gmail.com)
+ * All rights reserved
+ * GNU General Public License (GPL) Version 2, June 1991
+ */
 package com.twapime.app.activity;
 
 import java.io.IOException;
