@@ -26,11 +26,11 @@ powered by Twitter API ME project and providing a link to website's project.
  MINIMUM REQUIREMENTS:
 ********************************************************************************
 + Runtime Environment
-  - Android 1.5 (API Level 3) or newer.
+  - Android 1.5 (API Level 3) or newer
 
 + Development Environment
   - Java SDK 1.6
-  - Android SDK 1.1 or newer.
+  - Android SDK 1.1 or newer
   - Twitter API ME for Android v1.7
 
  XAUTH SET UP:
