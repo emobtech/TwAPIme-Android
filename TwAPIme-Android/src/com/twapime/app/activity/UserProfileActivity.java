@@ -225,7 +225,9 @@ public class UserProfileActivity extends Activity {
 		Drawable cachedImage = null;
 		//
         if (userAccount != null) {
-        	imgUrl = userAccount.getString(MetadataSet.USERACCOUNT_PICTURE_URI);
+        	imgUrl =
+        		userAccount.getString(
+        			MetadataSet.USERACCOUNT_PICTURE_URI_NORMAL);
         }
         //
         if (imgUrl != null) {

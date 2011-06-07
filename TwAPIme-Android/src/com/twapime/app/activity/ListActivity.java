@@ -25,7 +25,6 @@ import com.twapime.app.util.UIUtil;
 import com.twapime.app.widget.ListArrayAdapter;
 import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.ListManager;
-import com.twitterapime.rest.UserAccount;
 
 /**
  * @author ernandes@gmail.com
@@ -81,7 +80,7 @@ public class ListActivity extends android.app.ListActivity {
 					ListManager.getInstance(app.getUserAccountManager());
 				//
 				try {
-					com.twitterapime.rest.List[] l = lmgr.getLists(new UserAccount("ccalmendra"));
+					com.twitterapime.rest.List[] l = lmgr.getLists();
 					//
 					lists.clear();
 					lists.addAll(Arrays.asList(l));

@@ -356,11 +356,7 @@ public class ViewTweetActivity extends Activity {
 		String imgUrl = null;
 		Drawable cachedImage = null;
 		//
-        if (ua != null) {
-        	imgUrl = ua.getString(MetadataSet.USERACCOUNT_PICTURE_URI);
-        } else if (tweet != null) {
-        	imgUrl = tweet.getString(MetadataSet.TWEET_AUTHOR_PICTURE_URI);
-        }
+       	imgUrl = ua.getString(MetadataSet.USERACCOUNT_PICTURE_URI_NORMAL);
         //
         if (imgUrl != null) {
         	imgV.setTag(imgUrl);
