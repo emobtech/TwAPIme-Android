@@ -15,7 +15,6 @@ import android.os.Bundle;
 
 import com.twapime.app.activity.AuthActivity;
 import com.twapime.app.activity.HomeActivity;
-import com.twapime.app.util.UIUtil;
 import com.twitterapime.rest.Credential;
 import com.twitterapime.rest.UserAccountManager;
 import com.twitterapime.xauth.Token;
@@ -69,7 +68,7 @@ public class TwAPImeActivity extends Activity {
 					startActivity(new Intent(this, AuthActivity.class));
 				}
 			} catch (Exception e) {
-				UIUtil.showAlertDialog(this, e);
+				startActivity(new Intent(this, AuthActivity.class));
 			}
         }
     }
