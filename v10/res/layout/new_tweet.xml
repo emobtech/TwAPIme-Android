@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:orientation="vertical" android:layout_height="wrap_content" android:id="@+id/new_tweet">
+    <LinearLayout android:id="@+id/linearLayout2" android:layout_height="wrap_content" android:layout_width="fill_parent">
+        <TextView android:text="@string/message" android:layout_height="wrap_content" android:id="@+id/new_tweet_txtv_new_tweet" android:layout_width="fill_parent" android:layout_weight="1"></TextView>
+        <TextView android:text="0" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/new_tweet_txtv_number_chars" android:gravity="right"></TextView>
+    </LinearLayout>
+    <EditText android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/new_tweet_txtf_content" android:maxLength="140" android:gravity="top" android:lines="5"></EditText>
+    <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout1" android:gravity="center">
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/new_tweet_btn_post" android:text="@string/post"></Button>
+    </LinearLayout>
+</LinearLayout>

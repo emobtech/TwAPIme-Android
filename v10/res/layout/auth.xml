@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent"
+	android:orientation="vertical">
+	<TextView android:layout_height="wrap_content"
+		android:typeface="normal" android:textStyle="bold" android:text="@string/hello"
+		android:layout_width="fill_parent" android:gravity="center"
+		android:layout_marginTop="4px" android:layout_marginBottom="4px"
+		android:id="@+id/auth_txtv_hello"></TextView>
+	<TextView android:layout_height="wrap_content" android:text="@string/username"
+		android:layout_width="wrap_content" android:textStyle="bold"
+		android:id="@+id/auth_txtv_username"></TextView>
+	<EditText android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:id="@+id/auth_txtf_username"></EditText>
+	<TextView android:layout_height="wrap_content" android:text="@string/password"
+		android:layout_width="wrap_content" android:textStyle="bold"
+		android:id="@+id/auth_txtv_password"></TextView>
+	<EditText android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:id="@+id/auth_txtf_password" android:inputType="textPassword"></EditText>
+	<Button android:layout_height="wrap_content" android:text="@string/sign_in"
+		android:layout_width="wrap_content" android:layout_gravity="center_horizontal"
+		android:id="@+id/auth_btn_sign_in"></Button>
+</LinearLayout>

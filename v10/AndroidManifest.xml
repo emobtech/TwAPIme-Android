@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.twapime.app" android:versionCode="1" android:versionName="1.0">
+	<uses-sdk android:minSdkVersion="3" />
+
+	<uses-permission android:name="android.permission.INTERNET" />
+
+	<application android:icon="@drawable/icon" android:label="@string/app_name"
+		android:name=".TwAPImeApplication">
+
+		<meta-data android:name="android.app.default_searchable"
+			android:value=".activity.SearchHomeActivity" />
+
+		<activity android:name=".TwAPImeActivity" android:label="@string/app_name"
+			android:noHistory="true">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+
+		<activity android:name=".activity.SearchHomeActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.SEARCH" />
+			</intent-filter>
+			<meta-data android:name="android.app.searchable"
+				android:resource="@xml/searchable" />
+		</activity>
+
+		<activity android:name=".activity.AuthActivity"
+			android:label="@string/app_name" android:noHistory="true" />
+		<activity android:name=".activity.HomeActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.HomeTimelineActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.MentionTimelineActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.DirectMessageTimelineActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.ListActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.NewTweetActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.ViewTweetActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.NewDirectMessageActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.ListTimelineActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.MemberListActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.ListHomeActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.UserHomeActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.UserProfileActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.UserTimelineActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.TweetSearchTimelineActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.UserSearchListActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.FriendListActivity"
+			android:label="@string/app_name" />
+		<activity android:name=".activity.FollowerListActivity"
+			android:label="@string/app_name" />
+	</application>
+</manifest>
