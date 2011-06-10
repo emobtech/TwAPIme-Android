@@ -46,13 +46,13 @@ public class AuthActivity extends Activity {
 	/**
 	 * 
 	 */
-	public static final String CONSUMER_KEY = "gJT21KgpjtJvFrvkcsL5w";
+	public static final String CONSUMER_KEY = "<Your consumer key goes here>";
 	
 	/**
 	 * 
 	 */
-	public static final String CONSUMER_SECRET =
-		"uRM24w1KnN5Hno3cgsf77gkeRNQSzd1atLFzLlsk";
+	public static final String CONSUMER_SECRET = 
+		"<Your consumer secret goes here>";
 	
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -96,9 +96,6 @@ public class AuthActivity extends Activity {
 		//
 		username.addTextChangedListener(txtWatcher);
 		password.addTextChangedListener(txtWatcher);
-		//
-		username.setText("twiterapimetest");
-		password.setText("password");
 	}
 	
 	/**
@@ -127,16 +124,16 @@ public class AuthActivity extends Activity {
 						CONSUMER_KEY,
 						CONSUMER_SECRET);
 				//
-				Token token =
-					new Token(
-						"100090763-iEaRN7aUH589CnBEDVd4HxzIcEeYWkq8Yk0dSJyG",
-						"OuV7m01mALwksfsNghk5r4Jo1LGhSIS54nR9rPeE");
-				c =
-					new Credential(
-						username.getText().toString(),
-						CONSUMER_KEY,
-						CONSUMER_SECRET,
-						token);
+//				Token token =
+//					new Token(
+//						"<Your access token goes here>",
+//						"<Your token secret goes here>");
+//				c =
+//					new Credential(
+//						username.getText().toString(),
+//						CONSUMER_KEY,
+//						CONSUMER_SECRET,
+//						token);
 				//
 				UserAccountManager uam = UserAccountManager.getInstance(c);
 				//
