@@ -94,8 +94,7 @@ public class UserArrayAdapter extends ArrayAdapter<UserAccount> {
         ImageView imgView =
         	(ImageView)rowView.findViewById(R.id.user_row_img_avatar);
         //
-        String imageUrl =
-        	user.getString(MetadataSet.USERACCOUNT_PICTURE_URI_NORMAL);
+        String imageUrl = user.getString(MetadataSet.USERACCOUNT_PICTURE_URI);
         Drawable cachedImage = null;
         //
         if (imageUrl != null) {

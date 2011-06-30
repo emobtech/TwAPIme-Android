@@ -93,7 +93,7 @@ public class TimelineArrayAdapter extends ArrayAdapter<Tweet> {
         	(TextView)rowView.findViewById(R.id.tweet_row_txtv_username);
         //
        	tv.setText(ua.getString(MetadataSet.USERACCOUNT_NAME));	
-       	imageUrl = ua.getString(MetadataSet.USERACCOUNT_PICTURE_URI_NORMAL);
+       	imageUrl = ua.getString(MetadataSet.USERACCOUNT_PICTURE_URI);
         //
         tv = (TextView)rowView.findViewById(R.id.tweet_row_txtv_content);
         tv.setText(tweet.getString(MetadataSet.TWEET_CONTENT));

@@ -4,7 +4,7 @@
 	<LinearLayout android:id="@+id/linearLayout1"
 		android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="fill_parent">
 		<LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout3" android:orientation="horizontal">
-			<ImageView android:layout_width="wrap_content" android:paddingTop="2px" android:layout_height="wrap_content" android:src="@drawable/icon" android:paddingLeft="2px" android:id="@+id/user_profile_imgv_avatar"></ImageView>
+			<ImageView android:paddingTop="2px" android:src="@drawable/icon" android:paddingLeft="2px" android:id="@+id/user_profile_imgv_avatar" android:layout_height="48dp" android:layout_width="48dp"></ImageView>
 			<LinearLayout android:layout_width="wrap_content" android:layout_height="fill_parent" android:id="@+id/linearLayout2" android:orientation="vertical">
 				<TextView android:paddingTop="2px" android:paddingRight="2px" android:id="@+id/user_profile_txtv_name" android:textStyle="bold" android:text="TextView" android:layout_width="wrap_content" android:paddingLeft="2px" android:layout_height="wrap_content"></TextView>
 				<TextView android:paddingRight="2px" android:id="@+id/user_profile_txtv_username" android:text="TextView" android:layout_width="wrap_content" android:paddingLeft="2px" android:layout_height="wrap_content"></TextView>
