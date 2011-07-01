@@ -13,6 +13,7 @@ import android.app.TabActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,26 +35,32 @@ public class HomeActivity extends TabActivity {
 		//
 		setContentView(R.layout.home);
 		//
+		Resources res = getResources();
 		TabHost tabHost = getTabHost();
 	    TabHost.TabSpec spec;
 	    //
 	    spec = tabHost.newTabSpec("home");
-	    spec.setIndicator(getString(R.string.home), null);
+	    spec.setIndicator(
+	    	getString(R.string.home), res.getDrawable(R.drawable.chat));
 	    spec.setContent(new Intent(this, HomeTimelineActivity.class));
 	    tabHost.addTab(spec);
 	    //
 	    spec = tabHost.newTabSpec("mention");
-	    spec.setIndicator(getString(R.string.mentions), null);
+	    spec.setIndicator(
+	    	getString(R.string.mentions), res.getDrawable(R.drawable.at));
 	    spec.setContent(new Intent(this, MentionTimelineActivity.class));
 	    tabHost.addTab(spec);
 	    //
 	    spec = tabHost.newTabSpec("dm");
-	    spec.setIndicator(getString(R.string.direct_message), null);
+	    spec.setIndicator(
+	    	getString(
+	    		R.string.direct_message), res.getDrawable(R.drawable.mail));
 	    spec.setContent(new Intent(this, DirectMessageTimelineActivity.class));
 	    tabHost.addTab(spec);
 	    //
 	    spec = tabHost.newTabSpec("list");
-	    spec.setIndicator(getString(R.string.lists), null);
+	    spec.setIndicator(
+	    	getString(R.string.lists), res.getDrawable(R.drawable.doc_lines));
 	    spec.setContent(new Intent(this, ListActivity.class));
 	    tabHost.addTab(spec);
 	}

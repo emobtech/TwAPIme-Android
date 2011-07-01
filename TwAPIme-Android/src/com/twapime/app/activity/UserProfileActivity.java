@@ -377,8 +377,12 @@ public class UserProfileActivity extends Activity {
 		//
 		menu.findItem(R.id.menu_item_follow).setTitle(
 			isFollowing ? R.string.unfollow : R.string.follow);	
+		menu.findItem(R.id.menu_item_follow).setIcon(
+			isFollowing ? R.drawable.round_minus : R.drawable.round_plus);	
 		menu.findItem(R.id.menu_item_block).setTitle(
-			isBlocking ? R.string.unblock : R.string.block);	
+			isBlocking ? R.string.unblock : R.string.block);
+		menu.findItem(R.id.menu_item_block).setIcon(
+			isBlocking ? R.drawable.round_checkmark : R.drawable.cancel);	
 		//
 		return result;
 	}

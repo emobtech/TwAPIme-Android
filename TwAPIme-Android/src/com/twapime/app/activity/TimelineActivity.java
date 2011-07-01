@@ -117,9 +117,9 @@ public class TimelineActivity extends ListActivity implements
 			sinceID =
 				QueryComposer.append(
 					QueryComposer.sinceID(lastTweetId),
-					QueryComposer.count(TWEET_COUNT));	
+					QueryComposer.count(TWEET_COUNT / 4));	
 		} else {
-			sinceID = QueryComposer.count(TWEET_COUNT);
+			sinceID = QueryComposer.count(TWEET_COUNT / 4);
 		}
 		//
 		refresh();

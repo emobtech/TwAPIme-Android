@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="@string/follow" android:id="@+id/menu_item_follow"></item>
-    <item android:title="@string/block" android:id="@+id/menu_item_block"></item>
-    <item android:title="@string/report_spam" android:id="@+id/menu_item_report_spam"></item>
+    <item android:title="@string/follow" android:id="@+id/menu_item_follow" android:icon="@drawable/round_plus"></item>
+    <item android:title="@string/block" android:id="@+id/menu_item_block" android:icon="@drawable/cancel"></item>
+    <item android:title="@string/report_spam" android:id="@+id/menu_item_report_spam" android:icon="@drawable/hand"></item>
 </menu>
