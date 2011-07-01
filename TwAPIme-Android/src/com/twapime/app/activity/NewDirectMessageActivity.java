@@ -138,7 +138,7 @@ public class NewDirectMessageActivity extends Activity {
 						public void run() {
 							progressDialog.dismiss();
 							//
-							UIUtil.showAlertDialog(
+							UIUtil.showMessage(
 								NewDirectMessageActivity.this, e);
 						}
 					});

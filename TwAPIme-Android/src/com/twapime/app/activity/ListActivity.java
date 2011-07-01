@@ -99,7 +99,7 @@ public class ListActivity extends android.app.ListActivity {
 						public void run() {
 							progressDialog.dismiss();
 							//
-							UIUtil.showAlertDialog(ListActivity.this, e);
+							UIUtil.showMessage(ListActivity.this, e);
 						}
 					});
 				}

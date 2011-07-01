@@ -10,9 +10,8 @@ package com.twapime.app.util;
 
 import java.io.IOException;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.widget.Toast;
 
 import com.twapime.app.R;
 import com.twitterapime.search.LimitExceededException;
@@ -25,16 +24,16 @@ public final class UIUtil {
 	 * @param context
 	 * @param exception
 	 */
-	public static void showAlertDialog(Context context, Throwable exception) {
+	public static void showMessage(Context context, Throwable exception) {
 		if (exception instanceof IOException) {
-			showAlertDialog(
+			showMessage(
 				context,
 				context.getString(R.string.network_access_failure));
 		} else if (exception instanceof LimitExceededException) {
-			showAlertDialog(
+			showMessage(
 				context, context.getString(R.string.rate_limit_exceeded));
 		} else {
-			showAlertDialog(context, exception.getMessage());
+			showMessage(context, exception.getMessage());
 		}
 	}
 
@@ -42,20 +41,21 @@ public final class UIUtil {
 	 * @param context
 	 * @param message
 	 */
-	public static void showAlertDialog(Context context, String message) {
-		AlertDialog alert = new AlertDialog.Builder(context).create();
-		alert.setTitle(context.getString(R.string.app_name));
-		alert.setMessage(message);
-		alert.setButton(
-			context.getString(R.string.ok),
-			new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {}
-			}
-		);
-		alert.setIcon(R.drawable.icon);
-		alert.show();
+	public static void showMessage(Context context, String message) {
+		Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 	}
 	
+	/**
+	 * @param context
+	 * @param resId
+	 */
+	public static void showMessage(Context context, int resId) {
+		Toast.makeText(
+			context,
+			context.getResources().getString(resId),
+			Toast.LENGTH_LONG).show();
+	}
+
 	/**
 	 * 
 	 */

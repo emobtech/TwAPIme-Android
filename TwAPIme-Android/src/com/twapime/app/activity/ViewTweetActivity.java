@@ -103,7 +103,7 @@ public class ViewTweetActivity extends Activity {
 						public void run() {
 							progressDialog.dismiss();
 							//
-							UIUtil.showAlertDialog(ViewTweetActivity.this, e);
+							UIUtil.showMessage(ViewTweetActivity.this, e);
 						}
 					});
 				}
@@ -137,7 +137,7 @@ public class ViewTweetActivity extends Activity {
 						public void run() {
 							progressDialog.dismiss();
 							//
-							UIUtil.showAlertDialog(ViewTweetActivity.this, e);
+							UIUtil.showMessage(ViewTweetActivity.this, e);
 						}
 					});
 				}
@@ -226,7 +226,7 @@ public class ViewTweetActivity extends Activity {
 						public void run() {
 							progressDialog.dismiss();
 							//
-							UIUtil.showAlertDialog(ViewTweetActivity.this, e);
+							UIUtil.showMessage(ViewTweetActivity.this, e);
 						}
 					});
 				}

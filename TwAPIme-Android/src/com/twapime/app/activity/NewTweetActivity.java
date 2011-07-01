@@ -166,7 +166,7 @@ public class NewTweetActivity extends Activity {
 						public void run() {
 							progressDialog.dismiss();
 							//
-							UIUtil.showAlertDialog(NewTweetActivity.this, e);
+							UIUtil.showMessage(NewTweetActivity.this, e);
 						}
 					});
 				}

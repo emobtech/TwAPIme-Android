@@ -16,6 +16,7 @@ import java.util.List;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -41,6 +42,11 @@ import com.twitterapime.search.Tweet;
  */
 public class TimelineActivity extends ListActivity implements
 	SearchDeviceListener {
+	/**
+	 * 
+	 */
+	static final int TWEET_COUNT = 200;
+
 	/**
 	 * 
 	 */
@@ -106,6 +112,16 @@ public class TimelineActivity extends ListActivity implements
 		//
 		timeline = Timeline.getInstance(app.getUserAccountManager());
 		//
+		String lastTweetId = loadSavedLastTweetId();
+		if (lastTweetId != null) {
+			sinceID =
+				QueryComposer.append(
+					QueryComposer.sinceID(lastTweetId),
+					QueryComposer.count(TWEET_COUNT));	
+		} else {
+			sinceID = QueryComposer.count(TWEET_COUNT);
+		}
+		//
 		refresh();
 	}
 	
@@ -161,7 +177,7 @@ public class TimelineActivity extends ListActivity implements
 						public void run() {
 							progressDialog.dismiss();
 							//
-							UIUtil.showAlertDialog(TimelineActivity.this, e);
+							UIUtil.showMessage(TimelineActivity.this, e);
 						}
 					});
 				}
@@ -252,7 +268,7 @@ public class TimelineActivity extends ListActivity implements
 						public void run() {
 							progressDialog.dismiss();
 							//
-							UIUtil.showAlertDialog(TimelineActivity.this, e);
+							UIUtil.showMessage(TimelineActivity.this, e);
 						}
 					});
 				}
@@ -281,9 +297,14 @@ public class TimelineActivity extends ListActivity implements
 			}
 		});
 		if (tweets.size() > 0) {
+			String lastTweetId = tweets.get(0).getString(MetadataSet.TWEET_ID);
+			//
 			sinceID =
-				QueryComposer.sinceID(
-					tweets.get(0).getString(MetadataSet.TWEET_ID));
+				QueryComposer.append(
+					QueryComposer.sinceID(lastTweetId),
+					QueryComposer.count(TWEET_COUNT));
+			//
+			saveLastTweetId(lastTweetId);
 		}
 		//
 		runOnUiThread(notifyNewTweet);
@@ -299,7 +320,7 @@ public class TimelineActivity extends ListActivity implements
 			public void run() {
 				progressDialog.dismiss();
 				//
-				UIUtil.showAlertDialog(TimelineActivity.this, exception);
+				UIUtil.showMessage(TimelineActivity.this, exception);
 			}
 		});
 	}
@@ -378,6 +399,30 @@ public class TimelineActivity extends ListActivity implements
 	    default:
 	        return super.onContextItemSelected(item);
 	    }
+	}
+	
+	/**
+	 * @param tweetId
+	 */
+	protected void saveLastTweetId(String tweetId) {
+		SharedPreferences.Editor editor =
+			getSharedPreferences(
+				TwAPImeApplication.PREFS_NAME, MODE_PRIVATE).edit();
+		//
+		editor.putString(getClass().getName(), tweetId);
+		//
+		editor.commit();
+	}
+	
+	/**
+	 * @return
+	 */
+	protected String loadSavedLastTweetId() {
+//		SharedPreferences prefs =
+//			getSharedPreferences(TwAPImeApplication.PREFS_NAME, MODE_PRIVATE);
+//		//
+//		return prefs.getString(getClass().getName(), null);
+		return null;
 	}
 	
 	/**

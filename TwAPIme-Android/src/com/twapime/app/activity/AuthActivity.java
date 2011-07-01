@@ -162,7 +162,7 @@ public class AuthActivity extends Activity {
 							public void run() {
 								progressDialog.dismiss();
 								//
-								UIUtil.showAlertDialog(
+								UIUtil.showMessage(
 									AuthActivity.this,
 									getString(R.string.credentials_invalid));
 							}
@@ -174,7 +174,7 @@ public class AuthActivity extends Activity {
 						public void run() {
 							progressDialog.dismiss();
 							//
-							UIUtil.showAlertDialog(AuthActivity.this, e);
+							UIUtil.showMessage(AuthActivity.this, e);
 						}
 					});
 				}

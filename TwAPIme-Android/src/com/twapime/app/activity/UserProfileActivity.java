@@ -112,7 +112,7 @@ public class UserProfileActivity extends Activity {
 						public void run() {
 							progressDialog.dismiss();
 							//
-							UIUtil.showAlertDialog(UserProfileActivity.this, e);
+							UIUtil.showMessage(UserProfileActivity.this, e);
 						}
 					});
 				}
@@ -280,7 +280,7 @@ public class UserProfileActivity extends Activity {
 						public void run() {
 							progressDialog.dismiss();
 							//
-							UIUtil.showAlertDialog(UserProfileActivity.this, e);
+							UIUtil.showMessage(UserProfileActivity.this, e);
 						}
 					});
 				}
@@ -326,7 +326,7 @@ public class UserProfileActivity extends Activity {
 						public void run() {
 							progressDialog.dismiss();
 							//
-							UIUtil.showAlertDialog(UserProfileActivity.this, e);
+							UIUtil.showMessage(UserProfileActivity.this, e);
 						}
 					});
 				}
@@ -360,7 +360,7 @@ public class UserProfileActivity extends Activity {
 						public void run() {
 							progressDialog.dismiss();
 							//
-							UIUtil.showAlertDialog(UserProfileActivity.this, e);
+							UIUtil.showMessage(UserProfileActivity.this, e);
 						}
 					});
 				}

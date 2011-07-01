@@ -18,7 +18,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.twapime.app.R;
 import com.twapime.app.util.UIUtil;
@@ -90,10 +89,8 @@ public abstract class UserListActivity extends ListActivity {
 					runOnUiThread(new Runnable() {
 						@Override
 						public void run() {
-							Toast.makeText(
-								getApplicationContext(),
-								R.string.refreshing,
-								Toast.LENGTH_LONG).show();
+							UIUtil.showMessage(
+								getApplicationContext(), R.string.refreshing);
 						}
 					});
 					//
@@ -157,7 +154,7 @@ public abstract class UserListActivity extends ListActivity {
 			runOnUiThread(new Runnable() {
 				@Override
 				public void run() {
-					UIUtil.showAlertDialog(UserListActivity.this, e);
+					UIUtil.showMessage(UserListActivity.this, e);
 				}
 			});
 		}
