@@ -18,6 +18,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.twapime.app.R;
 import com.twapime.app.util.UIUtil;
@@ -33,7 +34,7 @@ import com.twitterapime.search.QueryComposer;
 /**
  * @author ernandes@gmail.com
  */
-public class UserListActivity extends ListActivity {
+public abstract class UserListActivity extends ListActivity {
 	/**
 	 * 
 	 */
@@ -86,6 +87,16 @@ public class UserListActivity extends ListActivity {
 			@Override
 			public void run() {
 				if (hasMorePages) {
+					runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							Toast.makeText(
+								getApplicationContext(),
+								R.string.refreshing,
+								Toast.LENGTH_LONG).show();
+						}
+					});
+					//
 					refresh();
 				}
 			}
@@ -94,12 +105,22 @@ public class UserListActivity extends ListActivity {
 		getListView().setOnScrollListener(
 			new LoadingScrollListener(5, loadNextPageTask));
 		//
+		reload();
+	}
+	
+	/**
+	 * 
+	 */
+	protected void reload() {
 		final ProgressDialog progressDialog =
 			ProgressDialog.show(
 				this, "", getString(R.string.refreshing), false);
 		//
 		new Thread() {
 			public void run() {
+				users.clear();
+				nextPageQuery = null;
+				//
 				refresh();
 				//
 				runOnUiThread(new Runnable() {
@@ -159,7 +180,6 @@ public class UserListActivity extends ListActivity {
 	/**
 	 * @return
 	 */
-	protected Cursor loadNextPage() throws IOException, LimitExceededException {
-		return new Cursor(new Object[0], 0, 0);
-	}
+	protected abstract Cursor loadNextPage() throws IOException, 
+		LimitExceededException;
 }

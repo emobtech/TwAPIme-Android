@@ -54,12 +54,12 @@ public class TimelineActivity extends ListActivity implements
 	/**
 	 * 
 	 */
-	private List<Tweet> tweets;
-	
+	private Runnable notifyNewTweet;
+
 	/**
 	 * 
 	 */
-	private Runnable notifyNewTweet;
+	protected List<Tweet> tweets;
 	
 	/**
 	 * 

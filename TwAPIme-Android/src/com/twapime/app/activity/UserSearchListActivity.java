@@ -11,6 +11,7 @@ package com.twapime.app.activity;
 import java.io.IOException;
 
 import android.app.SearchManager;
+import android.content.Intent;
 
 import com.twapime.app.TwAPImeApplication;
 import com.twitterapime.model.Cursor;
@@ -22,6 +23,16 @@ import com.twitterapime.search.QueryComposer;
  * @author ernandes@gmail.com
  */
 public class UserSearchListActivity extends UserListActivity {
+	/**
+	 * @see android.app.Activity#setIntent(android.content.Intent)
+	 */
+	@Override
+	public void setIntent(Intent newIntent) {
+		super.setIntent(newIntent);
+		//
+		reload();
+	}
+
 	/**
 	 * @see com.twapime.app.activity.UserListActivity#loadNextPage()
 	 */

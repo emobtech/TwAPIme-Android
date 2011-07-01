@@ -9,7 +9,7 @@
 package com.twapime.app.activity;
 
 import android.app.SearchManager;
-import android.os.Bundle;
+import android.content.Intent;
 
 import com.twitterapime.search.QueryComposer;
 import com.twitterapime.search.SearchDevice;
@@ -19,19 +19,22 @@ import com.twitterapime.search.SearchDevice;
  */
 public class TweetSearchTimelineActivity extends TimelineActivity {
 	/**
-	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 * @see android.app.Activity#setIntent(android.content.Intent)
 	 */
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void setIntent(Intent newIntent) {
+		super.setIntent(newIntent);
+		//
+		refresh();
 	}
-	
+
 	/**
 	 * @see com.twapime.app.activity.TimelineActivity#refresh()
 	 */
 	@Override
 	public void refresh() {
 		super.refresh();
+		tweets.clear();
 		//
 		String queryStr = getIntent().getStringExtra(SearchManager.QUERY);
 		SearchDevice sd = SearchDevice.getInstance();

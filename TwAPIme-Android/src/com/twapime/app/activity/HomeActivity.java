@@ -118,7 +118,7 @@ public class HomeActivity extends TabActivity {
 		SharedPreferences prefs =
 			getSharedPreferences(TwAPImeApplication.PREFS_NAME, MODE_PRIVATE);
 		//
-		Intent intent = new Intent(this, UserProfileActivity.class);
+		Intent intent = new Intent(this, UserHomeActivity.class);
 		intent.putExtra(
 			UserHomeActivity.PARAM_KEY_USERNAME,
 			prefs.getString(AuthActivity.PREFS_KEY_USERNAME, null));

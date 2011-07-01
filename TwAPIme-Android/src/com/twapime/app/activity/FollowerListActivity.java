@@ -27,13 +27,12 @@ public class FollowerListActivity extends FriendListActivity {
 		String username =
 			userAccount.getString(MetadataSet.USERACCOUNT_USER_NAME);
 		//
-		if (nextPageQuery != null) {
-			nextPageQuery =
-				QueryComposer.append(
-					nextPageQuery, QueryComposer.screenName(username));
-		} else {
-			nextPageQuery = QueryComposer.screenName(username);
+		if (nextPageQuery == null) {
+			nextPageQuery = QueryComposer.cursor(-1);
 		}
+		nextPageQuery =
+			QueryComposer.append(
+				nextPageQuery, QueryComposer.screenName(username));
 		//
 		return friendMngr.getFollowers(nextPageQuery);
 	}
