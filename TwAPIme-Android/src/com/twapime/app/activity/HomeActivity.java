@@ -51,12 +51,12 @@ public class HomeActivity extends TabActivity {
 	    spec.setContent(new Intent(this, MentionTimelineActivity.class));
 	    tabHost.addTab(spec);
 	    //
-	    spec = tabHost.newTabSpec("dm");
-	    spec.setIndicator(
-	    	getString(
-	    		R.string.direct_message), res.getDrawable(R.drawable.mail));
-	    spec.setContent(new Intent(this, DirectMessageTimelineActivity.class));
-	    tabHost.addTab(spec);
+//	    spec = tabHost.newTabSpec("dm");
+//	    spec.setIndicator(
+//	    	getString(
+//	    		R.string.direct_message), res.getDrawable(R.drawable.mail));
+//	    spec.setContent(new Intent(this, DirectMessageTimelineActivity.class));
+//	    tabHost.addTab(spec);
 	    //
 	    spec = tabHost.newTabSpec("list");
 	    spec.setIndicator(
@@ -134,6 +134,13 @@ public class HomeActivity extends TabActivity {
 	}
 	
 	/**
+	 * 
+	 */
+	protected void viewAbout() {
+		startActivity(new Intent(this, AboutActivity.class));
+	}
+	
+	/**
 	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
 	 */
 	@Override
@@ -174,6 +181,8 @@ public class HomeActivity extends TabActivity {
 	    	//
 	        return true;
 	    case R.id.menu_item_about:
+	    	viewAbout();
+	    	//
 	        return true;
 	    case R.id.menu_item_sign_out:
 	    	signOut();

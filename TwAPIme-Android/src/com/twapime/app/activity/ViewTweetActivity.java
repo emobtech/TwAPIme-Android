@@ -285,10 +285,10 @@ public class ViewTweetActivity extends Activity {
 	    	comment();
 	    	//
 	        return true;
-	    case R.id.menu_item_new_dm:
-	    	newDM();
-	    	//
-	        return true;
+//	    case R.id.menu_item_new_dm:
+//	    	newDM();
+//	    	//
+//	        return true;
 	    case R.id.menu_item_reply:
 	    	reply();
 	    	//

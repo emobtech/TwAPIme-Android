@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
 
@@ -30,6 +31,7 @@ public class SearchHomeActivity extends TabActivity {
 		//
 		setContentView(R.layout.home);
 		//
+		Resources res = getResources();
 		Intent intent = getIntent();
 		String queryStr = null;
 		//
@@ -41,7 +43,8 @@ public class SearchHomeActivity extends TabActivity {
 		TabHost.TabSpec spec;
 		//
 		spec = tabHost.newTabSpec("tweets");
-		spec.setIndicator(getString(R.string.tweets), null);
+		spec.setIndicator(
+			getString(R.string.tweets), res.getDrawable(R.drawable.chat));
 		//
 		intent = new Intent(this, TweetSearchTimelineActivity.class);
 		intent.putExtra(SearchManager.QUERY, queryStr);
@@ -50,7 +53,8 @@ public class SearchHomeActivity extends TabActivity {
 		tabHost.addTab(spec);
 		//
 		spec = tabHost.newTabSpec("users");
-		spec.setIndicator(getString(R.string.users), null);
+		spec.setIndicator(
+			getString(R.string.users), res.getDrawable(R.drawable.users));
 		//
 		intent = new Intent(this, UserSearchListActivity.class);
 		intent.putExtra(SearchManager.QUERY, queryStr);

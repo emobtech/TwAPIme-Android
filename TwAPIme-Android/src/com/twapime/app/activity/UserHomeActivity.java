@@ -10,6 +10,7 @@ package com.twapime.app.activity;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
 
@@ -33,6 +34,7 @@ public class UserHomeActivity extends TabActivity {
 		//
 		setContentView(R.layout.home);
 		//
+		Resources res = getResources();
 		Intent intent = getIntent();
 		//
 		String username = intent.getExtras().getString(PARAM_KEY_USERNAME);
@@ -41,7 +43,8 @@ public class UserHomeActivity extends TabActivity {
 	    TabHost.TabSpec spec;
 	    //
 	    spec = tabHost.newTabSpec("profile");
-	    spec.setIndicator(getString(R.string.profile), null);
+	    spec.setIndicator(
+	    	getString(R.string.profile), res.getDrawable(R.drawable.user));
 	    //
 		intent = new Intent(this, UserProfileActivity.class);
 		intent.putExtra(UserProfileActivity.PARAM_KEY_USERNAME, username);
@@ -50,7 +53,8 @@ public class UserHomeActivity extends TabActivity {
 	    tabHost.addTab(spec);
 	    //
 	    spec = tabHost.newTabSpec("tweets");
-	    spec.setIndicator(getString(R.string.tweets), null);
+	    spec.setIndicator(
+	    	getString(R.string.tweets), res.getDrawable(R.drawable.chat));
 	    //
 		intent = new Intent(this, UserTimelineActivity.class);
 		intent.putExtra(UserTimelineActivity.PARAM_KEY_USERNAME, username);
@@ -59,7 +63,8 @@ public class UserHomeActivity extends TabActivity {
 	    tabHost.addTab(spec);
 	    //
 	    spec = tabHost.newTabSpec("friends");
-	    spec.setIndicator(getString(R.string.friends), null);
+	    spec.setIndicator(
+	    	getString(R.string.friends), res.getDrawable(R.drawable.users));
 	    //
 		intent = new Intent(this, FriendListActivity.class);
 		intent.putExtra(FriendListActivity.PARAM_KEY_USERNAME, username);
@@ -68,7 +73,8 @@ public class UserHomeActivity extends TabActivity {
 	    tabHost.addTab(spec);
 	    //
 	    spec = tabHost.newTabSpec("followers");
-	    spec.setIndicator(getString(R.string.followers), null);
+	    spec.setIndicator(
+	    	getString(R.string.followers), res.getDrawable(R.drawable.users));
 	    //
 		intent = new Intent(this, FollowerListActivity.class);
 		intent.putExtra(FollowerListActivity.PARAM_KEY_USERNAME, username);

@@ -117,7 +117,7 @@ public class TimelineActivity extends ListActivity implements
 			sinceID =
 				QueryComposer.append(
 					QueryComposer.sinceID(lastTweetId),
-					QueryComposer.count(TWEET_COUNT / 4));	
+					QueryComposer.count(TWEET_COUNT / 4));
 		} else {
 			sinceID = QueryComposer.count(TWEET_COUNT / 4);
 		}
@@ -384,10 +384,10 @@ public class TimelineActivity extends ListActivity implements
 	    	comment(tweet);
 	    	//
 	        return true;
-	    case R.id.menu_item_new_dm:
-	    	newDM(tweet);
-	    	//
-	        return true;
+//	    case R.id.menu_item_new_dm:
+//	    	newDM(tweet);
+//	    	//
+//	        return true;
 	    case R.id.menu_item_reply:
 	    	reply(tweet);
 	    	//

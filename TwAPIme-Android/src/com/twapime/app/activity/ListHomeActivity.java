@@ -10,6 +10,7 @@ package com.twapime.app.activity;
 
 import android.app.TabActivity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
 
@@ -38,6 +39,7 @@ public class ListHomeActivity extends TabActivity {
 		//
 		setContentView(R.layout.home);
 		//
+		Resources res = getResources();
 		Intent intent = getIntent();
 		//
 		String listID = intent.getExtras().getString(PARAM_KEY_LIST_ID);
@@ -47,7 +49,8 @@ public class ListHomeActivity extends TabActivity {
 	    TabHost.TabSpec spec;
 	    //
 	    spec = tabHost.newTabSpec("timeline");
-	    spec.setIndicator(getString(R.string.tweets), null);
+	    spec.setIndicator(
+	    	getString(R.string.tweets), res.getDrawable(R.drawable.chat));
 	    //
 		intent = new Intent(this, ListTimelineActivity.class);
 		intent.putExtra(ListTimelineActivity.PARAM_KEY_LIST_ID, listID);
@@ -57,7 +60,8 @@ public class ListHomeActivity extends TabActivity {
 	    tabHost.addTab(spec);
 	    //
 	    spec = tabHost.newTabSpec("member");
-	    spec.setIndicator(getString(R.string.members), null);
+	    spec.setIndicator(
+	    	getString(R.string.members), res.getDrawable(R.drawable.users));
 	    //
 		intent = new Intent(this, MemberListActivity.class);
 		intent.putExtra(MemberListActivity.PARAM_KEY_LIST_ID, listID);
