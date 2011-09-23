@@ -9,9 +9,9 @@
 package com.twapime.app.activity;
 
 import java.util.Hashtable;
+import java.util.List;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -22,10 +22,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.twapime.app.R;
-import com.twapime.app.TwAPImeApplication;
-import com.twapime.app.util.UIUtil;
+import com.twapime.app.service.PostTweetAsyncServiceCall;
 import com.twitterapime.model.MetadataSet;
-import com.twitterapime.rest.TweetER;
 import com.twitterapime.rest.UserAccount;
 import com.twitterapime.search.Tweet;
 
@@ -47,11 +45,6 @@ public class NewTweetActivity extends Activity {
 	 * 
 	 */
 	static final String PARAM_KEY_TWEET_CONTENT = "PARAM_KEY_TWEET_CONTENT";
-	
-	/**
-	 * 
-	 */
-	private TweetER ter;
 	
 	/**
 	 * 
@@ -127,50 +120,20 @@ public class NewTweetActivity extends Activity {
 			//
 			replyTweet = new Tweet(data);
 		}
-		//
-		TwAPImeApplication app = (TwAPImeApplication)getApplication();
-		ter = TweetER.getInstance(app.getUserAccountManager());
 	}
 	
 	/**
 	 * 
 	 */
 	public void post() {
-		final ProgressDialog progressDialog =
-			ProgressDialog.show(
-				this, "", getString(R.string.posting_tweet), false);
+		EditText text = (EditText)findViewById(R.id.new_tweet_txtf_content);
+		Tweet tweet = new Tweet(text.getEditableText().toString(), replyTweet);
 		//
-		new Thread() {
+		new PostTweetAsyncServiceCall(this) {
 			@Override
-			public void run() {
-				EditText content =
-					(EditText)findViewById(R.id.new_tweet_txtf_content);
-				Tweet tweet =
-					new Tweet(content.getEditableText().toString(), replyTweet);
-				//
-				try {
-					ter.post(tweet);
-					//
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-						}
-					});
-					//
-					finish();
-				} catch (final Exception e) {
-					//
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-							//
-							UIUtil.showMessage(NewTweetActivity.this, e);
-						}
-					});
-				}
-			}
-		}.start();
+			protected void onPostRun(List<Tweet> result) {
+				finish();
+			};
+		}.execute(tweet);
 	}
 }
