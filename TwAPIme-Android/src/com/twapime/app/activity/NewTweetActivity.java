@@ -69,6 +69,10 @@ public class NewTweetActivity extends Activity {
 			}
 		});
 		//
+		final TextView numberOfChars =
+			(TextView)findViewById(R.id.new_tweet_txtv_number_chars);
+		numberOfChars.setText(Tweet.MAX_CHARACTERS + "");
+		//
 		EditText t = (EditText)findViewById(R.id.new_tweet_txtf_content);
 		t.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -83,10 +87,8 @@ public class NewTweetActivity extends Activity {
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				TextView tv =
-					(TextView)findViewById(R.id.new_tweet_txtv_number_chars);
-				//
-				tv.setText(s.length() + "");
+				numberOfChars.setText(
+					(Tweet.MAX_CHARACTERS - s.length()) + "");
 				btnPost.setEnabled(s.length() > 0);
 			}
 		});
@@ -97,10 +99,9 @@ public class NewTweetActivity extends Activity {
 			String content =
 				intent.getExtras().getString(PARAM_KEY_TWEET_CONTENT);
 			//
-			final int TWEET_LENGTH = 140;
-			//
-			if (content.trim().length() > TWEET_LENGTH) {
-				content = content.substring(0, TWEET_LENGTH - 3) + "...";
+			if (content.trim().length() > Tweet.MAX_CHARACTERS) {
+				content =
+					content.substring(0, Tweet.MAX_CHARACTERS - 3) + "...";
 			}
 			//
 			t.setText(content);
