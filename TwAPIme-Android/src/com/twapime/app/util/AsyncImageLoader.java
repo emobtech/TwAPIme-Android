@@ -59,7 +59,7 @@ public final class AsyncImageLoader {
 		return singleton;
 	}
 	
-    /**
+    /**                                               
      * 
      */
     private final ConcurrentHashMap<String, SoftReference<Drawable>> softCache;
@@ -262,7 +262,7 @@ public final class AsyncImageLoader {
 	                    stream.close();
 	                }
 	                //
-	                entity.consumeContent();
+	                entity.consumeContent();                                                              
 	            }
 	        }
 	    } catch (IOException e) {
@@ -278,15 +278,14 @@ public final class AsyncImageLoader {
 	private void loadCacheDir() {
 	    if (Environment.getExternalStorageState().equals(
 	    		Environment.MEDIA_MOUNTED)) {
-	        cacheDir =
-	        	new File(
-	        		Environment.getExternalStorageDirectory(), "TwAPIme");
+	    	File sdDir = Environment.getExternalStorageDirectory();
+	        cacheDir = new File(sdDir.getAbsolutePath() + "/TwAPIme/cache");
+		    //
+		    if (!cacheDir.exists()) {
+	    		cacheDir.mkdirs();	
+		    }
 	    } else {
 	        cacheDir = context.getCacheDir();
-	    }
-	    //
-	    if (!cacheDir.exists()) {
-	        cacheDir.mkdirs();
 	    }
 	}
 	

@@ -8,8 +8,9 @@
  */
 package com.twapime.app.activity;
 
+import java.util.List;
+
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -21,13 +22,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.twapime.app.R;
-import com.twapime.app.TwAPImeApplication;
+import com.twapime.app.service.FavoriteTweetAsyncServiceCall;
+import com.twapime.app.service.RepostTweetAsyncServiceCall;
 import com.twapime.app.util.AsyncImageLoader;
 import com.twapime.app.util.DateUtil;
-import com.twapime.app.util.UIUtil;
 import com.twapime.app.widget.ImageViewCallback;
 import com.twitterapime.model.MetadataSet;
-import com.twitterapime.rest.TweetER;
 import com.twitterapime.rest.UserAccount;
 import com.twitterapime.search.Tweet;
 
@@ -38,17 +38,17 @@ public class ViewTweetActivity extends Activity {
 	/**
 	 * 
 	 */
-	static final String PARAM_KEY_TWEET_ID = "PARAM_KEY_TWEET_ID";
-	
-	/**
-	 * 
-	 */
-	private TweetER ter;
+	static final String PARAM_KEY_TWEET = "PARAM_KEY_TWEET";
 	
 	/**
 	 * 
 	 */
 	private Tweet tweet;
+	
+	/**
+	 * 
+	 */
+	private boolean isFavorite;
 	
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -59,9 +59,6 @@ public class ViewTweetActivity extends Activity {
 		//
 		setContentView(R.layout.view_tweet);
 		//
-		TwAPImeApplication app = (TwAPImeApplication)getApplication();
-		ter = TweetER.getInstance(app.getUserAccountManager());
-		//
 		final Button btn = (Button)findViewById(R.id.view_tweet_btn_profile);
 		btn.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -69,80 +66,17 @@ public class ViewTweetActivity extends Activity {
 				viewUserProfile();
 			}
 		});
+		tweet = (Tweet)getIntent().getExtras().getSerializable(PARAM_KEY_TWEET);
+		isFavorite = tweet.getBoolean(MetadataSet.TWEET_FAVOURITE);
 		//
 		displayTweet();
-		//
-		loadTweet(getIntent().getExtras().getString(PARAM_KEY_TWEET_ID));
-	}
-	
-	/**
-	 * @param tweetID
-	 */
-	public void loadTweet(final String tweetID) {
-		final ProgressDialog progressDialog =
-			ProgressDialog.show(
-				this, "", getString(R.string.loading_tweet), false);
-		//
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					tweet = ter.findByID(tweetID);
-					//
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							displayTweet();
-							//
-							progressDialog.dismiss();
-						}
-					});
-				} catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-							//
-							UIUtil.showMessage(ViewTweetActivity.this, e);
-						}
-					});
-				}
-			};
-		}.start();
 	}
 	
 	/**
 	 * 
 	 */
 	public void retweet() {
-		final ProgressDialog progressDialog =
-			ProgressDialog.show(
-				this, "", getString(R.string.retweeting), false);
-		//
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					ter.repost(tweet);
-					//
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-						}
-					});
-				} catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-							//
-							UIUtil.showMessage(ViewTweetActivity.this, e);
-						}
-					});
-				}
-			};
-		}.start();
+		new RepostTweetAsyncServiceCall(this).execute(tweet);
 	}
 	
 	/**
@@ -180,16 +114,12 @@ public class ViewTweetActivity extends Activity {
 	 * 
 	 */
 	public void reply() {
-		String tweetID = tweet.getString(MetadataSet.TWEET_ID);
 		String username =
 			tweet.getUserAccount().getString(MetadataSet.USERACCOUNT_USER_NAME);
 		//
 		Intent intent = new Intent(this, NewTweetActivity.class);
 		//
-		intent.putExtra(
-			NewTweetActivity.PARAM_KEY_REPLY_TWEET_ID, tweetID);
-		intent.putExtra(
-			NewTweetActivity.PARAM_KEY_REPLY_USERNAME, username);
+		intent.putExtra(NewTweetActivity.PARAM_KEY_REPLY_TWEET, tweet);
 		intent.putExtra(
 			NewTweetActivity.PARAM_KEY_TWEET_CONTENT, "@" + username);
 		//
@@ -200,50 +130,26 @@ public class ViewTweetActivity extends Activity {
 	 * 
 	 */
 	public void favorite() {
-		final ProgressDialog progressDialog =
-			ProgressDialog.show(
-				this, "",
-				getString(
-					isFavoriteTweet()
-						? R.string.unfavoriting : R.string.favoriting),
-				false);
-		//
-		new Thread() {
+		FavoriteTweetAsyncServiceCall favCall =
+			new FavoriteTweetAsyncServiceCall(this) {
 			@Override
-			public void run() {
-				try {
-					ter.favorite(tweet);
-					//
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-						}
-					});
-				} catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-							//
-							UIUtil.showMessage(ViewTweetActivity.this, e);
-						}
-					});
-				}
-			};
-		}.start();
+			protected void onPostRun(List<Tweet> result) {
+				isFavorite = !isFavorite;
+			}
+		};
+		favCall.setProgressStringId(
+			isFavorite ? R.string.unfavoriting : R.string.favoriting);
+		//
+		favCall.execute(tweet);
 	}
 	
 	/**
 	 * 
 	 */
-	protected void viewUserProfile() {
-		UserAccount ua = tweet.getUserAccount();
-		//
+	public void viewUserProfile() {
 		Intent intent = new Intent(this, UserHomeActivity.class);
 		intent.putExtra(
-			UserHomeActivity.PARAM_KEY_USERNAME,
-			ua.getString(MetadataSet.USERACCOUNT_USER_NAME));
+			UserHomeActivity.PARAM_KEY_USER, tweet.getUserAccount());
 		//
 		startActivity(intent);
 	}
@@ -256,7 +162,7 @@ public class ViewTweetActivity extends Activity {
 		boolean result = super.onPrepareOptionsMenu(menu);
 		//
 		menu.findItem(R.id.menu_item_favorite).setTitle(
-			isFavoriteTweet() ? R.string.unfavorite : R.string.favorite);	
+			isFavorite ? R.string.unfavorite : R.string.favorite);	
 		//
 		return result;
 	}
@@ -285,10 +191,10 @@ public class ViewTweetActivity extends Activity {
 	    	comment();
 	    	//
 	        return true;
-//	    case R.id.menu_item_new_dm:
-//	    	newDM();
-//	    	//
-//	        return true;
+	    case R.id.menu_item_new_dm:
+	    	newDM();
+	    	//
+	        return true;
 	    case R.id.menu_item_reply:
 	    	reply();
 	    	//
@@ -306,11 +212,7 @@ public class ViewTweetActivity extends Activity {
 	 * 
 	 */
 	public void displayTweet() {
-		UserAccount ua = null;
-		//
-		if (tweet != null) {
-			ua = tweet.getUserAccount();
-		}
+		UserAccount ua = tweet.getUserAccount();
 		//
 		TextView txtv = (TextView)findViewById(R.id.view_tweet_txtv_name);
 		if (ua != null) {
@@ -327,29 +229,17 @@ public class ViewTweetActivity extends Activity {
 		}
 		//
 		txtv = (TextView)findViewById(R.id.view_tweet_txtv_content);
-		if (tweet != null) {
-			txtv.setText(tweet.getString(MetadataSet.TWEET_CONTENT));	
-		} else {
-			txtv.setText("");
-		}
+		txtv.setText(tweet.getString(MetadataSet.TWEET_CONTENT));	
 		//
 		txtv = (TextView)findViewById(R.id.view_tweet_txtv_app);
-		if (tweet != null) {
-			txtv.setText(tweet.getString(MetadataSet.TWEET_SOURCE));	
-		} else {
-			txtv.setText("");
-		}
+		txtv.setText(tweet.getString(MetadataSet.TWEET_SOURCE));	
 		//
 		txtv = (TextView)findViewById(R.id.view_tweet_txtv_time);
-		if (tweet != null) {
-			txtv.setText(
-				DateUtil.formatTweetDate(
-	        		Long.parseLong(
-	            		tweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
-	            		this));
-		} else {
-			txtv.setText("");
-		}
+		txtv.setText(
+			DateUtil.formatTweetDate(
+        		Long.parseLong(
+            		tweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
+            		this));
 		//
 		ImageView imgV = (ImageView)findViewById(R.id.view_tweet_imgv_avatar);
 		//
@@ -372,14 +262,5 @@ public class ViewTweetActivity extends Activity {
         }
         //
         imgV.setImageDrawable(cachedImage);
-	}
-	
-	/**
-	 * @return
-	 */
-	private boolean isFavoriteTweet() {
-		String favorite = tweet.getString(MetadataSet.TWEET_FAVOURITE);
-		//
-		return favorite != null && "true".equals(favorite);
 	}
 }

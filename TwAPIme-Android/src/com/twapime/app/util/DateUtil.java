@@ -8,6 +8,9 @@
  */
 package com.twapime.app.util;
 
+import java.util.Calendar;
+import java.util.TimeZone;
+
 import android.content.Context;
 import android.text.format.DateFormat;
 
@@ -28,7 +31,24 @@ public final class DateUtil {
 		final long OH = OM * 60;
 		final long T4H = OH * 24;
 		//
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(time);
+		//
+	    TimeZone z = c.getTimeZone();
+	    final int offset = z.getRawOffset();
+	    final int offsetHrs = offset / 1000 / 60 / 60;
+	    final int offsetMins = offset / 1000 / 60 % 60;
+	    //
+	    c.add(Calendar.HOUR_OF_DAY, offsetHrs);
+	    c.add(Calendar.MINUTE, offsetMins);
+	    //
+	    time = c.getTimeInMillis();
+		//
 		long ellapsed = System.currentTimeMillis() - time;
+		//
+		if (ellapsed < 0) {
+			return "1 " + context.getString(R.string.second);
+		}
 		//
 		if (ellapsed < OM) {
 			ellapsed = ellapsed / OS;

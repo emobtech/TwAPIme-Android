@@ -50,7 +50,6 @@ public class TwAPImeActivity extends Activity {
         	//
         	Credential c =
         		new Credential(
-        			prefs.getString(AuthActivity.PREFS_KEY_USERNAME, null),
         			AuthActivity.CONSUMER_KEY,
         			AuthActivity.CONSUMER_SECRET,
         			token);

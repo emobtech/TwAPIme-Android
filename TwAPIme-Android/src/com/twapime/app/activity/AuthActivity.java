@@ -9,21 +9,21 @@
 package com.twapime.app.activity;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
+import com.twapime.app.service.AuthAsyncServiceCall;
 import com.twapime.app.util.UIUtil;
+import com.twapime.app.widget.SimpleTextWatcher;
 import com.twitterapime.rest.Credential;
-import com.twitterapime.rest.UserAccountManager;
 import com.twitterapime.xauth.Token;
 
 public class AuthActivity extends Activity {
@@ -46,14 +46,24 @@ public class AuthActivity extends Activity {
 	/**
 	 * 
 	 */
-	public static final String CONSUMER_KEY = "<Your consumer key goes here>";
+	public static final String CONSUMER_KEY = "KQlYF5kzKrBHm6s9gOyAVQ";
 	
 	/**
 	 * 
 	 */
 	public static final String CONSUMER_SECRET = 
-		"<Your consumer secret goes here>";
+		"yv57uIvC8CMNo6NPyebwyDwbbw306xuXew4U5x81Ljw";
 	
+	/**
+	 * 
+	 */
+	private EditText username;
+
+	/**
+	 * 
+	 */
+	private EditText password;
+
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
@@ -71,22 +81,21 @@ public class AuthActivity extends Activity {
 			}
 		});
 		//
-		final EditText username =
-			(EditText)findViewById(R.id.auth_txtf_username);
-		final EditText password =
-			(EditText)findViewById(R.id.auth_txtf_password);
+		Button btnSignUp = (Button)findViewById(R.id.auth_btn_sign_up);
+		btnSignUp.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(
+					new Intent(
+						Intent.ACTION_VIEW,
+						Uri.parse("https://mobile.twitter.com/signup")));
+			}
+		});
 		//
-		TextWatcher txtWatcher = new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-				int count) {
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-				int after) {
-			}
-			
+		username = (EditText)findViewById(R.id.auth_txtf_username);
+		password = (EditText)findViewById(R.id.auth_txtf_password);
+		//
+		SimpleTextWatcher txtWatcher = new SimpleTextWatcher() {
 			@Override
 			public void afterTextChanged(Editable s) {
 				btnSignIn.setEnabled(
@@ -102,84 +111,31 @@ public class AuthActivity extends Activity {
 	 * 
 	 */
 	protected void signIn() {
-		final ProgressDialog progressDialog =
-			ProgressDialog.show(
-				this,
-				"",
-				getString(R.string.authenticating),
-				false);
+		Credential credential =
+			new Credential(
+				username.getText().toString(),
+				password.getText().toString(),
+				CONSUMER_KEY,
+				CONSUMER_SECRET);
 		//
-		new Thread() {
+		Token token =
+			new Token(
+				"55935824-P8omaqHxc9koLbiY7aJPo4TqHhTzdhU7xE9zRNc3I",
+				"zacT3GkRQq9EPef82DgXfuZi9ULplwv1DX9TyGYYuA");
+		credential = new Credential(CONSUMER_KEY, CONSUMER_SECRET, token);
+		//
+		new AuthAsyncServiceCall(this) {
 			@Override
-			public void run() {
-				EditText username =
-					(EditText)findViewById(R.id.auth_txtf_username);
-				EditText password =
-					(EditText)findViewById(R.id.auth_txtf_password);
-				//
-				Credential c =
-					new Credential(
-						username.getText().toString(),
-						password.getText().toString(),
-						CONSUMER_KEY,
-						CONSUMER_SECRET);
-				//
-//				Token token =
-//					new Token(
-//						"<Your access token goes here>",
-//						"<Your token secret goes here>");
-//				c =
-//					new Credential(
-//						username.getText().toString(),
-//						CONSUMER_KEY,
-//						CONSUMER_SECRET,
-//						token);
-				//
-				UserAccountManager uam = UserAccountManager.getInstance(c);
-				//
-				try {
-					if (uam.verifyCredential()) {
-						TwAPImeApplication app =
-							(TwAPImeApplication)getApplication();
-						app.setUserAccountManager(uam);
-						//
-						saveCredentials(
-							username.getText().toString(),
-							uam.getAccessToken());
-						//
-						runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
-								progressDialog.dismiss();
-							}
-						});
-						//
-						startActivity(
-							new Intent(AuthActivity.this, HomeActivity.class));
-					} else {
-						runOnUiThread(new Runnable() {
-							@Override
-							public void run() {
-								progressDialog.dismiss();
-								//
-								UIUtil.showMessage(
-									AuthActivity.this,
-									getString(R.string.credentials_invalid));
-							}
-						});
-					}
-				} catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-							//
-							UIUtil.showMessage(AuthActivity.this, e);
-						}
-					});
+			public void onPostRun(Token result) {
+				if (result != null) {
+					saveCredentials(username.getText().toString(), result);
+					startActivity(new Intent(getContext(), HomeActivity.class));
+				} else {
+					UIUtil.showMessage(
+						getContext(), R.string.credentials_invalid);
 				}
-			};
-		}.start();
+			}
+		}.execute(credential);
 	}
 	
 	/**

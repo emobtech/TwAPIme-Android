@@ -10,8 +10,8 @@ package com.twapime.app.util;
 
 import java.io.IOException;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 
 import com.twitterapime.search.LimitExceededException;
@@ -24,7 +24,7 @@ public abstract class AsyncServiceCall<P, G, R>
 	/**
 	 * 
 	 */
-	private Context context;
+	private Activity context;
 	
 	/**
 	 * 
@@ -54,7 +54,7 @@ public abstract class AsyncServiceCall<P, G, R>
 	/**
 	 * @param context
 	 */
-	public AsyncServiceCall(Context context) {
+	public AsyncServiceCall(Activity context) {
 		if (context == null) {
 			throw new IllegalArgumentException("Context must not be null.");
 		}
@@ -110,7 +110,7 @@ public abstract class AsyncServiceCall<P, G, R>
 	/**
 	 * @return
 	 */
-	protected Context getContext() {
+	protected Activity getContext() {
 		return context;
 	}
 

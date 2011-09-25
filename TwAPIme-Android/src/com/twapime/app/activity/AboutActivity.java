@@ -8,6 +8,8 @@
  */
 package com.twapime.app.activity;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -19,6 +21,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.twapime.app.R;
+import com.twapime.app.service.GetUserAsyncServiceCall;
+import com.twitterapime.rest.UserAccount;
 
 /**
  * @author ernandes@gmail.com
@@ -61,13 +65,16 @@ public class AboutActivity extends Activity {
 		tv.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent =
-					new Intent(AboutActivity.this, UserHomeActivity.class);
-				intent.putExtra(
-					UserHomeActivity.PARAM_KEY_USERNAME,
-					getString(R.string.app_twitter));
-				//
-				startActivity(intent);
+				new GetUserAsyncServiceCall(AboutActivity.this) {
+					protected void onPostRun(List<UserAccount> result) {
+						Intent intent =
+							new Intent(getContext(), UserHomeActivity.class);
+						intent.putExtra(
+							UserHomeActivity.PARAM_KEY_USER, result.get(0));
+						//
+						startActivity(intent);
+					};
+				}.execute(new UserAccount(getString(R.string.app_twitter)));
 			}
 		});
 	}

@@ -71,13 +71,6 @@ public class DirectMessageTimelineActivity extends TimelineActivity {
 	}
 	
 	/**
-	 * @see com.twapime.app.activity.TimelineActivity#viewTweet(int)
-	 */
-	@Override
-	public void viewTweet(int index) {
-	}
-	
-	/**
 	 * 
 	 */
 	public void newDM() {

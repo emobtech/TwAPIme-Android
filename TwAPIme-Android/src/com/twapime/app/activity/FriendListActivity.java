@@ -29,12 +29,12 @@ public class FriendListActivity extends UserListActivity {
 	/**
 	 * 
 	 */
-	static final String PARAM_KEY_USERNAME = "PARAM_KEY_USERNAME";
+	static final String PARAM_KEY_USER = "PARAM_KEY_USER";
 	
 	/**
 	 * 
 	 */
-	protected UserAccount userAccount;
+	protected UserAccount user;
 
 	/**
 	 * 
@@ -50,9 +50,7 @@ public class FriendListActivity extends UserListActivity {
 		//
 		Intent intent = getIntent();
 		//
-		String username = intent.getExtras().getString(PARAM_KEY_USERNAME);
-		//
-		userAccount = new UserAccount(username);
+		user = (UserAccount)intent.getExtras().getSerializable(PARAM_KEY_USER);
 		//
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		UserAccountManager uam = app.getUserAccountManager();
@@ -65,8 +63,7 @@ public class FriendListActivity extends UserListActivity {
 	 */
 	@Override
 	protected Cursor loadNextPage() throws IOException, LimitExceededException {
-		String username =
-			userAccount.getString(MetadataSet.USERACCOUNT_USER_NAME);
+		String username = user.getString(MetadataSet.USERACCOUNT_USER_NAME);
 		//
 		if (nextPageQuery == null) {
 			nextPageQuery = QueryComposer.cursor(-1);

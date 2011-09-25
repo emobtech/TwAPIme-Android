@@ -8,14 +8,12 @@
  */
 package com.twapime.app.activity;
 
-import java.util.Hashtable;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,8 +21,7 @@ import android.widget.TextView;
 
 import com.twapime.app.R;
 import com.twapime.app.service.PostTweetAsyncServiceCall;
-import com.twitterapime.model.MetadataSet;
-import com.twitterapime.rest.UserAccount;
+import com.twapime.app.widget.SimpleTextWatcher;
 import com.twitterapime.search.Tweet;
 
 /**
@@ -34,12 +31,7 @@ public class NewTweetActivity extends Activity {
 	/**
 	 * 
 	 */
-	static final String PARAM_KEY_REPLY_TWEET_ID = "PARAM_KEY_REPLY_TWEET_ID";
-
-	/**
-	 * 
-	 */
-	static final String PARAM_KEY_REPLY_USERNAME = "PARAM_KEY_REPLY_USERNAME";
+	static final String PARAM_KEY_REPLY_TWEET = "PARAM_KEY_REPLY_TWEET";
 
 	/**
 	 * 
@@ -68,23 +60,22 @@ public class NewTweetActivity extends Activity {
 				post();
 			}
 		});
+	    //
+	    Button btnCancel = (Button)findViewById(R.id.new_tweet_btn_cancel);
+	    btnCancel.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				setResult(RESULT_CANCELED);
+				finish();
+			}
+		});
 		//
 		final TextView numberOfChars =
 			(TextView)findViewById(R.id.new_tweet_txtv_number_chars);
 		numberOfChars.setText(Tweet.MAX_CHARACTERS + "");
 		//
 		EditText t = (EditText)findViewById(R.id.new_tweet_txtf_content);
-		t.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-				int count) {
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-				int after) {
-			}
-			
+		t.addTextChangedListener(new SimpleTextWatcher() {
 			@Override
 			public void afterTextChanged(Editable s) {
 				numberOfChars.setText(
@@ -108,18 +99,10 @@ public class NewTweetActivity extends Activity {
 			t.setSelection(0);
 		}
 		//
-		if (intent.hasExtra(PARAM_KEY_REPLY_TWEET_ID)
-				&& intent.hasExtra(PARAM_KEY_REPLY_USERNAME)) {
-			String tweetID =
-				intent.getExtras().getString(PARAM_KEY_REPLY_TWEET_ID);
-			String username =
-				intent.getExtras().getString(PARAM_KEY_REPLY_USERNAME);
-			//
-			Hashtable<String, Object> data = new Hashtable<String, Object>();
-			data.put(MetadataSet.TWEET_ID, tweetID);
-			data.put(MetadataSet.TWEET_USER_ACCOUNT, new UserAccount(username));
-			//
-			replyTweet = new Tweet(data);
+		if (intent.hasExtra(PARAM_KEY_REPLY_TWEET)) {
+			replyTweet =
+				(Tweet)intent.getExtras().getSerializable(
+					PARAM_KEY_REPLY_TWEET);
 		}
 	}
 	

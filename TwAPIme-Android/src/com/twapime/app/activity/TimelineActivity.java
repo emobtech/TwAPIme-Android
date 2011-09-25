@@ -27,11 +27,12 @@ import android.widget.AdapterView;
 
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
+import com.twapime.app.service.FavoriteTweetAsyncServiceCall;
+import com.twapime.app.service.RepostTweetAsyncServiceCall;
 import com.twapime.app.util.UIUtil;
 import com.twapime.app.widget.TimelineArrayAdapter;
 import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.Timeline;
-import com.twitterapime.rest.TweetER;
 import com.twitterapime.search.Query;
 import com.twitterapime.search.QueryComposer;
 import com.twitterapime.search.SearchDeviceListener;
@@ -95,7 +96,7 @@ public class TimelineActivity extends ListActivity implements
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-					viewTweet(position);
+					viewTweet(tweets.get(position));
 				}
 			}
 		);
@@ -105,6 +106,11 @@ public class TimelineActivity extends ListActivity implements
 			public void run() {
 				adapter.notifyDataSetChanged();
 				progressDialog.dismiss();
+				//
+				if (tweets.size() == 0) {
+					UIUtil.showMessage(
+						getApplicationContext(), R.string.no_tweet_found);
+				}
 			}
 		};
 		//
@@ -135,15 +141,11 @@ public class TimelineActivity extends ListActivity implements
 	}
 	
 	/**
-	 * @param index
+	 * @param tweet
 	 */
-	public void viewTweet(int index) {
-		Tweet tweet = tweets.get(index);
-		//
+	public void viewTweet(Tweet tweet) {
 		Intent intent = new Intent(this, ViewTweetActivity.class);
-		intent.putExtra(
-			ViewTweetActivity.PARAM_KEY_TWEET_ID,
-			tweet.getString(MetadataSet.TWEET_ID));
+		intent.putExtra(ViewTweetActivity.PARAM_KEY_TWEET, tweet);
 		//
 		startActivity(intent);
 	}
@@ -151,38 +153,8 @@ public class TimelineActivity extends ListActivity implements
 	/**
 	 * 
 	 */
-	public void retweet(final Tweet tweet) {
-		final ProgressDialog progressDialog =
-			ProgressDialog.show(
-				this, "", getString(R.string.retweeting), false);
-		//
-		new Thread() {
-			@Override
-			public void run() {
-				TwAPImeApplication app = (TwAPImeApplication)getApplication();
-				TweetER ter = TweetER.getInstance(app.getUserAccountManager());
-				//
-				try {
-					ter.repost(tweet);
-					//
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-						}
-					});
-				} catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-							//
-							UIUtil.showMessage(TimelineActivity.this, e);
-						}
-					});
-				}
-			};
-		}.start();
+	public void retweet(Tweet tweet) {
+		new RepostTweetAsyncServiceCall(this).execute(tweet);
 	}
 	
 	/**
@@ -219,16 +191,12 @@ public class TimelineActivity extends ListActivity implements
 	 * @param tweet
 	 */
 	public void reply(Tweet tweet) {
-		String tweetID = tweet.getString(MetadataSet.TWEET_ID);
 		String username =
 			tweet.getUserAccount().getString(MetadataSet.USERACCOUNT_USER_NAME);
 		//
 		Intent intent = new Intent(this, NewTweetActivity.class);
 		//
-		intent.putExtra(
-			NewTweetActivity.PARAM_KEY_REPLY_TWEET_ID, tweetID);
-		intent.putExtra(
-			NewTweetActivity.PARAM_KEY_REPLY_USERNAME, username);
+		intent.putExtra(NewTweetActivity.PARAM_KEY_REPLY_TWEET, tweet);
 		intent.putExtra(
 			NewTweetActivity.PARAM_KEY_TWEET_CONTENT, "@" + username);
 		//
@@ -238,42 +206,13 @@ public class TimelineActivity extends ListActivity implements
 	/**
 	 * @param tweet
 	 */
-	public void favorite(final Tweet tweet) {
-		final ProgressDialog progressDialog =
-			ProgressDialog.show(
-				this, "",
-				getString(
-					isFavorite(tweet)
-						? R.string.unfavoriting : R.string.favoriting),
-				false);
+	public void favorite(Tweet tweet) {
+		FavoriteTweetAsyncServiceCall favCall =
+			new FavoriteTweetAsyncServiceCall(this);
+		favCall.setProgressStringId(
+			isFavorite(tweet) ? R.string.unfavoriting : R.string.favoriting);
 		//
-		new Thread() {
-			@Override
-			public void run() {
-				TwAPImeApplication app = (TwAPImeApplication)getApplication();
-				TweetER ter = TweetER.getInstance(app.getUserAccountManager());
-				//
-				try {
-					ter.favorite(tweet);
-					//
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-						}
-					});
-				} catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-							//
-							UIUtil.showMessage(TimelineActivity.this, e);
-						}
-					});
-				}
-			};
-		}.start();
+		favCall.execute(tweet);
 	}
 
 	/**
@@ -384,10 +323,10 @@ public class TimelineActivity extends ListActivity implements
 	    	comment(tweet);
 	    	//
 	        return true;
-//	    case R.id.menu_item_new_dm:
-//	    	newDM(tweet);
-//	    	//
-//	        return true;
+	    case R.id.menu_item_new_dm:
+	    	newDM(tweet);
+	    	//
+	        return true;
 	    case R.id.menu_item_reply:
 	    	reply(tweet);
 	    	//

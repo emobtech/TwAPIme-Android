@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.widget.TabHost;
 
 import com.twapime.app.R;
+import com.twitterapime.rest.UserAccount;
 
 /**
  * @author ernandes@gmail.com
@@ -23,7 +24,7 @@ public class UserHomeActivity extends TabActivity {
 	/**
 	 * 
 	 */
-	static final String PARAM_KEY_USERNAME = "PARAM_KEY_USERNAME";
+	static final String PARAM_KEY_USER = "PARAM_KEY_USER";
 	
 	/**
 	 * @see android.app.ActivityGroup#onCreate(android.os.Bundle)
@@ -37,7 +38,8 @@ public class UserHomeActivity extends TabActivity {
 		Resources res = getResources();
 		Intent intent = getIntent();
 		//
-		String username = intent.getExtras().getString(PARAM_KEY_USERNAME);
+		UserAccount user =
+			(UserAccount)intent.getExtras().getSerializable(PARAM_KEY_USER);
 		//
 		TabHost tabHost = getTabHost();
 	    TabHost.TabSpec spec;
@@ -47,7 +49,7 @@ public class UserHomeActivity extends TabActivity {
 	    	getString(R.string.profile), res.getDrawable(R.drawable.user));
 	    //
 		intent = new Intent(this, UserProfileActivity.class);
-		intent.putExtra(UserProfileActivity.PARAM_KEY_USERNAME, username);
+		intent.putExtra(UserProfileActivity.PARAM_KEY_USER, user);
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);
@@ -57,7 +59,7 @@ public class UserHomeActivity extends TabActivity {
 	    	getString(R.string.tweets), res.getDrawable(R.drawable.chat));
 	    //
 		intent = new Intent(this, UserTimelineActivity.class);
-		intent.putExtra(UserTimelineActivity.PARAM_KEY_USERNAME, username);
+		intent.putExtra(UserTimelineActivity.PARAM_KEY_USER, user);
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);
@@ -67,7 +69,7 @@ public class UserHomeActivity extends TabActivity {
 	    	getString(R.string.friends), res.getDrawable(R.drawable.users));
 	    //
 		intent = new Intent(this, FriendListActivity.class);
-		intent.putExtra(FriendListActivity.PARAM_KEY_USERNAME, username);
+		intent.putExtra(FriendListActivity.PARAM_KEY_USER, user);
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);
@@ -77,7 +79,7 @@ public class UserHomeActivity extends TabActivity {
 	    	getString(R.string.followers), res.getDrawable(R.drawable.users));
 	    //
 		intent = new Intent(this, FollowerListActivity.class);
-		intent.putExtra(FollowerListActivity.PARAM_KEY_USERNAME, username);
+		intent.putExtra(FollowerListActivity.PARAM_KEY_USER, user);
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);

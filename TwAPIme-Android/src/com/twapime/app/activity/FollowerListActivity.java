@@ -24,8 +24,7 @@ public class FollowerListActivity extends FriendListActivity {
 	 */
 	@Override
 	protected Cursor loadNextPage() throws IOException, LimitExceededException {
-		String username =
-			userAccount.getString(MetadataSet.USERACCOUNT_USER_NAME);
+		String username = user.getString(MetadataSet.USERACCOUNT_USER_NAME);
 		//
 		if (nextPageQuery == null) {
 			nextPageQuery = QueryComposer.cursor(-1);

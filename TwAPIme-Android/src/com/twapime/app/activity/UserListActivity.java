@@ -24,7 +24,6 @@ import com.twapime.app.util.UIUtil;
 import com.twapime.app.widget.LoadingScrollListener;
 import com.twapime.app.widget.UserArrayAdapter;
 import com.twitterapime.model.Cursor;
-import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.UserAccount;
 import com.twitterapime.search.LimitExceededException;
 import com.twitterapime.search.Query;
@@ -77,7 +76,7 @@ public abstract class UserListActivity extends ListActivity {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-					viewUser(position);
+					viewUser(users.get(position));
 				}
 			}
 		);
@@ -161,15 +160,11 @@ public abstract class UserListActivity extends ListActivity {
 	}
 	
 	/**
-	 * @param index
+	 * @param user
 	 */
-	protected void viewUser(int index) {
-		UserAccount user = users.get(index);
-		//
+	protected void viewUser(UserAccount user) {
 		Intent intent = new Intent(this, UserHomeActivity.class);
-		intent.putExtra(
-			UserHomeActivity.PARAM_KEY_USERNAME,
-			user.getString(MetadataSet.USERACCOUNT_USER_NAME));
+		intent.putExtra(UserHomeActivity.PARAM_KEY_USER, user);
 		//
 		startActivity(intent);
 	}

@@ -8,9 +8,9 @@
  */
 package com.twapime.app.activity;
 
+import java.util.List;
+
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -22,13 +22,18 @@ import android.widget.TextView;
 
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
+import com.twapime.app.service.BlockAsyncServiceCall;
+import com.twapime.app.service.FollowAsyncServiceCall;
+import com.twapime.app.service.GetFriendshipAsyncServiceCall;
+import com.twapime.app.service.ReportSpamAsyncServiceCall;
+import com.twapime.app.service.UnblockAsyncServiceCall;
+import com.twapime.app.service.UnfollowAsyncServiceCall;
 import com.twapime.app.util.AsyncImageLoader;
 import com.twapime.app.util.DateUtil;
-import com.twapime.app.util.UIUtil;
 import com.twapime.app.widget.ImageViewCallback;
 import com.twitterapime.model.MetadataSet;
+import com.twitterapime.rest.Friendship;
 import com.twitterapime.rest.UserAccount;
-import com.twitterapime.rest.UserAccountManager;
 import com.twitterapime.search.Tweet;
 
 /**
@@ -38,17 +43,12 @@ public class UserProfileActivity extends Activity {
 	/**
 	 * 
 	 */
-	static final String PARAM_KEY_USERNAME = "PARAM_KEY_USERNAME";
+	static final String PARAM_KEY_USER = "PARAM_KEY_USER";
 	
 	/**
 	 * 
 	 */
-	private UserAccount userAccount;
-	
-	/**
-	 * 
-	 */
-	private UserAccountManager userManager;
+	private UserAccount user;
 	
 	/**
 	 * 
@@ -68,56 +68,27 @@ public class UserProfileActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		//
 		setContentView(R.layout.user_profile);
+		//
+		user =
+			(UserAccount)getIntent().getExtras().getSerializable(
+				PARAM_KEY_USER);
+		//
 		displayUserProfile();
-		//
-		Intent intent = getIntent();
-		//
-		String userID = intent.getExtras().getString(PARAM_KEY_USERNAME);
-		//
-		userAccount = new UserAccount(userID);
-		//
-		TwAPImeApplication app = (TwAPImeApplication)getApplication();
-		userManager = app.getUserAccountManager();
-		//
-		loadUserProfile();
+		loadUserFriendship();
 	}
 	
 	/**
 	 * 
 	 */
-	protected void loadUserProfile() {
-		final ProgressDialog progressDialog =
-			ProgressDialog.show(
-				this, "", getString(R.string.loading_user_profile), false);
-		//
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					userAccount = userManager.getUserAccount(userAccount);
-					isFollowing = userManager.isFollowing(userAccount);
-					isBlocking = userManager.isBlocking(userAccount);
-					//
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							displayUserProfile();
-							//
-							progressDialog.dismiss();
-						}
-					});
-				} catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-							//
-							UIUtil.showMessage(UserProfileActivity.this, e);
-						}
-					});
-				}
+	protected void loadUserFriendship() {
+		new GetFriendshipAsyncServiceCall(this) {
+			protected void onPostRun(List<Friendship> result) {
+				Friendship f = result.get(0);
+				//
+				isFollowing = f.getBoolean(MetadataSet.FRIENDSHIP_FOLLOWING);
+				isBlocking = f.getBoolean(MetadataSet.FRIENDSHIP_BLOCKING);
 			};
-		}.start();
+		}.execute(user);
 	}
 	
 	/**
@@ -125,108 +96,60 @@ public class UserProfileActivity extends Activity {
 	 */
 	protected void displayUserProfile() {
 		TextView txtv = (TextView)findViewById(R.id.user_profile_txtv_name);
-		if (userAccount != null) {
-			txtv.setText(userAccount.getString(MetadataSet.USERACCOUNT_NAME));	
-		} else {
-			txtv.setText("");
-		}
+		txtv.setText(user.getString(MetadataSet.USERACCOUNT_NAME));	
 		//
 		txtv = (TextView)findViewById(R.id.user_profile_txtv_username);
-		if (userAccount != null) {
-			txtv.setText(
-				"@" + userAccount.getString(MetadataSet.USERACCOUNT_USER_NAME));	
-		} else {
-			txtv.setText("");
-		}
+		txtv.setText("@" + user.getString(MetadataSet.USERACCOUNT_USER_NAME));	
 		//
 		txtv = (TextView)findViewById(R.id.user_profile_txtv_last_tweet);
-		if (userAccount != null) {
-			Tweet tweet = userAccount.getLastTweet();
-			//
-			if (tweet != null) {
-				txtv.setText(tweet.getString(MetadataSet.TWEET_CONTENT));	
-			} else {
-				txtv.setText("");
-			}
+		Tweet tweet = user.getLastTweet();
+		//
+		if (tweet != null) {
+			txtv.setText(tweet.getString(MetadataSet.TWEET_CONTENT));	
 		} else {
 			txtv.setText("");
 		}
 		//
 		txtv = (TextView)findViewById(R.id.user_profile_txtv_last_tweet_time);
-		if (userAccount != null) {
-			Tweet tweet = userAccount.getLastTweet();
-			//
-			if (tweet != null) {
-				txtv.setText(
-					DateUtil.formatTweetDate(
-						Long.parseLong(
-							tweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
-					this));	
-			} else {
-				txtv.setText("");
-			}
+		//
+		if (tweet != null) {
+			txtv.setText(
+				DateUtil.formatTweetDate(
+					Long.parseLong(
+						tweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
+				this));	
 		} else {
 			txtv.setText("");
 		}
 		//
 		txtv = (TextView)findViewById(R.id.user_profile_txtv_bio);
-		if (userAccount != null) {
-			txtv.setText(
-				userAccount.getString(MetadataSet.USERACCOUNT_DESCRIPTION));	
-		} else {
-			txtv.setText("");
-		}
+		txtv.setText(user.getString(MetadataSet.USERACCOUNT_DESCRIPTION));	
 		//
 		txtv = (TextView)findViewById(R.id.user_profile_txtv_web);
-		if (userAccount != null) {
-			txtv.setText(userAccount.getString(MetadataSet.USERACCOUNT_URL));	
-		} else {
-			txtv.setText("");
-		}
+		txtv.setText(user.getString(MetadataSet.USERACCOUNT_URL));	
 		//
 		txtv = (TextView)findViewById(R.id.user_profile_txtv_tweets);
-		if (userAccount != null) {
-			txtv.setText(
-				userAccount.getString(MetadataSet.USERACCOUNT_TWEETS_COUNT));	
-		} else {
-			txtv.setText("");
-		}
+		txtv.setText(user.getString(MetadataSet.USERACCOUNT_TWEETS_COUNT));	
 		//
 		txtv = (TextView)findViewById(R.id.user_profile_txtv_friends);
-		if (userAccount != null) {
-			txtv.setText(
-				userAccount.getString(MetadataSet.USERACCOUNT_FRIENDS_COUNT));	
-		} else {
-			txtv.setText("");
-		}
+		txtv.setText(user.getString(MetadataSet.USERACCOUNT_FRIENDS_COUNT));	
 		//
 		txtv = (TextView)findViewById(R.id.user_profile_txtv_followers);
-		if (userAccount != null) {
-			txtv.setText(
-				userAccount.getString(MetadataSet.USERACCOUNT_FOLLOWERS_COUNT));	
-		} else {
-			txtv.setText("");
-		}
+		txtv.setText(user.getString(MetadataSet.USERACCOUNT_FOLLOWERS_COUNT));	
 		//
 		txtv = (TextView)findViewById(R.id.user_profile_txtv_member_since);
-		if (userAccount != null) {
-			txtv.setText(
-				DateFormat.format("dd/MM/yyyy",
-				Long.parseLong(
-					userAccount.getString(
-						MetadataSet.USERACCOUNT_CREATE_DATE))).toString());
-		} else {
-			txtv.setText("");
-		}
+		txtv.setText(
+			DateFormat.format("dd/MM/yyyy",
+			Long.parseLong(
+				user.getString(
+					MetadataSet.USERACCOUNT_CREATE_DATE))).toString());
 		//
 		ImageView imgV = (ImageView)findViewById(R.id.user_profile_imgv_avatar);
 		//
 		String imgUrl = null;
 		Drawable cachedImage = null;
 		//
-        if (userAccount != null) {
-        	imgUrl = userAccount.getString(MetadataSet.USERACCOUNT_PICTURE_URI);
-        }
+       	imgUrl = user.getString(MetadataSet.USERACCOUNT_PICTURE_URI);
         //
         if (imgUrl != null) {
         	imgV.setTag(imgUrl);
@@ -246,126 +169,49 @@ public class UserProfileActivity extends Activity {
 	 * 
 	 */
 	protected void followOrUnfollow() {
-		final ProgressDialog progressDialog =
-			ProgressDialog.show(
-				this,
-				"",
-				getString(
-					isFollowing ? R.string.unfollowing : R.string.following),
-				false);
-		//
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					if (isFollowing) {
-						userAccount = userManager.unfollow(userAccount);
-					} else {
-						userAccount = userManager.follow(userAccount);
-					}
-					//
-					isFollowing = !isFollowing;
-					//
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							displayUserProfile();
-							//
-							progressDialog.dismiss();
-						}
-					});
-				} catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-							//
-							UIUtil.showMessage(UserProfileActivity.this, e);
-						}
-					});
+		if (isFollowing) {
+			new UnfollowAsyncServiceCall(this) {
+				@Override
+				protected void onPostRun(List<UserAccount> result) {
+					isFollowing = false;
 				}
-			};
-		}.start();
+			}.execute(user);
+		} else {
+			new FollowAsyncServiceCall(this) {
+				@Override
+				protected void onPostRun(List<UserAccount> result) {
+					isFollowing = true;
+				}
+			}.execute(user);
+		}
 	}
 	
 	/**
 	 * 
 	 */
 	protected void blockOrUnblock() {
-		final ProgressDialog progressDialog =
-			ProgressDialog.show(
-				this,
-				"",
-				getString(
-					isBlocking ? R.string.unblocking : R.string.blocking),
-				false);
-		//
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					if (isFollowing) {
-						userAccount = userManager.block(userAccount);
-					} else {
-						userAccount = userManager.unblock(userAccount);
-					}
-					//
-					isBlocking = !isBlocking;
-					//
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							displayUserProfile();
-							//
-							progressDialog.dismiss();
-						}
-					});
-				} catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-							//
-							UIUtil.showMessage(UserProfileActivity.this, e);
-						}
-					});
+		if (isBlocking) {
+			new UnblockAsyncServiceCall(this) {
+				@Override
+				protected void onPostRun(List<UserAccount> result) {
+					isBlocking = false;
 				}
-			};
-		}.start();
+			}.execute(user);
+		} else {
+			new BlockAsyncServiceCall(this) {
+				@Override
+				protected void onPostRun(List<UserAccount> result) {
+					isBlocking = true;
+				}
+			}.execute(user);
+		}
 	}
 	
 	/**
 	 * 
 	 */
 	protected void reportSpam() {
-		final ProgressDialog progressDialog =
-			ProgressDialog.show(
-				this, "", getString(R.string.reporting_spam), false);
-		//
-		new Thread() {
-			@Override
-			public void run() {
-				try {
-					userAccount = userManager.reportSpam(userAccount);
-					//
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-						}
-					});
-				} catch (final Exception e) {
-					runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							progressDialog.dismiss();
-							//
-							UIUtil.showMessage(UserProfileActivity.this, e);
-						}
-					});
-				}
-			};
-		}.start();
+		new ReportSpamAsyncServiceCall(this).execute(user);
 	}
 	
 	/**
@@ -399,7 +245,7 @@ public class UserProfileActivity extends Activity {
 			prefs.getString(AuthActivity.PREFS_KEY_USERNAME, null);
 		//
 		if (!username.equalsIgnoreCase(
-				userAccount.getString(MetadataSet.USERACCOUNT_USER_NAME))) {
+				user.getString(MetadataSet.USERACCOUNT_USER_NAME))) {
 			getMenuInflater().inflate(R.menu.view_user_profile, menu);
 		    //
 		    return true;

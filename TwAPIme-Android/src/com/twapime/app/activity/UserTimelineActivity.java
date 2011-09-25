@@ -11,6 +11,8 @@ package com.twapime.app.activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.twitterapime.model.MetadataSet;
+import com.twitterapime.rest.UserAccount;
 import com.twitterapime.search.Query;
 import com.twitterapime.search.QueryComposer;
 
@@ -21,7 +23,7 @@ public class UserTimelineActivity extends TimelineActivity {
 	/**
 	 * 
 	 */
-	static final String PARAM_KEY_USERNAME = "PARAM_KEY_USERNAME";
+	static final String PARAM_KEY_USER = "PARAM_KEY_USER";
 
 	/**
 	 * 
@@ -35,7 +37,10 @@ public class UserTimelineActivity extends TimelineActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		Intent intent = getIntent();
 		//
-		username = intent.getExtras().getString(PARAM_KEY_USERNAME);
+		UserAccount user =
+			(UserAccount)intent.getExtras().getSerializable(PARAM_KEY_USER);
+		//
+		username = user.getString(MetadataSet.USERACCOUNT_USER_NAME);
 		//
 		super.onCreate(savedInstanceState);
 	}

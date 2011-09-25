@@ -21,6 +21,7 @@ import android.widget.TabHost;
 
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
+import com.twitterapime.rest.UserAccount;
 
 /**
  * @author ernandes@gmail.com
@@ -51,12 +52,12 @@ public class HomeActivity extends TabActivity {
 	    spec.setContent(new Intent(this, MentionTimelineActivity.class));
 	    tabHost.addTab(spec);
 	    //
-//	    spec = tabHost.newTabSpec("dm");
-//	    spec.setIndicator(
-//	    	getString(
-//	    		R.string.direct_message), res.getDrawable(R.drawable.mail));
-//	    spec.setContent(new Intent(this, DirectMessageTimelineActivity.class));
-//	    tabHost.addTab(spec);
+	    spec = tabHost.newTabSpec("dm");
+	    spec.setIndicator(
+	    	getString(
+	    		R.string.direct_message), res.getDrawable(R.drawable.mail));
+	    spec.setContent(new Intent(this, DirectMessageTimelineActivity.class));
+	    tabHost.addTab(spec);
 	    //
 	    spec = tabHost.newTabSpec("list");
 	    spec.setIndicator(
@@ -127,8 +128,9 @@ public class HomeActivity extends TabActivity {
 		//
 		Intent intent = new Intent(this, UserHomeActivity.class);
 		intent.putExtra(
-			UserHomeActivity.PARAM_KEY_USERNAME,
-			prefs.getString(AuthActivity.PREFS_KEY_USERNAME, null));
+			UserHomeActivity.PARAM_KEY_USER,
+			new UserAccount(
+				prefs.getString(AuthActivity.PREFS_KEY_USERNAME, null)));
 		//
 		startActivity(intent);
 	}

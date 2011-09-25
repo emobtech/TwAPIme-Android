@@ -8,6 +8,9 @@
  */
 package com.twapime.app;
 
+import com.twitterapime.rest.FriendshipManager;
+import com.twitterapime.rest.ListManager;
+import com.twitterapime.rest.TweetER;
 import com.twitterapime.rest.UserAccountManager;
 
 import android.app.Application;
@@ -38,5 +41,26 @@ public class TwAPImeApplication extends Application {
 	 */
 	public UserAccountManager getUserAccountManager() {
 		return userAccountManager;
+	}
+
+	/**
+	 * @return
+	 */
+	public ListManager getListManager() {
+		return ListManager.getInstance(userAccountManager);
+	}
+
+	/**
+	 * @return
+	 */
+	public TweetER getTweetER() {
+		return TweetER.getInstance(userAccountManager);
+	}
+
+	/**
+	 * @return
+	 */
+	public FriendshipManager getFriendshipManager() {
+		return FriendshipManager.getInstance(userAccountManager);
 	}
 }

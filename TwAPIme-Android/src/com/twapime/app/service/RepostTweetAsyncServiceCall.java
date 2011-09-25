@@ -1,5 +1,5 @@
 /*
- * PostTweetAsyncServiceCall.java
+ * RepostTweetAsyncServiceCall.java
  * 23/09/2011
  * TwAPIme for Android
  * Copyright(c) Ernandes Mourao Junior (ernandes@gmail.com)
@@ -24,12 +24,12 @@ import com.twitterapime.search.Tweet;
 /**
  * @author ernandes@gmail.com
  */
-public class PostTweetAsyncServiceCall 
+public class RepostTweetAsyncServiceCall 
 	extends PostAsyncServiceCall<Tweet, Void, List<Tweet>> {
 	/**
 	 * @param context
 	 */
-	public PostTweetAsyncServiceCall(Activity context) {
+	public RepostTweetAsyncServiceCall(Activity context) {
 		super(context);
 	}
 	
@@ -38,7 +38,7 @@ public class PostTweetAsyncServiceCall
 	 */
 	@Override
 	public int getProgressStringId() {
-		return R.string.posting_tweet;
+		return R.string.retweeting;
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class PostTweetAsyncServiceCall
 		List<Tweet> result = new ArrayList<Tweet>();
 		//
 		for (Tweet tweet : params) {
-			result.add(ter.post(tweet));
+			result.add(ter.repost(tweet));
 		}
 		//
 		return result;

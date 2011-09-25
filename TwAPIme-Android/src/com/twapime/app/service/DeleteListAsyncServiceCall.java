@@ -1,5 +1,5 @@
 /*
- * PostTweetAsyncServiceCall.java
+ * DeleteListAsyncServiceCall.java
  * 23/09/2011
  * TwAPIme for Android
  * Copyright(c) Ernandes Mourao Junior (ernandes@gmail.com)
@@ -14,46 +14,39 @@ import java.util.List;
 
 import android.app.Activity;
 
-import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.util.PostAsyncServiceCall;
-import com.twitterapime.rest.TweetER;
+import com.twitterapime.rest.ListManager;
 import com.twitterapime.search.LimitExceededException;
-import com.twitterapime.search.Tweet;
 
 /**
  * @author ernandes@gmail.com
  */
-public class PostTweetAsyncServiceCall 
-	extends PostAsyncServiceCall<Tweet, Void, List<Tweet>> {
+public class DeleteListAsyncServiceCall 
+	extends PostAsyncServiceCall<
+		com.twitterapime.rest.List, Void, List<com.twitterapime.rest.List>> {
 	/**
 	 * @param context
 	 */
-	public PostTweetAsyncServiceCall(Activity context) {
+	public DeleteListAsyncServiceCall(Activity context) {
 		super(context);
 	}
 	
 	/**
-	 * @see com.twapime.app.util.PostAsyncServiceCall#getProgressStringId()
-	 */
-	@Override
-	public int getProgressStringId() {
-		return R.string.posting_tweet;
-	}
-
-	/**
 	 * @see com.twapime.app.util.AsyncServiceCall#run(P[])
 	 */
 	@Override
-	protected List<Tweet> run(Tweet... params) throws IOException,
+	protected List<com.twitterapime.rest.List> run(
+		com.twitterapime.rest.List... params) throws IOException,
 		LimitExceededException {
 		TwAPImeApplication app =
 			(TwAPImeApplication)getContext().getApplicationContext();
-		TweetER ter = TweetER.getInstance(app.getUserAccountManager());
-		List<Tweet> result = new ArrayList<Tweet>();
+		ListManager lmgr = app.getListManager();
+		List<com.twitterapime.rest.List> result =
+			new ArrayList<com.twitterapime.rest.List>(); 
 		//
-		for (Tweet tweet : params) {
-			result.add(ter.post(tweet));
+		for (com.twitterapime.rest.List list : params) {
+			result.add(lmgr.delete(list));
 		}
 		//
 		return result;

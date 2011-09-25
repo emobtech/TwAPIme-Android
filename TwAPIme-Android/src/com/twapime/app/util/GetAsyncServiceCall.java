@@ -8,7 +8,7 @@
  */
 package com.twapime.app.util;
 
-import android.content.Context;
+import android.app.Activity;
 
 /**
  * @author ernandes@gmail.com
@@ -18,15 +18,9 @@ public abstract class GetAsyncServiceCall<P, G, R>
 	/**
 	 * @param context
 	 */
-	public GetAsyncServiceCall(Context context) {
+	public GetAsyncServiceCall(Activity context) {
 		super(context);
-	}
-	
-	/**
-	 * @see com.twapime.app.util.AsyncServiceCall#getProgressStringId()
-	 */
-	@Override
-	public int getProgressStringId() {
-		return com.twapime.app.R.string.refreshing;
+		//
+		setProgressStringId(com.twapime.app.R.string.refreshing);
 	}
 }

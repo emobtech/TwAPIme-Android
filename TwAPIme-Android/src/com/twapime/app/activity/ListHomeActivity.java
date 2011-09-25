@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.widget.TabHost;
 
 import com.twapime.app.R;
+import com.twitterapime.rest.List;
 
 /**
  * @author ernandes@gmail.com
@@ -23,12 +24,7 @@ public class ListHomeActivity extends TabActivity {
 	/**
 	 * 
 	 */
-	static final String PARAM_KEY_LIST_ID = "PARAM_KEY_LIST_ID";
-	
-	/**
-	 * 
-	 */
-	static final String PARAM_KEY_LIST_OWNER = "PARAM_KEY_LIST_OWNER";
+	public static final String PARAM_KEY_LIST = "PARAM_KEY_LIST";
 
 	/**
 	 * @see android.app.ActivityGroup#onCreate(android.os.Bundle)
@@ -42,8 +38,7 @@ public class ListHomeActivity extends TabActivity {
 		Resources res = getResources();
 		Intent intent = getIntent();
 		//
-		String listID = intent.getExtras().getString(PARAM_KEY_LIST_ID);
-		String listOwner = intent.getExtras().getString(PARAM_KEY_LIST_OWNER);
+		List list = (List)intent.getExtras().getSerializable(PARAM_KEY_LIST);
 		//
 		TabHost tabHost = getTabHost();
 	    TabHost.TabSpec spec;
@@ -53,8 +48,7 @@ public class ListHomeActivity extends TabActivity {
 	    	getString(R.string.tweets), res.getDrawable(R.drawable.chat));
 	    //
 		intent = new Intent(this, ListTimelineActivity.class);
-		intent.putExtra(ListTimelineActivity.PARAM_KEY_LIST_ID, listID);
-		intent.putExtra(ListTimelineActivity.PARAM_KEY_LIST_OWNER, listOwner);
+		intent.putExtra(ListTimelineActivity.PARAM_KEY_LIST, list);
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);
@@ -64,8 +58,7 @@ public class ListHomeActivity extends TabActivity {
 	    	getString(R.string.members), res.getDrawable(R.drawable.users));
 	    //
 		intent = new Intent(this, MemberListActivity.class);
-		intent.putExtra(MemberListActivity.PARAM_KEY_LIST_ID, listID);
-		intent.putExtra(MemberListActivity.PARAM_KEY_LIST_OWNER, listOwner);
+		intent.putExtra(MemberListActivity.PARAM_KEY_LIST, list);
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);
