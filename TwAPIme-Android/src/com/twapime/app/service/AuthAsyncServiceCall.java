@@ -13,18 +13,16 @@ import java.io.IOException;
 import android.app.Activity;
 
 import com.twapime.app.R;
-import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.util.GetAsyncServiceCall;
 import com.twitterapime.rest.Credential;
 import com.twitterapime.rest.UserAccountManager;
 import com.twitterapime.search.LimitExceededException;
-import com.twitterapime.xauth.Token;
 
 /**
  * @author ernandes@gmail.com
  */
 public class AuthAsyncServiceCall 
-	extends GetAsyncServiceCall<Credential, Void, Token> {
+	extends GetAsyncServiceCall<Credential, Void, UserAccountManager> {
 	/**
 	 * @param context
 	 */
@@ -44,16 +42,12 @@ public class AuthAsyncServiceCall
 	 * @see com.twapime.app.util.AsyncServiceCall#run(P[])
 	 */
 	@Override
-	protected Token run(Credential... params) throws IOException,
+	protected UserAccountManager run(Credential... params) throws IOException,
 		LimitExceededException {
 		UserAccountManager uam = UserAccountManager.getInstance(params[0]);
 		//
 		if (uam.verifyCredential()) {
-			TwAPImeApplication app =
-				(TwAPImeApplication)getContext().getApplication();
-			app.setUserAccountManager(uam);
-			//
-			return uam.getAccessToken();
+			return uam;
 		} else {
 			return null;
 		}

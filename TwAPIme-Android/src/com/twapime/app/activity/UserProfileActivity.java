@@ -11,7 +11,7 @@ package com.twapime.app.activity;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.twapime.app.R;
-import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.service.BlockAsyncServiceCall;
 import com.twapime.app.service.FollowAsyncServiceCall;
 import com.twapime.app.service.GetFriendshipAsyncServiceCall;
@@ -48,6 +47,11 @@ public class UserProfileActivity extends Activity {
 	/**
 	 * 
 	 */
+	static final String PARAM_KEY_IS_LOGGED_USER = "PARAM_KEY_IS_LOGGED_USER";
+
+	/**
+	 * 
+	 */
 	private UserAccount user;
 	
 	/**
@@ -59,6 +63,11 @@ public class UserProfileActivity extends Activity {
 	 * 
 	 */
 	private boolean isBlocking;
+	
+	/**
+	 * 
+	 */
+	private boolean isLoggedUser;
 
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -69,9 +78,10 @@ public class UserProfileActivity extends Activity {
 		//
 		setContentView(R.layout.user_profile);
 		//
-		user =
-			(UserAccount)getIntent().getExtras().getSerializable(
-				PARAM_KEY_USER);
+		Intent intent = getIntent();
+		//
+		user = (UserAccount)intent.getSerializableExtra(PARAM_KEY_USER);
+		isLoggedUser = intent.getBooleanExtra(PARAM_KEY_IS_LOGGED_USER, false);
 		//
 		displayUserProfile();
 		loadUserFriendship();
@@ -238,19 +248,12 @@ public class UserProfileActivity extends Activity {
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		SharedPreferences prefs =
-			getSharedPreferences(TwAPImeApplication.PREFS_NAME, MODE_PRIVATE);
-		//
-		String username =
-			prefs.getString(AuthActivity.PREFS_KEY_USERNAME, null);
-		//
-		if (!username.equalsIgnoreCase(
-				user.getString(MetadataSet.USERACCOUNT_USER_NAME))) {
+		if (isLoggedUser) {
+			return false;
+		} else {
 			getMenuInflater().inflate(R.menu.view_user_profile, menu);
 		    //
 		    return true;
-		} else {
-			return false;
 		}
 	}
 	

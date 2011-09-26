@@ -26,12 +26,9 @@ public final class UIUtil {
 	 */
 	public static void showMessage(Context context, Throwable exception) {
 		if (exception instanceof IOException) {
-			showMessage(
-				context,
-				context.getString(R.string.network_access_failure));
+			showMessage(context, R.string.network_access_failure);
 		} else if (exception instanceof LimitExceededException) {
-			showMessage(
-				context, context.getString(R.string.rate_limit_exceeded));
+			showMessage(context, R.string.rate_limit_exceeded);
 		} else {
 			showMessage(context, exception.getMessage());
 		}
@@ -50,10 +47,7 @@ public final class UIUtil {
 	 * @param resId
 	 */
 	public static void showMessage(Context context, int resId) {
-		Toast.makeText(
-			context,
-			context.getResources().getString(resId),
-			Toast.LENGTH_LONG).show();
+		showMessage(context, context.getResources().getString(resId));
 	}
 
 	/**

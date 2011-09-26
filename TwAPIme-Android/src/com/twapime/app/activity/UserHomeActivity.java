@@ -27,6 +27,11 @@ public class UserHomeActivity extends TabActivity {
 	static final String PARAM_KEY_USER = "PARAM_KEY_USER";
 	
 	/**
+	 * 
+	 */
+	static final String PARAM_KEY_IS_LOGGED_USER = "PARAM_KEY_IS_LOGGED_USER";
+	
+	/**
 	 * @see android.app.ActivityGroup#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -39,7 +44,9 @@ public class UserHomeActivity extends TabActivity {
 		Intent intent = getIntent();
 		//
 		UserAccount user =
-			(UserAccount)intent.getExtras().getSerializable(PARAM_KEY_USER);
+			(UserAccount)intent.getSerializableExtra(PARAM_KEY_USER);
+		boolean isLoggedUser =
+			intent.getBooleanExtra(PARAM_KEY_IS_LOGGED_USER, false);
 		//
 		TabHost tabHost = getTabHost();
 	    TabHost.TabSpec spec;
@@ -50,6 +57,8 @@ public class UserHomeActivity extends TabActivity {
 	    //
 		intent = new Intent(this, UserProfileActivity.class);
 		intent.putExtra(UserProfileActivity.PARAM_KEY_USER, user);
+		intent.putExtra(
+			UserProfileActivity.PARAM_KEY_IS_LOGGED_USER, isLoggedUser);
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);

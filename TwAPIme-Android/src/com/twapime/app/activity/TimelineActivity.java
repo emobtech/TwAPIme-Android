@@ -16,7 +16,6 @@ import java.util.List;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -118,15 +117,15 @@ public class TimelineActivity extends ListActivity implements
 		//
 		timeline = Timeline.getInstance(app.getUserAccountManager());
 		//
-		String lastTweetId = loadSavedLastTweetId();
-		if (lastTweetId != null) {
-			sinceID =
-				QueryComposer.append(
-					QueryComposer.sinceID(lastTweetId),
-					QueryComposer.count(TWEET_COUNT / 4));
-		} else {
-			sinceID = QueryComposer.count(TWEET_COUNT / 4);
-		}
+//		String lastTweetId = loadSavedLastTweetId();
+//		if (lastTweetId != null) {
+//			sinceID =
+//				QueryComposer.append(
+//					QueryComposer.sinceID(lastTweetId),
+//					QueryComposer.count(TWEET_COUNT / 4));
+//		} else {
+		sinceID = QueryComposer.count(TWEET_COUNT / 4);
+//		}
 		//
 		refresh();
 	}
@@ -243,7 +242,7 @@ public class TimelineActivity extends ListActivity implements
 					QueryComposer.sinceID(lastTweetId),
 					QueryComposer.count(TWEET_COUNT));
 			//
-			saveLastTweetId(lastTweetId);
+//			saveLastTweetId(lastTweetId);
 		}
 		//
 		runOnUiThread(notifyNewTweet);
@@ -340,37 +339,35 @@ public class TimelineActivity extends ListActivity implements
 	    }
 	}
 	
-	/**
-	 * @param tweetId
-	 */
-	protected void saveLastTweetId(String tweetId) {
-		SharedPreferences.Editor editor =
-			getSharedPreferences(
-				TwAPImeApplication.PREFS_NAME, MODE_PRIVATE).edit();
-		//
-		editor.putString(getClass().getName(), tweetId);
-		//
-		editor.commit();
-	}
+//	/**
+//	 * @param tweetId
+//	 */
+//	protected void saveLastTweetId(String tweetId) {
+//		SharedPreferences.Editor editor =
+//			getSharedPreferences(
+//				TwAPImeApplication.PREFS_NAME, MODE_PRIVATE).edit();
+//		//
+//		editor.putString(getClass().getName(), tweetId);
+//		//
+//		editor.commit();
+//	}
 	
-	/**
-	 * @return
-	 */
-	protected String loadSavedLastTweetId() {
+//	/**
+//	 * @return
+//	 */
+//	protected String loadSavedLastTweetId() {
 //		SharedPreferences prefs =
 //			getSharedPreferences(TwAPImeApplication.PREFS_NAME, MODE_PRIVATE);
 //		//
 //		return prefs.getString(getClass().getName(), null);
-		return null;
-	}
+//		return null;
+//	}
 	
 	/**
 	 * @param tweet
 	 * @return
 	 */
 	private boolean isFavorite(Tweet tweet) {
-		String favorite = tweet.getString(MetadataSet.TWEET_FAVOURITE);
-		//
-		return favorite != null && "true".equals(favorite);
+		return tweet.getBoolean(MetadataSet.TWEET_FAVOURITE);
 	}
 }

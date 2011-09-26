@@ -10,7 +10,6 @@ package com.twapime.app.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -24,36 +23,12 @@ import com.twapime.app.service.AuthAsyncServiceCall;
 import com.twapime.app.util.UIUtil;
 import com.twapime.app.widget.SimpleTextWatcher;
 import com.twitterapime.rest.Credential;
-import com.twitterapime.xauth.Token;
+import com.twitterapime.rest.UserAccountManager;
 
+/**
+ * @author ernandes@gmail.com
+ */
 public class AuthActivity extends Activity {
-	/**
-	 * 
-	 */
-	public static final String PREFS_KEY_USERNAME = "PREFS_KEY_USERNAME";
-	
-	/**
-	 * 
-	 */
-	public static final String PREFS_KEY_TOKEN = "PREFS_KEY_TOKEN";
-	
-	/**
-	 * 
-	 */
-	public static final String PREFS_KEY_TOKEN_SECRET =
-		"PREFS_KEY_TOKEN_SECRET";
-	
-	/**
-	 * 
-	 */
-	public static final String CONSUMER_KEY = "KQlYF5kzKrBHm6s9gOyAVQ";
-	
-	/**
-	 * 
-	 */
-	public static final String CONSUMER_SECRET = 
-		"yv57uIvC8CMNo6NPyebwyDwbbw306xuXew4U5x81Ljw";
-	
 	/**
 	 * 
 	 */
@@ -111,24 +86,22 @@ public class AuthActivity extends Activity {
 	 * 
 	 */
 	protected void signIn() {
+		final TwAPImeApplication app = (TwAPImeApplication)getApplication();
+		//
 		Credential credential =
 			new Credential(
 				username.getText().toString(),
 				password.getText().toString(),
-				CONSUMER_KEY,
-				CONSUMER_SECRET);
-		//
-		Token token =
-			new Token(
-				"55935824-P8omaqHxc9koLbiY7aJPo4TqHhTzdhU7xE9zRNc3I",
-				"zacT3GkRQq9EPef82DgXfuZi9ULplwv1DX9TyGYYuA");
-		credential = new Credential(CONSUMER_KEY, CONSUMER_SECRET, token);
+				app.getOAuthConsumerKey(),
+				app.getOAuthConsumerSecret());
 		//
 		new AuthAsyncServiceCall(this) {
 			@Override
-			public void onPostRun(Token result) {
+			public void onPostRun(UserAccountManager result) {
 				if (result != null) {
-					saveCredentials(username.getText().toString(), result);
+					app.setUserAccountManager(result);
+					app.saveAccessToken(result.getAccessToken());
+					//
 					startActivity(new Intent(getContext(), HomeActivity.class));
 				} else {
 					UIUtil.showMessage(
@@ -136,21 +109,5 @@ public class AuthActivity extends Activity {
 				}
 			}
 		}.execute(credential);
-	}
-	
-	/**
-	 * @param username
-	 * @param token
-	 */
-	protected void saveCredentials(String username, Token token) {
-		SharedPreferences.Editor editor =
-			getSharedPreferences(
-				TwAPImeApplication.PREFS_NAME, MODE_PRIVATE).edit();
-		//
-		editor.putString(PREFS_KEY_USERNAME, username);
-		editor.putString(PREFS_KEY_TOKEN, token.getToken());
-		editor.putString(PREFS_KEY_TOKEN_SECRET, token.getSecret());
-		//
-		editor.commit();
 	}
 }

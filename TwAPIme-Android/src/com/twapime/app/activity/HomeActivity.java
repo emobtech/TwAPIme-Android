@@ -8,11 +8,12 @@
  */
 package com.twapime.app.activity;
 
+import java.io.IOException;
+
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,7 +22,10 @@ import android.widget.TabHost;
 
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
+import com.twapime.app.util.GetAsyncServiceCall;
 import com.twitterapime.rest.UserAccount;
+import com.twitterapime.rest.UserAccountManager;
+import com.twitterapime.search.LimitExceededException;
 
 /**
  * @author ernandes@gmail.com
@@ -85,7 +89,7 @@ public class HomeActivity extends TabActivity {
 			getString(R.string.yes), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
-				removeCredentials();
+				((TwAPImeApplication)getApplication()).saveAccessToken(null);
 				//
 				startActivity(
 					new Intent(HomeActivity.this, AuthActivity.class));
@@ -108,31 +112,30 @@ public class HomeActivity extends TabActivity {
 	/**
 	 * 
 	 */
-	protected void removeCredentials() {
-		SharedPreferences.Editor editor = getSharedPreferences(
-			TwAPImeApplication.PREFS_NAME, MODE_PRIVATE).edit();
-		//
-		editor.remove(AuthActivity.PREFS_KEY_USERNAME);
-		editor.remove(AuthActivity.PREFS_KEY_TOKEN);
-		editor.remove(AuthActivity.PREFS_KEY_TOKEN_SECRET);
-		//
-		editor.commit();
-	}
-	
-	/**
-	 * 
-	 */
 	protected void viewMyProfile() {
-		SharedPreferences prefs =
-			getSharedPreferences(TwAPImeApplication.PREFS_NAME, MODE_PRIVATE);
-		//
-		Intent intent = new Intent(this, UserHomeActivity.class);
-		intent.putExtra(
-			UserHomeActivity.PARAM_KEY_USER,
-			new UserAccount(
-				prefs.getString(AuthActivity.PREFS_KEY_USERNAME, null)));
-		//
-		startActivity(intent);
+		new GetAsyncServiceCall<UserAccountManager, Void, UserAccount>(this) {
+			@Override
+			protected UserAccount run(UserAccountManager... params)
+				throws IOException, LimitExceededException {
+				return params[0].getUserAccount();
+			};
+			
+			@Override
+			protected void onPostRun(UserAccount result) {
+				Intent intent = new Intent(getContext(),UserHomeActivity.class);
+				intent.putExtra(UserHomeActivity.PARAM_KEY_USER, result);
+				intent.putExtra(UserHomeActivity.PARAM_KEY_IS_LOGGED_USER,true);
+				//
+				startActivity(intent);
+			};
+			
+			@Override
+			public int getProgressStringId() {
+				return R.string.loading_user_profile;
+			};
+		}.execute(
+			((TwAPImeApplication)getApplicationContext()
+				).getUserAccountManager());
 	}
 	
 	/**

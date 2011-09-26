@@ -9,6 +9,8 @@
 package com.twapime.app.activity;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import com.twitterapime.rest.FriendshipManager;
 import com.twitterapime.rest.UserAccount;
 import com.twitterapime.rest.UserAccountManager;
 import com.twitterapime.search.LimitExceededException;
+import com.twitterapime.search.Query;
 import com.twitterapime.search.QueryComposer;
 
 /**
@@ -35,11 +38,6 @@ public class FriendListActivity extends UserListActivity {
 	 * 
 	 */
 	protected UserAccount user;
-
-	/**
-	 * 
-	 */
-	protected FriendshipManager friendMngr;
 	
 	/**
 	 * @see com.twapime.app.activity.UserListActivity#onCreate(android.os.Bundle)
@@ -51,27 +49,42 @@ public class FriendListActivity extends UserListActivity {
 		Intent intent = getIntent();
 		//
 		user = (UserAccount)intent.getExtras().getSerializable(PARAM_KEY_USER);
-		//
-		TwAPImeApplication app = (TwAPImeApplication)getApplication();
-		UserAccountManager uam = app.getUserAccountManager();
-		//
-		friendMngr = FriendshipManager.getInstance(uam);
 	}
 	
 	/**
 	 * @see com.twapime.app.activity.UserListActivity#loadNextPage()
 	 */
 	@Override
-	protected Cursor loadNextPage() throws IOException, LimitExceededException {
-		String username = user.getString(MetadataSet.USERACCOUNT_USER_NAME);
+	protected Cursor loadNextPage() throws IOException, 
+		LimitExceededException {
+		TwAPImeApplication app = (TwAPImeApplication)getApplication();
+		UserAccountManager uam = app.getUserAccountManager();
+		FriendshipManager fpm = app.getFriendshipManager();
 		//
 		if (nextPageQuery == null) {
 			nextPageQuery = QueryComposer.cursor(-1);
 		}
 		nextPageQuery =
 			QueryComposer.append(
-				nextPageQuery, QueryComposer.screenName(username));
+				nextPageQuery,
+				QueryComposer.screenName(
+					user.getString(MetadataSet.USERACCOUNT_USER_NAME)));
 		//
-		return friendMngr.getFriends(nextPageQuery);
+		Cursor cursorIds = fpm.getFriendsIDs(nextPageQuery);
+		List<String> ids = new ArrayList<String>();
+		//
+		while (cursorIds.hasMoreElements()) {
+			ids.add(cursorIds.nextElement().toString());
+		}
+		//
+		Query nextLookupPageQuery =
+			QueryComposer.append(
+				QueryComposer.userIDs(ids.toArray(new String[ids.size()])),
+				QueryComposer.skipStatus());
+		//
+		return new Cursor(
+			uam.lookup(nextLookupPageQuery),
+			cursorIds.getPreviousPageIndex(),
+			cursorIds.getNextPageIndex());
 	}
 }

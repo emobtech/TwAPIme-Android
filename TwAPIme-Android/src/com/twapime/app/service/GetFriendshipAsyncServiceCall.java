@@ -14,9 +14,8 @@ import java.util.List;
 
 import android.app.Activity;
 
-import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
-import com.twapime.app.util.GetAsyncServiceCall;
+import com.twapime.app.util.AsyncServiceCall;
 import com.twitterapime.rest.Friendship;
 import com.twitterapime.rest.FriendshipManager;
 import com.twitterapime.rest.UserAccount;
@@ -26,20 +25,12 @@ import com.twitterapime.search.LimitExceededException;
  * @author ernandes@gmail.com
  */
 public class GetFriendshipAsyncServiceCall 
-	extends GetAsyncServiceCall<UserAccount, Void, List<Friendship>> {
+	extends AsyncServiceCall<UserAccount, Void, List<Friendship>> {
 	/**
 	 * @param context
 	 */
 	public GetFriendshipAsyncServiceCall(Activity context) {
 		super(context);
-	}
-	
-	/**
-	 * @see com.twapime.app.util.PostAsyncServiceCall#getProgressStringId()
-	 */
-	@Override
-	public int getProgressStringId() {
-		return R.string.loading_user_profile;
 	}
 
 	/**

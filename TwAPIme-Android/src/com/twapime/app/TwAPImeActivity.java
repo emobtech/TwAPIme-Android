@@ -10,11 +10,11 @@ package com.twapime.app;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.twapime.app.activity.AuthActivity;
 import com.twapime.app.activity.HomeActivity;
+import com.twapime.app.activity.OAuthActivity;
+import com.twapime.app.service.AuthAsyncServiceCall;
 import com.twitterapime.rest.Credential;
 import com.twitterapime.rest.UserAccountManager;
 import com.twitterapime.xauth.Token;
@@ -37,38 +37,41 @@ public class TwAPImeActivity extends Activity {
      * 
      */
     public void verifyExistentAccount() {
-		SharedPreferences prefs =
-			getSharedPreferences(TwAPImeApplication.PREFS_NAME, MODE_PRIVATE);
+    	TwAPImeApplication app = (TwAPImeApplication)getApplication();
+    	//
+    	Token token = app.getAccessToken();
 		//
-        if (prefs.getString(AuthActivity.PREFS_KEY_TOKEN, null) == null) {
-        	startActivity(new Intent(this, AuthActivity.class));
+        if (token == null) {
+        	startActivity(new Intent(this, OAuthActivity.class));
         } else {
-        	Token token =
-        		new Token(
-        			prefs.getString(AuthActivity.PREFS_KEY_TOKEN, null),
-        			prefs.getString(AuthActivity.PREFS_KEY_TOKEN_SECRET, null));
-        	//
-        	Credential c =
+        	Credential credential =
         		new Credential(
-        			AuthActivity.CONSUMER_KEY,
-        			AuthActivity.CONSUMER_SECRET,
+        			app.getOAuthConsumerKey(), 
+        			app.getOAuthConsumerSecret(),
         			token);
         	//
-        	UserAccountManager uam = UserAccountManager.getInstance(c);
-        	//
-        	try {
-				if (uam.verifyCredential()) {
-					TwAPImeApplication app =
-						(TwAPImeApplication)getApplication();
-					app.setUserAccountManager(uam);
-					//
-					startActivity(new Intent(this, HomeActivity.class));
-				} else {
-					startActivity(new Intent(this, AuthActivity.class));
-				}
-			} catch (Exception e) {
-				startActivity(new Intent(this, AuthActivity.class));
-			}
+        	new AuthAsyncServiceCall(this) {
+        		@Override
+        		protected void onPostRun(UserAccountManager result) {
+    				if (result != null) {
+    					TwAPImeApplication app =
+    						(TwAPImeApplication)getApplication();
+    					app.setUserAccountManager(result);
+    					//
+    					startActivity(
+    						new Intent(getContext(), HomeActivity.class));
+    				} else {
+    					startActivity(
+    						new Intent(getContext(), OAuthActivity.class));
+    				}
+        		};
+        		
+        		@Override
+        		protected void onFailedRun(Throwable result) {
+        			startActivity(
+        				new Intent(getContext(), OAuthActivity.class));
+        		};
+        	}.execute(credential);
         }
     }
 }
