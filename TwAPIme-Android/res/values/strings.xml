@@ -91,4 +91,7 @@
     <string name="confirm_delete_list">Are you sure you want to delete this list?</string>
     <string name="no_list_found">No list found.</string>
     <string name="sign_up">Sign Up</string>
+    <string name="oauth_error_question">It was not possible to authenticate you. Would you like to try again?</string>
+    <string name="oauth_deny_question">You have denied access to your account. Would you like to reconsider it?</string>
+    <string name="exit_app">Exit App</string>
 </resources>

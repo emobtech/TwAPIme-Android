@@ -76,8 +76,6 @@ public class TwAPImeApplication extends Application {
 		    //
 		    oauthProps = new Properties();
 		    oauthProps.load(resource);
-		    //
-		    Log.d("twapime", "Loading Oauth.properties");
 		} catch (Exception e) {
 			Log.e("twapime", "Error by loading Oauth.properties");
 		} finally {

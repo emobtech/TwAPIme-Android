@@ -10,6 +10,8 @@ package com.twapime.app.activity;
 
 import impl.android.com.twitterapime.xauth.ui.WebViewOAuthDialogWrapper;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebView;
@@ -17,7 +19,6 @@ import android.webkit.WebView;
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.service.AuthAsyncServiceCall;
-import com.twapime.app.util.UIUtil;
 import com.twitterapime.rest.Credential;
 import com.twitterapime.rest.UserAccountManager;
 import com.twitterapime.xauth.Token;
@@ -31,6 +32,11 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 	 * 
 	 */
 	private WebViewOAuthDialogWrapper loginWrapper;
+	
+	/**
+	 * 
+	 */
+	private Runnable tryAgainError;
 
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -51,6 +57,13 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 		loginWrapper.addOAuthListener(this);
 		//
 		loginWrapper.login();
+		//
+		tryAgainError = new Runnable() {
+			@Override
+			public void run() {
+				tryAgain(R.string.oauth_error_question);
+			}
+		};
 	}
 
 	/**
@@ -58,7 +71,12 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 	 */
 	@Override
 	public void onAccessDenied(String message) {
-		UIUtil.showMessage(this, message);
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				tryAgain(R.string.oauth_deny_question);
+			}
+		});
 	}
 
 	/**
@@ -78,16 +96,13 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 					//
 					startActivity(new Intent(getContext(), HomeActivity.class));
 				} else {
-					UIUtil.showMessage(
-						getContext(), R.string.credentials_invalid);
-					//
-					loginWrapper.login();
+					runOnUiThread(tryAgainError);
 				}
 			};
 			
 			@Override
 			protected void onFailedRun(Throwable result) {
-				loginWrapper.login();
+				runOnUiThread(tryAgainError);
 			};
 		}.execute(
 			new Credential(
@@ -101,6 +116,34 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 	 */
 	@Override
 	public void onFail(String message, String description) {
-		UIUtil.showMessage(this, description);
+		runOnUiThread(tryAgainError);
+	}
+	
+	/**
+	 * @param strId
+	 */
+	public void tryAgain(int strId) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(getString(R.string.app_name));
+		builder.setMessage(strId);
+		builder.setCancelable(false);
+		builder.setPositiveButton(
+			getString(R.string.yes), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				loginWrapper.login();
+			}
+		});
+		builder.setNegativeButton(
+			getString(
+				R.string.exit_app), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				finish();
+			}
+		});
+		//
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 }
