@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
@@ -53,9 +54,12 @@ public class TwAPImeApplication extends Application {
 	private Properties oauthProps;
 	
 	/**
-	 * 
+	 * @see android.app.Application#onCreate()
 	 */
-	public TwAPImeApplication() {
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		//
 		loadProperties();
 	}
 	
@@ -66,7 +70,9 @@ public class TwAPImeApplication extends Application {
 		InputStream resource = null;
 		//
 		try {
-		    resource = getResources().openRawResource(R.raw.oauth);
+			Context ctx = getApplicationContext();
+			//
+		    resource = ctx.getResources().openRawResource(R.raw.oauth);
 		    //
 		    oauthProps = new Properties();
 		    oauthProps.load(resource);
