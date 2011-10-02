@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:orientation="vertical"
+	android:id="@+id/edit_list" android:layout_height="fill_parent">
+	<ScrollView android:layout_width="fill_parent" android:id="@+id/scrollView1"
+		android:layout_weight="1" android:layout_height="wrap_content">
+		<LinearLayout android:layout_width="fill_parent"
+			android:id="@+id/linearLayout2" android:layout_height="fill_parent"
+			android:orientation="vertical">
+			<LinearLayout android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:id="@+id/linearLayout3"
+				android:orientation="horizontal">
+				<ImageView android:paddingTop="2px" android:src="@drawable/icon"
+					android:paddingLeft="2px" android:layout_height="48dp" android:layout_width="48dp" android:id="@+id/edit_user_profile_imgv_avatar"></ImageView>
+				<LinearLayout android:layout_width="wrap_content"
+					android:layout_height="fill_parent" android:id="@+id/linearLayout2"
+					android:orientation="vertical">
+					<TextView android:paddingTop="2px" android:paddingRight="2px"
+						android:textStyle="bold"
+						android:text="" android:layout_width="wrap_content"
+						android:paddingLeft="2px" android:layout_height="wrap_content" android:id="@+id/edit_user_profile_txtv_avatar_name"></TextView>
+					<TextView android:paddingRight="2px"
+						android:text=""
+						android:layout_width="wrap_content" android:paddingLeft="2px"
+						android:layout_height="wrap_content" android:id="@+id/edit_user_profile_txtv_avatar_username"></TextView>
+				</LinearLayout>
+			</LinearLayout>
+			<TextView android:text="@string/name" android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:id="@+id/edit_user_profile_txtv_name"></TextView>
+			<EditText android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:id="@+id/edit_user_profile_txtf_name" android:maxLength="100"></EditText>
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="@string/bio"
+				android:id="@+id/edit_user_profile_txtv_bio"></TextView>
+			<EditText android:layout_width="fill_parent"
+				android:gravity="top" android:layout_height="wrap_content"
+				android:maxLength="160" android:lines="2"
+				android:id="@+id/edit_user_profile_txtf_bio"></EditText>
+			<TextView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:text="@string/web"
+				android:id="@+id/edit_user_profile_txtv_web"></TextView>
+			<EditText android:layout_height="wrap_content"
+				android:layout_width="fill_parent" android:id="@+id/edit_user_profile_txtf_web" android:maxLength="50" android:inputType="textWebEditText"></EditText>
+			<TextView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:text="@string/location"
+				android:id="@+id/edit_user_profile_txtv_location"></TextView>
+			<EditText android:layout_height="wrap_content"
+				android:layout_width="fill_parent" android:id="@+id/edit_user_profile_txtf_location" android:maxLength="50"></EditText>
+		</LinearLayout>
+	</ScrollView>
+	<LinearLayout android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:id="@+id/linearLayout1"
+		android:gravity="center">
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="@string/done"
+			android:layout_weight="1" android:id="@+id/edit_user_profile_btn_done"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="@string/cancel" android:layout_weight="1" android:id="@+id/edit_user_profile_btn_cancel"></Button>
+	</LinearLayout>
+</LinearLayout>

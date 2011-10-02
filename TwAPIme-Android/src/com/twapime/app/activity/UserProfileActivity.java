@@ -11,6 +11,8 @@ package com.twapime.app.activity;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -40,6 +42,11 @@ import com.twitterapime.search.Tweet;
  * @author ernandes@gmail.com
  */
 public class UserProfileActivity extends Activity {
+	/**
+	 * 
+	 */
+	private static final int REQUEST_EDIT_USER = 0;
+	
 	/**
 	 * 
 	 */
@@ -238,13 +245,45 @@ public class UserProfileActivity extends Activity {
 	 * 
 	 */
 	public void reportSpam() {
-		new ReportSpamAsyncServiceCall(this).execute(user);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(getString(R.string.app_name));
+		builder.setMessage(getString(R.string.confirm_report_spam));
+		builder.setCancelable(false);
+		builder.setPositiveButton(
+			getString(R.string.yes), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				new ReportSpamAsyncServiceCall(getParent()).execute(user);
+			}
+		});
+		builder.setNegativeButton(
+			getString(R.string.no), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+			}
+		});
+		//
+		AlertDialog alert = builder.create();
+		alert.show();
 	}
 	
 	/**
 	 * 
 	 */
 	public void editProfile() {
+		Intent intent = new Intent(this, EditUserProfileActivity.class);
+		intent.putExtra(EditUserProfileActivity.PARAM_KEY_USER, user);
+		//
+		startActivityForResult(intent, REQUEST_EDIT_USER);
+	}
+	
+	/**
+	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 	
 	/**

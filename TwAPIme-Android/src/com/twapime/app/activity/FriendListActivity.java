@@ -55,8 +55,7 @@ public class FriendListActivity extends UserListActivity {
 	 * @see com.twapime.app.activity.UserListActivity#loadNextPage()
 	 */
 	@Override
-	protected Cursor loadNextPage() throws IOException, 
-		LimitExceededException {
+	protected Cursor loadNextPage() throws IOException, LimitExceededException {
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		UserAccountManager uam = app.getUserAccountManager();
 		FriendshipManager fpm = app.getFriendshipManager();
