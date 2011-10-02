@@ -11,9 +11,13 @@ package com.twapime.app.activity;
 import impl.android.com.twitterapime.xauth.ui.WebViewOAuthDialogWrapper;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
 import com.twapime.app.R;
@@ -37,6 +41,11 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 	 * 
 	 */
 	private Runnable tryAgainError;
+	
+	/**
+	 * 
+	 */
+	private ProgressDialog progressDialog;
 
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -46,7 +55,22 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 		super.onCreate(savedInstanceState);
 		//
 		WebView webView = new WebView(this);
+		webView.getSettings().setJavaScriptEnabled(true);
+		//
 		setContentView(webView);
+		//
+		progressDialog =
+			ProgressDialog.show(this, "", getString(R.string.loading), false);
+		//
+		webView.setWebChromeClient(new WebChromeClient() {
+			public void onProgressChanged(WebView view, int progress) {
+				if (!progressDialog.isShowing() && progress < 100) {
+					progressDialog.show();
+				} else if (progress == 100 && progressDialog.isShowing()) {
+					progressDialog.dismiss();
+				}
+			}
+		});
 		//
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		//
@@ -56,6 +80,13 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 		loginWrapper.setCallbackUrl(app.getOAuthCallbackUrl());
 		loginWrapper.addOAuthListener(this);
 		//
+		final String body =
+			"<html><body style='background-color:white'/></html>";
+		//
+		loginWrapper.setCustomSuccessPageHtml(body);
+		loginWrapper.setCustomDeniedPageHtml(body);
+		loginWrapper.setCustomErrorPageHtml(body);
+		//
 		loginWrapper.login();
 		//
 		tryAgainError = new Runnable() {
@@ -64,6 +95,31 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 				tryAgain(R.string.oauth_error_question);
 			}
 		};
+	}
+	
+	/**
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.oauth, menu);
+	    //
+	    return true;
+	}
+	
+	/**
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.menu_item_refresh:
+	    	loginWrapper.login();
+	    	//
+	        return true;
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
 	}
 
 	/**

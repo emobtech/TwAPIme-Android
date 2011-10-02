@@ -24,6 +24,7 @@ import com.twapime.app.R;
 import com.twapime.app.service.BlockAsyncServiceCall;
 import com.twapime.app.service.FollowAsyncServiceCall;
 import com.twapime.app.service.GetFriendshipAsyncServiceCall;
+import com.twapime.app.service.GetUserAsyncServiceCall;
 import com.twapime.app.service.ReportSpamAsyncServiceCall;
 import com.twapime.app.service.UnblockAsyncServiceCall;
 import com.twapime.app.service.UnfollowAsyncServiceCall;
@@ -83,17 +84,34 @@ public class UserProfileActivity extends Activity {
 		user = (UserAccount)intent.getSerializableExtra(PARAM_KEY_USER);
 		isLoggedUser = intent.getBooleanExtra(PARAM_KEY_IS_LOGGED_USER, false);
 		//
-		displayUserProfile();
+		loadUserProfile();
 		loadUserFriendship();
 	}
 	
 	/**
 	 * 
 	 */
-	protected void loadUserFriendship() {
+	public void loadUserProfile() {
+		if (user.getObject(MetadataSet.USERACCOUNT_CREATE_DATE) == null) {
+			new GetUserAsyncServiceCall(this) {
+				@Override
+				protected void onPostRun(List<UserAccount> result) {
+					user = result.get(0);
+					displayUserProfile();
+				}
+			}.execute(user); //load all user data.
+		} else {
+			displayUserProfile();
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	public void loadUserFriendship() {
 		new GetFriendshipAsyncServiceCall(this) {
 			protected void onPostRun(List<Friendship> result) {
-				Friendship f = result.get(0);
+				Friendship f = result.get(0).getSource();
 				//
 				isFollowing = f.getBoolean(MetadataSet.FRIENDSHIP_FOLLOWING);
 				isBlocking = f.getBoolean(MetadataSet.FRIENDSHIP_BLOCKING);
@@ -104,7 +122,7 @@ public class UserProfileActivity extends Activity {
 	/**
 	 * 
 	 */
-	protected void displayUserProfile() {
+	public void displayUserProfile() {
 		TextView txtv = (TextView)findViewById(R.id.user_profile_txtv_name);
 		txtv.setText(user.getString(MetadataSet.USERACCOUNT_NAME));	
 		//
@@ -149,10 +167,9 @@ public class UserProfileActivity extends Activity {
 		//
 		txtv = (TextView)findViewById(R.id.user_profile_txtv_member_since);
 		txtv.setText(
-			DateFormat.format("dd/MM/yyyy",
-			Long.parseLong(
-				user.getString(
-					MetadataSet.USERACCOUNT_CREATE_DATE))).toString());
+			DateFormat.format(
+				"dd/MM/yyyy",
+				user.getLong(MetadataSet.USERACCOUNT_CREATE_DATE)));
 		//
 		ImageView imgV = (ImageView)findViewById(R.id.user_profile_imgv_avatar);
 		//
@@ -178,7 +195,7 @@ public class UserProfileActivity extends Activity {
 	/**
 	 * 
 	 */
-	protected void followOrUnfollow() {
+	public void followOrUnfollow() {
 		if (isFollowing) {
 			new UnfollowAsyncServiceCall(this) {
 				@Override
@@ -199,7 +216,7 @@ public class UserProfileActivity extends Activity {
 	/**
 	 * 
 	 */
-	protected void blockOrUnblock() {
+	public void blockOrUnblock() {
 		if (isBlocking) {
 			new UnblockAsyncServiceCall(this) {
 				@Override
@@ -220,8 +237,14 @@ public class UserProfileActivity extends Activity {
 	/**
 	 * 
 	 */
-	protected void reportSpam() {
+	public void reportSpam() {
 		new ReportSpamAsyncServiceCall(this).execute(user);
+	}
+	
+	/**
+	 * 
+	 */
+	public void editProfile() {
 	}
 	
 	/**
@@ -231,14 +254,16 @@ public class UserProfileActivity extends Activity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean result = super.onPrepareOptionsMenu(menu);
 		//
-		menu.findItem(R.id.menu_item_follow).setTitle(
-			isFollowing ? R.string.unfollow : R.string.follow);	
-		menu.findItem(R.id.menu_item_follow).setIcon(
-			isFollowing ? R.drawable.round_minus : R.drawable.round_plus);	
-		menu.findItem(R.id.menu_item_block).setTitle(
-			isBlocking ? R.string.unblock : R.string.block);
-		menu.findItem(R.id.menu_item_block).setIcon(
-			isBlocking ? R.drawable.round_checkmark : R.drawable.cancel);	
+		if (!isLoggedUser) {
+			menu.findItem(R.id.menu_item_follow).setTitle(
+				isFollowing ? R.string.unfollow : R.string.follow);	
+			menu.findItem(R.id.menu_item_follow).setIcon(
+				isFollowing ? R.drawable.round_minus : R.drawable.round_plus);	
+			menu.findItem(R.id.menu_item_block).setTitle(
+				isBlocking ? R.string.unblock : R.string.block);
+			menu.findItem(R.id.menu_item_block).setIcon(
+				isBlocking ? R.drawable.round_checkmark : R.drawable.cancel);	
+		}
 		//
 		return result;
 	}
@@ -249,12 +274,12 @@ public class UserProfileActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (isLoggedUser) {
-			return false;
+			getMenuInflater().inflate(R.menu.view_my_user_profile, menu);
 		} else {
 			getMenuInflater().inflate(R.menu.view_user_profile, menu);
-		    //
-		    return true;
 		}
+		//
+		return true;
 	}
 	
 	/**
@@ -273,6 +298,10 @@ public class UserProfileActivity extends Activity {
 	        return true;
 	    case R.id.menu_item_report_spam:
 	    	reportSpam();
+	    	//
+	        return true;
+	    case R.id.menu_item_edit_profile:
+	    	editProfile();
 	    	//
 	        return true;
 	    default:
