@@ -40,12 +40,6 @@ public class TwAPImeApplication extends Application {
 	/**
 	 * 
 	 */
-	private static final String PREFS_KEY_TOKEN_SECRET =
-		"PREFS_KEY_TOKEN_SECRET";
-	
-	/**
-	 * 
-	 */
 	private UserAccountManager userAccountManager;
 
 	/**
@@ -127,14 +121,14 @@ public class TwAPImeApplication extends Application {
 			if (isOAuthSingleAccessTokenEnabled()) {
 	       		return new Token(
 	       			oauthProps.getProperty("twapime.oauth.token"),
-	       			oauthProps.getProperty("twapime.oauth.token_secret"));
+	       			oauthProps.getProperty("twapime.oauth.token_secret"),
+	       			oauthProps.getProperty("twapime.oauth.user_id"),
+	       			oauthProps.getProperty("twapime.oauth.screen_name"));
 			} else {
 				return null;
 			}
 		} else {
-       		return new Token(
-       			prefs.getString(PREFS_KEY_TOKEN, null),
-       			prefs.getString(PREFS_KEY_TOKEN_SECRET, null));
+			return Token.parse(prefs.getString(PREFS_KEY_TOKEN, null));
 		}
 	}
 	
@@ -146,11 +140,9 @@ public class TwAPImeApplication extends Application {
 			getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
 		//
 		if (token != null) {
-			editor.putString(PREFS_KEY_TOKEN, token.getToken());
-			editor.putString(PREFS_KEY_TOKEN_SECRET, token.getSecret());
+			editor.putString(PREFS_KEY_TOKEN, token.toString());
 		} else {
 			editor.remove(PREFS_KEY_TOKEN);
-			editor.remove(PREFS_KEY_TOKEN_SECRET);
 		}
 		//
 		editor.commit();

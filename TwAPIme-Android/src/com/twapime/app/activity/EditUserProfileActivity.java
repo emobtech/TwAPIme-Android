@@ -117,6 +117,13 @@ public class EditUserProfileActivity extends Activity {
 	 * 
 	 */
 	public void done() {
+		user =
+			new UserAccount(
+				name.getEditableText().toString(),
+				bio.getEditableText().toString(),
+				web.getEditableText().toString(),
+				location.getEditableText().toString());
+		//
 		new UpdateProfileAsyncServiceCall(this) {
 			@Override
 			protected void onPostRun(java.util.List<UserAccount> result) {

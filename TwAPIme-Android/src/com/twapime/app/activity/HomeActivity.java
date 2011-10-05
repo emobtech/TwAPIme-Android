@@ -92,7 +92,7 @@ public class HomeActivity extends TabActivity {
 				((TwAPImeApplication)getApplication()).saveAccessToken(null);
 				//
 				startActivity(
-					new Intent(HomeActivity.this, AuthActivity.class));
+					new Intent(HomeActivity.this, OAuthActivity.class));
 				//
 				finish();
 			}

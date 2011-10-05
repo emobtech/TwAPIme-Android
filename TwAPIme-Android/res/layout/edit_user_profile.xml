@@ -28,24 +28,23 @@
 			<TextView android:text="@string/name" android:layout_width="wrap_content"
 				android:layout_height="wrap_content" android:id="@+id/edit_user_profile_txtv_name"></TextView>
 			<EditText android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:id="@+id/edit_user_profile_txtf_name" android:maxLength="100"></EditText>
+				android:layout_height="wrap_content" android:id="@+id/edit_user_profile_txtf_name" android:maxLength="20"></EditText>
 			<TextView android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:text="@string/bio"
-				android:id="@+id/edit_user_profile_txtv_bio"></TextView>
+				android:id="@+id/edit_user_profile_txtv_bio" android:capitalize="none"></TextView>
 			<EditText android:layout_width="fill_parent"
 				android:gravity="top" android:layout_height="wrap_content"
-				android:maxLength="160" android:lines="2"
-				android:id="@+id/edit_user_profile_txtf_bio"></EditText>
+				android:id="@+id/edit_user_profile_txtf_bio" android:maxLength="160" android:lines="3"></EditText>
 			<TextView android:layout_height="wrap_content"
 				android:layout_width="wrap_content" android:text="@string/web"
 				android:id="@+id/edit_user_profile_txtv_web"></TextView>
 			<EditText android:layout_height="wrap_content"
-				android:layout_width="fill_parent" android:id="@+id/edit_user_profile_txtf_web" android:maxLength="50" android:inputType="textWebEditText"></EditText>
+				android:layout_width="fill_parent" android:id="@+id/edit_user_profile_txtf_web" android:inputType="textWebEditText" android:maxLength="100"></EditText>
 			<TextView android:layout_height="wrap_content"
 				android:layout_width="wrap_content" android:text="@string/location"
 				android:id="@+id/edit_user_profile_txtv_location"></TextView>
 			<EditText android:layout_height="wrap_content"
-				android:layout_width="fill_parent" android:id="@+id/edit_user_profile_txtf_location" android:maxLength="50"></EditText>
+				android:layout_width="fill_parent" android:id="@+id/edit_user_profile_txtf_location" android:maxLength="30"></EditText>
 		</LinearLayout>
 	</ScrollView>
 	<LinearLayout android:layout_height="wrap_content"
