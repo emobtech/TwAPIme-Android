@@ -71,7 +71,7 @@ public class ListActivity extends android.app.ListActivity {
 		super.onCreate(savedInstanceState);
 		//
 		lists = new ArrayList<com.twitterapime.rest.List>();
-		adapter = new ListArrayAdapter(this, R.layout.list_row, lists);
+		adapter = new ListArrayAdapter(this, R.layout.row_list, lists);
 		setListAdapter(adapter);
 		registerForContextMenu(getListView());
 		//
@@ -230,7 +230,7 @@ public class ListActivity extends android.app.ListActivity {
 	public void onCreateContextMenu(ContextMenu menu, View v, 
 		ContextMenuInfo menuInfo) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.edit_list, menu);
+		inflater.inflate(R.menu.list, menu);
 	}
 	
 	/**
@@ -244,12 +244,12 @@ public class ListActivity extends android.app.ListActivity {
 		com.twitterapime.rest.List list = lists.get(info.position);
 		//
 	    switch (item.getItemId()) {
-	    case R.id.menu_item_edit_list:
+	    case R.id.menu_item_edit:
 	    	selectedItemPos = info.position;
 	    	editList(list);
 	    	//
 	        return true;
-	    case R.id.menu_item_delete_list:
+	    case R.id.menu_item_delete:
 	    	selectedItemPos = info.position;
 	    	deleteList(list);
 	    	//

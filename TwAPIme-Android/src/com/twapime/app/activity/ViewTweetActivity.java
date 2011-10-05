@@ -172,7 +172,7 @@ public class ViewTweetActivity extends Activity {
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.view_tweet, menu);
+		getMenuInflater().inflate(R.menu.tweet, menu);
 	    //
 	    return true;
 	}

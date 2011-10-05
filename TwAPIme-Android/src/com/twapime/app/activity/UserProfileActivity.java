@@ -84,7 +84,7 @@ public class UserProfileActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//
-		setContentView(R.layout.user_profile);
+		setContentView(R.layout.view_profile);
 		//
 		Intent intent = getIntent();
 		//
@@ -313,9 +313,9 @@ public class UserProfileActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		if (isLoggedUser) {
-			getMenuInflater().inflate(R.menu.view_my_user_profile, menu);
+			getMenuInflater().inflate(R.menu.my_profile, menu);
 		} else {
-			getMenuInflater().inflate(R.menu.view_user_profile, menu);
+			getMenuInflater().inflate(R.menu.profile, menu);
 		}
 		//
 		return true;
@@ -339,7 +339,7 @@ public class UserProfileActivity extends Activity {
 	    	reportSpam();
 	    	//
 	        return true;
-	    case R.id.menu_item_edit_profile:
+	    case R.id.menu_item_edit:
 	    	editProfile();
 	    	//
 	        return true;

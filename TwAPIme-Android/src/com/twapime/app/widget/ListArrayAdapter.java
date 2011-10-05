@@ -58,7 +58,7 @@ public class ListArrayAdapter extends ArrayAdapter<com.twitterapime.rest.List> {
             LayoutInflater vi =
             	(LayoutInflater)context.getSystemService(
             		Context.LAYOUT_INFLATER_SERVICE);
-            v = vi.inflate(R.layout.list_row, null);
+            v = vi.inflate(R.layout.row_list, null);
         }
         //
         com.twitterapime.rest.List list = lists.get(position);

@@ -79,7 +79,7 @@ public class UserArrayAdapter extends ArrayAdapter<UserAccount> {
             LayoutInflater vi =
             	(LayoutInflater)context.getSystemService(
             		Context.LAYOUT_INFLATER_SERVICE);
-            rowView = vi.inflate(R.layout.user_row, null);
+            rowView = vi.inflate(R.layout.row_user, null);
         }
         //
         UserAccount user = users.get(position);

@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -85,7 +86,7 @@ public class TimelineActivity extends ListActivity implements
 		super.onCreate(savedInstanceState);
 		//
 		tweets = new ArrayList<Tweet>();
-		adapter = new TimelineArrayAdapter(this, R.layout.tweet_row, tweets);
+		adapter = new TimelineArrayAdapter(this, R.layout.row_tweet, tweets);
 		setListAdapter(adapter);
 		//
 		registerForContextMenu(getListView());
@@ -272,6 +273,22 @@ public class TimelineActivity extends ListActivity implements
 	}
 	
 	/**
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		if (getParent() == null) {
+			getMenuInflater().inflate(R.menu.timeline, menu);
+			//
+			return true;
+		} else {
+			getParent().getMenuInflater().inflate(R.menu.timeline, menu);
+			//
+			return super.onCreateOptionsMenu(menu);
+		}
+	}
+	
+	/**
 	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
 	 */
 	@Override
@@ -293,7 +310,7 @@ public class TimelineActivity extends ListActivity implements
 	public void onCreateContextMenu(ContextMenu menu, View v,
 		ContextMenuInfo menuInfo) {
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.view_tweet, menu);
+		inflater.inflate(R.menu.tweet, menu);
 		//
 		AdapterView.AdapterContextMenuInfo info =
 			(AdapterView.AdapterContextMenuInfo)menuInfo;

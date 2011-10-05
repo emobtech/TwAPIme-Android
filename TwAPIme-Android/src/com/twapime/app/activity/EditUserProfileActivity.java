@@ -71,7 +71,7 @@ public class EditUserProfileActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//
-		setContentView(R.layout.edit_user_profile);
+		setContentView(R.layout.edit_profile);
 	    //
 	    final Button btnDone =
 	    	(Button)findViewById(R.id.edit_user_profile_btn_done);

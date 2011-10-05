@@ -82,7 +82,7 @@ public class TimelineArrayAdapter extends ArrayAdapter<Tweet> {
             	(LayoutInflater)context.getSystemService(
             		Context.LAYOUT_INFLATER_SERVICE);
             //
-            rowView = vi.inflate(R.layout.tweet_row, null);
+            rowView = vi.inflate(R.layout.row_tweet, null);
         }
         //
         Tweet tweet = tweets.get(position);

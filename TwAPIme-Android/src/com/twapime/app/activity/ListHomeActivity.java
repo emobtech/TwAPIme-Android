@@ -62,5 +62,15 @@ public class ListHomeActivity extends TabActivity {
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);
+	    //
+	    spec = tabHost.newTabSpec("subscriber");
+	    spec.setIndicator(
+	    	getString(R.string.subscribers), res.getDrawable(R.drawable.users));
+	    //
+		intent = new Intent(this, SubscriberListActivity.class);
+		intent.putExtra(SubscriberListActivity.PARAM_KEY_LIST, list);
+	    //
+	    spec.setContent(intent);
+	    tabHost.addTab(spec);
 	}
 }

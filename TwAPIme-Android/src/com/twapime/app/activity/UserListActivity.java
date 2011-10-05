@@ -66,7 +66,7 @@ public abstract class UserListActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		//
 		users = new ArrayList<UserAccount>();
-		adapter = new UserArrayAdapter(this, R.layout.user_row, users);
+		adapter = new UserArrayAdapter(this, R.layout.row_user, users);
 		setListAdapter(adapter);
 		//
 		registerForContextMenu(getListView());

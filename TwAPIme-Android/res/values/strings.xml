@@ -97,4 +97,5 @@
     <string name="exit_app">Exit App</string>
     <string name="loading">Loading. Please wait...</string>
     <string name="location">Location</string>
+    <string name="subscribers">Subscribers</string>
 </resources>
