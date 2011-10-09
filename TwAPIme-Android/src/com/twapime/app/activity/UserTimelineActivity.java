@@ -52,7 +52,11 @@ public class UserTimelineActivity extends TimelineActivity {
 	public void refresh() {
 		super.refresh();
 		//
-		Query query = QueryComposer.screenName(username);
+		Query query =
+			QueryComposer.append(
+				QueryComposer.screenName(username),
+				QueryComposer.includeRetweets());
+		query = QueryComposer.append(query, QueryComposer.includeEntities());
 		//
 		if (sinceID != null) {
 			query = QueryComposer.append(query, sinceID);

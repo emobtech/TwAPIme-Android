@@ -49,6 +49,20 @@ public final class UIUtil {
 	public static void showMessage(Context context, int resId) {
 		showMessage(context, context.getResources().getString(resId));
 	}
+	
+	/**
+	 * @param exception
+	 * @return
+	 */
+	public static int getMessageId(Throwable exception) {
+		if (exception instanceof IOException) {
+			return R.string.network_access_failure;
+		} else if (exception instanceof LimitExceededException) {
+			return R.string.rate_limit_exceeded;
+		} else {
+			return R.string.unknown_failure;
+		}
+	}
 
 	/**
 	 * 

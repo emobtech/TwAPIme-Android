@@ -72,6 +72,16 @@ public class ListArrayAdapter extends ArrayAdapter<com.twitterapime.rest.List> {
         tv = (TextView) v.findViewById(R.id.list_row_txtv_list_name);
         tv.setText(list.getString(MetadataSet.LIST_NAME));
         //
+        String[] privacy =
+        	context.getResources().getStringArray(R.array.privacy_array);
+        //
+        tv = (TextView) v.findViewById(R.id.list_row_txtv_list_privacy);
+        if ("Public".equalsIgnoreCase(list.getString(MetadataSet.LIST_MODE))) {
+            tv.setText(privacy[1]);
+        } else {
+        	tv.setText(privacy[0]);
+        }
+        //
 		return v;
 	}
 }

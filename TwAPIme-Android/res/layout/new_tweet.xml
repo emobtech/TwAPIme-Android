@@ -12,7 +12,7 @@
             <EditText android:maxLength="140" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/new_tweet_txtf_content" android:gravity="top" android:lines="5"></EditText>
         </LinearLayout>
     </ScrollView>
-    <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout1" android:gravity="center">
+    <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout1">
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/new_tweet_btn_post" android:text="@string/post" android:layout_weight="1"></Button>
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/new_tweet_btn_cancel" android:text="@string/cancel" android:layout_weight="1"></Button>
     </LinearLayout>

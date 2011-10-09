@@ -23,6 +23,7 @@ import android.webkit.WebView;
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.service.AuthAsyncServiceCall;
+import com.twapime.app.util.IOUtil;
 import com.twitterapime.rest.Credential;
 import com.twitterapime.rest.UserAccountManager;
 import com.twitterapime.xauth.Token;
@@ -78,7 +79,7 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 		loginWrapper.setConsumerKey(app.getOAuthConsumerKey());
 		loginWrapper.setConsumerSecret(app.getOAuthConsumerSecret());
 		loginWrapper.setCallbackUrl(app.getOAuthCallbackUrl());
-		loginWrapper.addOAuthListener(this);
+		loginWrapper.setOAuthListener(this);
 		//
 		final String body =
 			"<html><body style='background-color:white'/></html>";
@@ -87,7 +88,7 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 		loginWrapper.setCustomDeniedPageHtml(body);
 		loginWrapper.setCustomErrorPageHtml(body);
 		//
-		loginWrapper.login();
+		login();
 		//
 		tryAgainError = new Runnable() {
 			@Override
@@ -95,6 +96,17 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 				tryAgain(R.string.oauth_error_question);
 			}
 		};
+	}
+	
+	/**
+	 * 
+	 */
+	public void login() {
+		if (IOUtil.isOnline(this)) {
+			loginWrapper.login();
+		} else {
+			tryAgain(R.string.network_access_failure);
+		}
 	}
 	
 	/**
@@ -114,7 +126,7 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.menu_item_refresh:
-	    	loginWrapper.login();
+	    	login();
 	    	//
 	        return true;
 	    default:
@@ -187,7 +199,7 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 			getString(R.string.yes), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
-				loginWrapper.login();
+				login();
 			}
 		});
 		builder.setNegativeButton(

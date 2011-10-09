@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.widget.TabHost;
 
 import com.twapime.app.R;
+import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.List;
 
 /**
@@ -63,14 +64,17 @@ public class ListHomeActivity extends TabActivity {
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);
 	    //
-	    spec = tabHost.newTabSpec("subscriber");
-	    spec.setIndicator(
-	    	getString(R.string.subscribers), res.getDrawable(R.drawable.users));
-	    //
-		intent = new Intent(this, SubscriberListActivity.class);
-		intent.putExtra(SubscriberListActivity.PARAM_KEY_LIST, list);
-	    //
-	    spec.setContent(intent);
-	    tabHost.addTab(spec);
+	    if ("Public".equalsIgnoreCase(list.getString(MetadataSet.LIST_MODE))) {
+		    spec = tabHost.newTabSpec("subscriber");
+		    spec.setIndicator(
+		    	getString(R.string.subscribers),
+		    	res.getDrawable(R.drawable.users));
+		    //
+			intent = new Intent(this, SubscriberListActivity.class);
+			intent.putExtra(SubscriberListActivity.PARAM_KEY_LIST, list);
+		    //
+		    spec.setContent(intent);
+		    tabHost.addTab(spec);
+	    }
 	}
 }

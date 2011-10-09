@@ -8,6 +8,8 @@
  */
 package com.twapime.app.activity;
 
+import com.twitterapime.search.QueryComposer;
+
 import android.os.Bundle;
 
 /**
@@ -29,6 +31,8 @@ public class HomeTimelineActivity extends TimelineActivity {
 	public void refresh() {
 		super.refresh();
 		//
-		timeline.startGetHomeTweets(sinceID, this);
+		timeline.startGetHomeTweets(
+			QueryComposer.append(sinceID, QueryComposer.includeEntities()),
+			this);
 	}
 }

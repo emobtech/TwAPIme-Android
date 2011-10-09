@@ -11,6 +11,7 @@ package com.twapime.app.activity;
 import android.app.SearchManager;
 import android.content.Intent;
 
+import com.twitterapime.search.Query;
 import com.twitterapime.search.QueryComposer;
 import com.twitterapime.search.SearchDevice;
 
@@ -38,7 +39,11 @@ public class TweetSearchTimelineActivity extends TimelineActivity {
 		//
 		String queryStr = getIntent().getStringExtra(SearchManager.QUERY);
 		SearchDevice sd = SearchDevice.getInstance();
+		Query query =
+			QueryComposer.append(
+				QueryComposer.containAll(queryStr),
+				QueryComposer.includeEntities());
 		//
-		sd.startSearchTweets(QueryComposer.containAll(queryStr), this);
+		sd.startSearchTweets(query, this);
 	}
 }

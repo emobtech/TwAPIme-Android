@@ -11,6 +11,7 @@ package com.twapime.app.activity;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.ListActivity;
@@ -62,6 +63,11 @@ public class TimelineActivity extends ListActivity implements
 	 * 
 	 */
 	private Runnable notifyNewTweet;
+	
+	/**
+	 * 
+	 */
+	private HashMap<Tweet, Boolean> favoriteHash;
 
 	/**
 	 * 
@@ -85,6 +91,7 @@ public class TimelineActivity extends ListActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//
+		favoriteHash = new HashMap<Tweet, Boolean>();
 		tweets = new ArrayList<Tweet>();
 		adapter = new TimelineArrayAdapter(this, R.layout.row_tweet, tweets);
 		setListAdapter(adapter);
@@ -191,14 +198,8 @@ public class TimelineActivity extends ListActivity implements
 	 * @param tweet
 	 */
 	public void reply(Tweet tweet) {
-		String username =
-			tweet.getUserAccount().getString(MetadataSet.USERACCOUNT_USER_NAME);
-		//
 		Intent intent = new Intent(this, NewTweetActivity.class);
-		//
 		intent.putExtra(NewTweetActivity.PARAM_KEY_REPLY_TWEET, tweet);
-		intent.putExtra(
-			NewTweetActivity.PARAM_KEY_TWEET_CONTENT, "@" + username);
 		//
 		startActivity(intent);
 	}
@@ -206,11 +207,19 @@ public class TimelineActivity extends ListActivity implements
 	/**
 	 * @param tweet
 	 */
-	public void favorite(Tweet tweet) {
+	public void favorite(final Tweet tweet) {
+		final boolean isFav = isFavorite(tweet);
+		//
 		FavoriteTweetAsyncServiceCall favCall =
-			new FavoriteTweetAsyncServiceCall(this);
+			new FavoriteTweetAsyncServiceCall(this) {
+			@Override
+			protected void onPostRun(List<Tweet> result) {
+				tweets.set(tweets.indexOf(tweet), result.get(0));
+				favoriteHash.put(result.get(0), !isFav);
+			}
+		};
 		favCall.setProgressStringId(
-			isFavorite(tweet) ? R.string.unfavoriting : R.string.favoriting);
+			isFav ? R.string.unfavoriting : R.string.favoriting);
 		//
 		favCall.execute(tweet);
 	}
@@ -385,6 +394,10 @@ public class TimelineActivity extends ListActivity implements
 	 * @return
 	 */
 	private boolean isFavorite(Tweet tweet) {
-		return tweet.getBoolean(MetadataSet.TWEET_FAVOURITE);
+		if (favoriteHash.containsKey(tweet)) {
+			return favoriteHash.get(tweet);
+		} else {
+			return tweet.getBoolean(MetadataSet.TWEET_FAVOURITE);	
+		}
 	}
 }

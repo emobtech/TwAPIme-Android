@@ -98,4 +98,8 @@
     <string name="loading">Loading. Please wait...</string>
     <string name="location">Location</string>
     <string name="subscribers">Subscribers</string>
+    <string name="try_again">Would you like to try again?</string>
+    <string name="unknown_failure">There was an expected error.</string>
+    <string name="retweeted_by">Retweeted by %1$s</string>
+    <string name="in_reply_to">In reply to %1$s</string>
 </resources>

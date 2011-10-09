@@ -11,7 +11,9 @@ package com.twapime.app.util;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 
 import com.twitterapime.search.LimitExceededException;
@@ -52,17 +54,28 @@ public abstract class AsyncServiceCall<P, G, R>
 	private R resultRun;
 	
 	/**
-	 * @param context
+	 * 
 	 */
-	public AsyncServiceCall(Activity context) {
-		if (context == null) {
+	private boolean retry;
+	
+	/**
+	 * 
+	 */
+	private boolean retryEnabled;
+	
+	/**
+	 * @param ctx
+	 */
+	public AsyncServiceCall(Activity ctx) {
+		if (ctx == null) {
 			throw new IllegalArgumentException("Context must not be null.");
 		}
 		//
-		this.context = context;
+		context = ctx;
 		progressStringId = -1;
 		successStringId = -1;
 		failureStringId = -1;
+		retryEnabled = true;
 	}
 	
 	/**
@@ -108,6 +121,13 @@ public abstract class AsyncServiceCall<P, G, R>
 	}
 	
 	/**
+	 * @param enabled
+	 */
+	public void setRetry(boolean enabled) {
+		retryEnabled = enabled;
+	}
+	
+	/**
 	 * @return
 	 */
 	protected Activity getContext() {
@@ -136,13 +156,26 @@ public abstract class AsyncServiceCall<P, G, R>
 	 */
 	@Override
 	protected final Throwable doInBackground(P... params) {
-		try {
-			resultRun = run(params);
-		} catch (Throwable e) {
-			return e;
-		}
+		Throwable error = null;
 		//
-		return null;
+		do {
+			try {
+				if (!IOUtil.isOnline(context)) {
+					return new IOException();
+				}
+				//
+				resultRun = run(params);
+				//
+				return null;
+			} catch (Throwable e) {
+				if (retryEnabled) {
+					retry(e);
+				}
+				error = e;
+			}
+		} while (retry);
+		//
+		return error;
 	}
 	
 	/**
@@ -154,10 +187,12 @@ public abstract class AsyncServiceCall<P, G, R>
 		}
 		//
 		if (result != null) {
-			if (getFailureStringId() != -1) {
-				UIUtil.showMessage(context, getFailureStringId());
-			} else {
-				UIUtil.showMessage(context, result);
+			if (!retryEnabled) {
+				if (getFailureStringId() != -1) {
+					UIUtil.showMessage(context, getFailureStringId());
+				} else {
+					UIUtil.showMessage(context, result);
+				}
 			}
 			//
 			onFailedRun(result);
@@ -193,4 +228,73 @@ public abstract class AsyncServiceCall<P, G, R>
 	 * @param result
 	 */
 	protected void onFailedRun(Throwable result) {}
+
+	/**
+	 * @param exception
+	 */
+	private void retry(Throwable exception) {
+		final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		//
+		builder.setTitle(context.getString(com.twapime.app.R.string.app_name));
+		builder.setMessage(getRetryMessage(exception));
+		builder.setCancelable(false);
+		builder.setPositiveButton(
+			context.getString(com.twapime.app.R.string.yes),
+			new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				retry = true;
+				//
+				synchronized (AsyncServiceCall.this) {
+					AsyncServiceCall.this.notify();
+				}
+			}
+		});
+		builder.setNegativeButton(
+			context.getString(com.twapime.app.R.string.no),
+			new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				retry = false;
+				//
+				synchronized (AsyncServiceCall.this) {
+					AsyncServiceCall.this.notify();
+				}
+			}
+		});
+		//
+		context.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				builder.create().show();
+			}
+		});
+		//
+		synchronized (AsyncServiceCall.this) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * @param exception
+	 * @return
+	 */
+	private String getRetryMessage(Throwable exception) {
+		String retryMsg = context.getString(com.twapime.app.R.string.try_again);
+		//
+		if (getFailureStringId() != -1) {
+			retryMsg =
+				context.getString(getFailureStringId()) + " " + retryMsg;
+		} else {
+			retryMsg =
+				context.getString(
+					UIUtil.getMessageId(exception)) + " " +retryMsg;
+		}
+		//
+		return retryMsg;
+	}
 }

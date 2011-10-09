@@ -31,12 +31,10 @@ import com.twapime.app.service.ReportSpamAsyncServiceCall;
 import com.twapime.app.service.UnblockAsyncServiceCall;
 import com.twapime.app.service.UnfollowAsyncServiceCall;
 import com.twapime.app.util.AsyncImageLoader;
-import com.twapime.app.util.DateUtil;
 import com.twapime.app.widget.ImageViewCallback;
 import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.Friendship;
 import com.twitterapime.rest.UserAccount;
-import com.twitterapime.search.Tweet;
 
 /**
  * @author ernandes@gmail.com
@@ -136,26 +134,8 @@ public class UserProfileActivity extends Activity {
 		txtv = (TextView)findViewById(R.id.user_profile_txtv_username);
 		txtv.setText("@" + user.getString(MetadataSet.USERACCOUNT_USER_NAME));	
 		//
-		txtv = (TextView)findViewById(R.id.user_profile_txtv_last_tweet);
-		Tweet tweet = user.getLastTweet();
-		//
-		if (tweet != null) {
-			txtv.setText(tweet.getString(MetadataSet.TWEET_CONTENT));	
-		} else {
-			txtv.setText("");
-		}
-		//
-		txtv = (TextView)findViewById(R.id.user_profile_txtv_last_tweet_time);
-		//
-		if (tweet != null) {
-			txtv.setText(
-				DateUtil.formatTweetDate(
-					Long.parseLong(
-						tweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
-				this));	
-		} else {
-			txtv.setText("");
-		}
+		txtv = (TextView)findViewById(R.id.user_profile_txtv_location);
+		txtv.setText(user.getString(MetadataSet.USERACCOUNT_LOCATION));
 		//
 		txtv = (TextView)findViewById(R.id.user_profile_txtv_bio);
 		txtv.setText(user.getString(MetadataSet.USERACCOUNT_DESCRIPTION));	

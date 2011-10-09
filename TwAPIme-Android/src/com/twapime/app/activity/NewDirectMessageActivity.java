@@ -50,7 +50,7 @@ public class NewDirectMessageActivity extends Activity {
 		//
 		setContentView(R.layout.new_dm);
 		//
-		final Button btnSend = (Button)findViewById(R.id.new_dm_btn_post);
+		final Button btnSend = (Button)findViewById(R.id.new_dm_btn_send);
 		btnSend.setEnabled(false);
 		btnSend.setOnClickListener(new View.OnClickListener() {
 			@Override

@@ -11,6 +11,8 @@ package com.twapime.app.activity;
 import android.os.Bundle;
 
 import com.twitterapime.rest.List;
+import com.twitterapime.search.Query;
+import com.twitterapime.search.QueryComposer;
 
 /**
  * @author ernandes@gmail.com
@@ -44,7 +46,12 @@ public class ListTimelineActivity extends TimelineActivity {
 		super.refresh();
 		//
 		if (list != null) {
-			timeline.startGetListTweets(list, sinceID, this);
+			Query query =
+				QueryComposer.append(sinceID, QueryComposer.includeRetweets());
+			query =
+				QueryComposer.append(query, QueryComposer.includeEntities());
+			//
+			timeline.startGetListTweets(list, query, this);
 		}
 	}
 }

@@ -30,6 +30,7 @@ import com.twapime.app.widget.ImageViewCallback;
 import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.UserAccount;
 import com.twitterapime.search.Tweet;
+import com.twitterapime.search.TweetEntity;
 
 /**
  * @author ernandes@gmail.com
@@ -114,14 +115,8 @@ public class ViewTweetActivity extends Activity {
 	 * 
 	 */
 	public void reply() {
-		String username =
-			tweet.getUserAccount().getString(MetadataSet.USERACCOUNT_USER_NAME);
-		//
 		Intent intent = new Intent(this, NewTweetActivity.class);
-		//
 		intent.putExtra(NewTweetActivity.PARAM_KEY_REPLY_TWEET, tweet);
-		intent.putExtra(
-			NewTweetActivity.PARAM_KEY_TWEET_CONTENT, "@" + username);
 		//
 		startActivity(intent);
 	}
@@ -147,9 +142,14 @@ public class ViewTweetActivity extends Activity {
 	 * 
 	 */
 	public void viewUserProfile() {
+		UserAccount account = tweet.getUserAccount();
+		//
+		if (tweet.getRepostedTweet() != null) {
+			account = tweet.getRepostedTweet().getUserAccount();
+		}
+		//
 		Intent intent = new Intent(this, UserHomeActivity.class);
-		intent.putExtra(
-			UserHomeActivity.PARAM_KEY_USER, tweet.getUserAccount());
+		intent.putExtra(UserHomeActivity.PARAM_KEY_USER, account);
 		//
 		startActivity(intent);
 	}
@@ -212,9 +212,38 @@ public class ViewTweetActivity extends Activity {
 	 * 
 	 */
 	public void displayTweet() {
-		UserAccount ua = tweet.getUserAccount();
+		Tweet dTweet = tweet;
+		TextView txtv = (TextView)findViewById(R.id.view_tweet_txtv_reply);
 		//
-		TextView txtv = (TextView)findViewById(R.id.view_tweet_txtv_name);
+		if (dTweet.getRepostedTweet() != null) { //retweeted?
+        	String username =
+        		dTweet.getUserAccount().getString(MetadataSet.USERACCOUNT_NAME);
+        	//
+        	txtv.setText(getString(R.string.retweeted_by, username));
+            //
+        	dTweet = tweet.getRepostedTweet();
+		} else {
+			if (dTweet.isEmpty(MetadataSet.TWEET_IN_REPLY_TO_TWEET_ID)) {
+				txtv.setVisibility(View.GONE);
+        	} else {
+        		String username = "";
+        		//
+        		if (dTweet.getEntity() != null) {
+        			TweetEntity[] entities = dTweet.getEntity().getMentions();
+        			if (entities.length > 0) {
+        				username =
+        					entities[0].getString(
+        						MetadataSet.TWEETENTITY_USERACCOUNT_NAME);
+        			}
+        		}
+        		//
+        		txtv.setText(getString(R.string.in_reply_to, username));
+        	}
+		}
+		//
+		UserAccount ua = dTweet.getUserAccount();
+		//
+		txtv = (TextView)findViewById(R.id.view_tweet_txtv_name);
 		if (ua != null) {
 			txtv.setText(ua.getString(MetadataSet.USERACCOUNT_NAME));	
 		} else {
@@ -229,16 +258,16 @@ public class ViewTweetActivity extends Activity {
 		}
 		//
 		txtv = (TextView)findViewById(R.id.view_tweet_txtv_content);
-		txtv.setText(tweet.getString(MetadataSet.TWEET_CONTENT));	
+		txtv.setText(dTweet.getString(MetadataSet.TWEET_CONTENT));	
 		//
 		txtv = (TextView)findViewById(R.id.view_tweet_txtv_app);
-		txtv.setText(tweet.getString(MetadataSet.TWEET_SOURCE));	
+		txtv.setText(dTweet.getString(MetadataSet.TWEET_SOURCE));	
 		//
 		txtv = (TextView)findViewById(R.id.view_tweet_txtv_time);
 		txtv.setText(
 			DateUtil.formatTweetDate(
         		Long.parseLong(
-            		tweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
+        			dTweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
             		this));
 		//
 		ImageView imgV = (ImageView)findViewById(R.id.view_tweet_imgv_avatar);

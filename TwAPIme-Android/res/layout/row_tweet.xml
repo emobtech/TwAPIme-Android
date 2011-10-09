@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:padding="6dip" android:layout_height="wrap_content">
-	<ImageView android:layout_marginRight="6dip"
-		android:src="@drawable/icon" android:id="@+id/tweet_row_img_avatar" android:layout_height="48dp" android:layout_width="48dp"/>
+	android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingBottom="2dp" android:paddingTop="4dp">
+	<ImageView android:src="@drawable/icon" android:id="@+id/tweet_row_img_avatar" android:layout_height="48dp" android:layout_width="48dp"/>
 	<LinearLayout android:orientation="vertical"
 		android:layout_weight="1"
-		android:layout_width="fill_parent" android:layout_height="wrap_content">
+		android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingBottom="2dp" android:paddingLeft="6dp" android:paddingRight="2dp">
 		<LinearLayout android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:id="@+id/linearLayout1">
-			<TextView android:layout_weight="1" android:gravity="center_vertical" android:layout_width="fill_parent"
+			<TextView android:layout_weight="1" android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:text="username" android:id="@+id/tweet_row_txtv_username" android:textStyle="bold"></TextView>
 			<TextView android:layout_height="wrap_content"
-				android:layout_width="wrap_content" android:text="3 hours" android:id="@+id/tweet_row_txtv_time"></TextView>
+				android:layout_width="wrap_content" android:text="3 hours" android:id="@+id/tweet_row_txtv_time" android:textSize="12dp"></TextView>
 		</LinearLayout>
 			<TextView android:layout_height="fill_parent"
 				android:text="text text text" android:layout_width="fill_parent" android:id="@+id/tweet_row_txtv_content"></TextView>
+			<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tweet_row_txtv_reply" android:text="in reply to" android:textSize="12dp" android:textStyle="italic"></TextView>
 	</LinearLayout>
 </LinearLayout>

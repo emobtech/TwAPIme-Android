@@ -22,6 +22,8 @@ import android.widget.TextView;
 import com.twapime.app.R;
 import com.twapime.app.service.PostTweetAsyncServiceCall;
 import com.twapime.app.widget.SimpleTextWatcher;
+import com.twitterapime.model.MetadataSet;
+import com.twitterapime.rest.UserAccount;
 import com.twitterapime.search.Tweet;
 
 /**
@@ -87,15 +89,7 @@ public class NewTweetActivity extends Activity {
 		Intent intent = getIntent();
 		//
 		if (intent.hasExtra(PARAM_KEY_TWEET_CONTENT)) {
-			String content =
-				intent.getExtras().getString(PARAM_KEY_TWEET_CONTENT);
-			//
-			if (content.trim().length() > Tweet.MAX_CHARACTERS) {
-				content =
-					content.substring(0, Tweet.MAX_CHARACTERS - 3) + "...";
-			}
-			//
-			t.setText(content);
+			t.setText(intent.getExtras().getString(PARAM_KEY_TWEET_CONTENT));
 			t.setSelection(0);
 		}
 		//
@@ -103,6 +97,12 @@ public class NewTweetActivity extends Activity {
 			replyTweet =
 				(Tweet)intent.getExtras().getSerializable(
 					PARAM_KEY_REPLY_TWEET);
+			//
+			UserAccount user = replyTweet.getUserAccount();
+			String usename = user.getString(MetadataSet.USERACCOUNT_USER_NAME);
+			//
+			t.setText("@" + usename + " ");
+			t.setSelection(t.getText().length());
 		}
 	}
 	

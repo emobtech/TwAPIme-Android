@@ -27,6 +27,7 @@ import com.twapime.app.util.DateUtil;
 import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.UserAccount;
 import com.twitterapime.search.Tweet;
+import com.twitterapime.search.TweetEntity;
 
 /**
  * @author ernandes@gmail.com
@@ -86,11 +87,41 @@ public class TimelineArrayAdapter extends ArrayAdapter<Tweet> {
         }
         //
         Tweet tweet = tweets.get(position);
+        //
+        TextView tv = (TextView)rowView.findViewById(R.id.tweet_row_txtv_reply);
+    	tv.setVisibility(View.VISIBLE);
+        //
+        if (tweet.getRepostedTweet() != null) { //retweeted?
+        	String username =
+        		tweet.getUserAccount().getString(MetadataSet.USERACCOUNT_NAME);
+        	//
+            tv.setText(getContext().getString(R.string.retweeted_by, username));
+            //
+        	tweet = tweet.getRepostedTweet();
+        } else {
+        	if (tweet.isEmpty(MetadataSet.TWEET_IN_REPLY_TO_TWEET_ID)) {
+        		tv.setVisibility(View.GONE);
+        	} else {
+        		String username = "";
+        		//
+        		if (tweet.getEntity() != null) {
+        			TweetEntity[] entities = tweet.getEntity().getMentions();
+        			if (entities.length > 0) {
+        				username =
+        					entities[0].getString(
+        						MetadataSet.TWEETENTITY_USERACCOUNT_NAME);
+        			}
+        		}
+        		//
+        		tv.setText(
+        			getContext().getString(R.string.in_reply_to, username));
+        	}
+        }
+        //
         UserAccount ua = tweet.getUserAccount();
         String imageUrl = null;
         //
-        TextView tv =
-        	(TextView)rowView.findViewById(R.id.tweet_row_txtv_username);
+        tv = (TextView)rowView.findViewById(R.id.tweet_row_txtv_username);
         //
        	tv.setText(ua.getString(MetadataSet.USERACCOUNT_NAME));	
        	imageUrl = ua.getString(MetadataSet.USERACCOUNT_PICTURE_URI);

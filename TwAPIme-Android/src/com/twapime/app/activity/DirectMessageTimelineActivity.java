@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.twapime.app.R;
+import com.twitterapime.search.Tweet;
 
 /**
  * @author ernandes@gmail.com
@@ -116,5 +117,11 @@ public class DirectMessageTimelineActivity extends TimelineActivity {
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }
+	}
+	
+	/**
+	 * @see com.twapime.app.activity.TimelineActivity#viewTweet(com.twitterapime.search.Tweet)
+	 */
+	public void viewTweet(Tweet tweet) {
 	}
 }

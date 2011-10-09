@@ -8,6 +8,9 @@
  */
 package com.twapime.app.activity;
 
+import com.twitterapime.search.Query;
+import com.twitterapime.search.QueryComposer;
+
 import android.os.Bundle;
 
 /**
@@ -29,6 +32,10 @@ public class MentionTimelineActivity extends TimelineActivity {
 	public void refresh() {
 		super.refresh();
 		//
-		timeline.startGetMentions(sinceID, this);
+		Query query =
+			QueryComposer.append(sinceID, QueryComposer.includeRetweets());
+		query = QueryComposer.append(query, QueryComposer.includeEntities());
+		//
+		timeline.startGetMentions(query, this);
 	}
 }
