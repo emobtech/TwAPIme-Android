@@ -24,16 +24,6 @@ import com.twitterapime.search.QueryComposer;
  */
 public class UserSearchListActivity extends UserListActivity {
 	/**
-	 * @see android.app.Activity#setIntent(android.content.Intent)
-	 */
-	@Override
-	public void setIntent(Intent newIntent) {
-		super.setIntent(newIntent);
-		//
-		reload();
-	}
-
-	/**
 	 * @see com.twapime.app.activity.UserListActivity#loadNextPage()
 	 */
 	@Override
@@ -44,5 +34,15 @@ public class UserSearchListActivity extends UserListActivity {
 		String queryStr = getIntent().getStringExtra(SearchManager.QUERY);
 		//
 		return new Cursor(uam.search(QueryComposer.query(queryStr)), 0, 0);
+	}
+
+	/**
+	 * @see android.app.Activity#setIntent(android.content.Intent)
+	 */
+	@Override
+	public void setIntent(Intent newIntent) {
+		super.setIntent(newIntent);
+		//
+		reload();
 	}
 }

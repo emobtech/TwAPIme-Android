@@ -103,4 +103,6 @@
     <string name="retweeted_by">Retweeted by %1$s</string>
     <string name="in_reply_to">In reply to %1$s</string>
     <string name="following">Following</string>
+    <string name="add_to_list">Add to List</string>
+    <string name="remove">Remove</string>
 </resources>

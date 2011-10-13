@@ -28,7 +28,7 @@ public class HomeTimelineActivity extends TimelineActivity {
 	 * @see com.twapime.app.activity.TimelineActivity#refresh()
 	 */
 	@Override
-	public void refresh() {
+	protected void refresh() {
 		super.refresh();
 		//
 		timeline.startGetHomeTweets(

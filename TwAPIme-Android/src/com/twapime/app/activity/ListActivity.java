@@ -9,7 +9,7 @@
 package com.twapime.app.activity;
 
 import static com.twapime.app.activity.EditListActivity.PARAM_KEY_LIST;
-import static com.twapime.app.activity.EditListActivity.RETURN_KEY_LIST;
+import static com.twapime.app.activity.EditListActivity.RETURN_KEY_EDIT_LIST;
 import static com.twitterapime.model.MetadataSet.USERACCOUNT_USER_NAME;
 
 import java.util.ArrayList;
@@ -31,6 +31,7 @@ import android.widget.AdapterView;
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.service.DeleteListAsyncServiceCall;
+import com.twapime.app.service.GetListsAsyncServiceCall;
 import com.twapime.app.service.GetSubscriptionsAsyncServiceCall;
 import com.twapime.app.service.SubscribeAsyncServiceCall;
 import com.twapime.app.service.UnsubscribeAsyncServiceCall;
@@ -57,6 +58,11 @@ public class ListActivity extends android.app.ListActivity {
 	 * 
 	 */
 	static final String PARAM_KEY_USER = "PARAM_KEY_USER";
+	
+	/**
+	 * 
+	 */
+	public static final String RETURN_KEY_PICK_LIST = "RETURN_KEY_PICK_LIST";
 
 	/**
 	 * 
@@ -82,6 +88,11 @@ public class ListActivity extends android.app.ListActivity {
 	 * 
 	 */
 	private boolean isLoggedUser;
+	
+	/**
+	 * 
+	 */
+	private boolean pickMode;
 
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -90,8 +101,11 @@ public class ListActivity extends android.app.ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//
+		Intent intent = getIntent();
+		//
 		lists = new ArrayList<com.twitterapime.rest.List>();
-		user = (UserAccount)getIntent().getSerializableExtra(PARAM_KEY_USER);
+		user = (UserAccount)intent.getSerializableExtra(PARAM_KEY_USER);
+		pickMode = Intent.ACTION_PICK.equals(intent.getAction());
 		adapter = new ListArrayAdapter(this, R.layout.row_list, lists, user);
 		setListAdapter(adapter);
 		registerForContextMenu(getListView());
@@ -101,7 +115,11 @@ public class ListActivity extends android.app.ListActivity {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-					viewListTweets(lists.get(position));
+					if (pickMode) {
+						picked(lists.get(position));
+					} else {
+						viewListTweets(lists.get(position));
+					}
 				}
 			}
 		);
@@ -115,25 +133,53 @@ public class ListActivity extends android.app.ListActivity {
 	/**
 	 * 
 	 */
-	public void refreshLists() {
-		new GetSubscriptionsAsyncServiceCall(this) {
-			@Override
-			protected void onPostRun(com.twitterapime.rest.List[] result) {
-				lists.clear();
-				lists.addAll(Arrays.asList(result));
-				adapter.notifyDataSetChanged();
-				//
-				if (result.length == 0) {
-					UIUtil.showMessage(getContext(), R.string.no_list_found);
+	protected void refreshLists() {
+		if (pickMode) {
+			new GetListsAsyncServiceCall(this) {
+				@Override
+				protected void onPostRun(com.twitterapime.rest.List[] result) {
+					lists.clear();
+					lists.addAll(Arrays.asList(result));
+					adapter.notifyDataSetChanged();
+					//
+					if (result.length == 0) {
+						UIUtil.showMessage(
+							getContext(), R.string.no_list_found);
+					}
 				}
-			}
-		}.execute(user);
+			}.execute(user);
+		} else {
+			new GetSubscriptionsAsyncServiceCall(this) {
+				@Override
+				protected void onPostRun(com.twitterapime.rest.List[] result) {
+					lists.clear();
+					lists.addAll(Arrays.asList(result));
+					adapter.notifyDataSetChanged();
+					//
+					if (result.length == 0) {
+						UIUtil.showMessage(
+							getContext(), R.string.no_list_found);
+					}
+				}
+			}.execute(user);
+		}
+	}
+	
+	/**
+	 * @param list
+	 */
+	protected void picked(com.twitterapime.rest.List list) {
+		Intent intent = new Intent();
+	    intent.putExtra(RETURN_KEY_PICK_LIST, list);
+	    //
+		setResult(RESULT_OK, intent);
+		finish();
 	}
 	
 	/**
 	 * @param index
 	 */
-	public void viewListTweets(com.twitterapime.rest.List list) {
+	protected void viewListTweets(com.twitterapime.rest.List list) {
 		Intent intent = new Intent(this, ListHomeActivity.class);
 		intent.putExtra(ListHomeActivity.PARAM_KEY_LIST, list);
 		//
@@ -143,7 +189,7 @@ public class ListActivity extends android.app.ListActivity {
 	/**
 	 * 
 	 */
-	public void newList() {
+	protected void newList() {
 		startActivityForResult(
 			new Intent(this, EditListActivity.class), REQUEST_NEW_LIST);
 	}
@@ -151,7 +197,7 @@ public class ListActivity extends android.app.ListActivity {
 	/**
 	 * @param filter
 	 */
-	public void editList(com.twitterapime.rest.List list) {
+	protected void editList(com.twitterapime.rest.List list) {
 		Intent intent = new Intent(this, EditListActivity.class);
 		intent.putExtra(PARAM_KEY_LIST, list);
 		//
@@ -161,7 +207,7 @@ public class ListActivity extends android.app.ListActivity {
 	/**
 	 * @param filter
 	 */
-	public void deleteList(final com.twitterapime.rest.List list) {
+	protected void deleteList(final com.twitterapime.rest.List list) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(getString(R.string.app_name));
 		builder.setMessage(getString(R.string.confirm_delete_list));
@@ -196,7 +242,7 @@ public class ListActivity extends android.app.ListActivity {
 	/**
 	 * @param list
 	 */
-	public void unfollowList(com.twitterapime.rest.List list) {
+	protected void unfollowList(com.twitterapime.rest.List list) {
 		new UnsubscribeAsyncServiceCall(this) {
 			@Override
 			protected void onPostRun(List<com.twitterapime.rest.List> result) {
@@ -214,7 +260,7 @@ public class ListActivity extends android.app.ListActivity {
 	/**
 	 * @param list
 	 */
-	public void followList(com.twitterapime.rest.List list) {
+	protected void followList(com.twitterapime.rest.List list) {
 		new SubscribeAsyncServiceCall(this) {
 			@Override
 			protected void onPostRun(List<com.twitterapime.rest.List> result) {
@@ -228,13 +274,13 @@ public class ListActivity extends android.app.ListActivity {
 	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
 	 */
 	@Override
-	public void onActivityResult(int requestCode, int resultCode,
+	protected void onActivityResult(int requestCode, int resultCode,
 		Intent data) {
 		if (resultCode == RESULT_OK) {
-			if (data != null && data.hasExtra(RETURN_KEY_LIST)) {
+			if (data != null && data.hasExtra(RETURN_KEY_EDIT_LIST)) {
 				com.twitterapime.rest.List list =
 					(com.twitterapime.rest.List)data.getExtras().get(
-						RETURN_KEY_LIST);
+						RETURN_KEY_EDIT_LIST);
 				//
 				if (requestCode == REQUEST_NEW_LIST) {
 					lists.add(list);
@@ -244,6 +290,18 @@ public class ListActivity extends android.app.ListActivity {
 				//
 				adapter.notifyDataSetChanged();
 			}
+		}
+	}
+	
+	/**
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		if (pickMode) {
+			return false;
+		} else {
+			return super.onCreateOptionsMenu(menu);
 		}
 	}
 	
@@ -287,6 +345,10 @@ public class ListActivity extends android.app.ListActivity {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, 
 		ContextMenuInfo menuInfo) {
+		if (pickMode) {
+			return;
+		}
+		//
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.list, menu);
 		//

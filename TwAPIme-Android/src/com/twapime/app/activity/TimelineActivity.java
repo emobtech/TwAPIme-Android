@@ -141,7 +141,7 @@ public class TimelineActivity extends ListActivity implements
 	/**
 	 * 
 	 */
-	public void refresh() {
+	protected void refresh() {
 		progressDialog =
 			ProgressDialog.show(
 				this, "", getString(R.string.refreshing), false);
@@ -150,7 +150,7 @@ public class TimelineActivity extends ListActivity implements
 	/**
 	 * @param tweet
 	 */
-	public void viewTweet(Tweet tweet) {
+	protected void viewTweet(Tweet tweet) {
 		Intent intent = new Intent(this, ViewTweetActivity.class);
 		intent.putExtra(ViewTweetActivity.PARAM_KEY_TWEET, tweet);
 		//
@@ -160,7 +160,7 @@ public class TimelineActivity extends ListActivity implements
 	/**
 	 * 
 	 */
-	public void retweet(final Tweet tweet) {
+	protected void retweet(final Tweet tweet) {
 		new RepostTweetAsyncServiceCall(this) {
 			@Override
 			protected void onPostRun(List<Tweet> result) {
@@ -173,7 +173,7 @@ public class TimelineActivity extends ListActivity implements
 	/**
 	 * @param tweet
 	 */
-	public void comment(Tweet tweet) {
+	protected void comment(Tweet tweet) {
 		String content =
 			"RT @" +
 			tweet.getUserAccount().getString(MetadataSet.USERACCOUNT_USER_NAME)+
@@ -189,21 +189,7 @@ public class TimelineActivity extends ListActivity implements
 	/**
 	 * @param tweet
 	 */
-	public void newDM(Tweet tweet) {
-		String repicient =
-			tweet.getUserAccount().getString(MetadataSet.USERACCOUNT_USER_NAME);
-		//
-		Intent intent = new Intent(this, NewDirectMessageActivity.class);
-		intent.putExtra(
-			NewDirectMessageActivity.PARAM_KEY_DM_RECIPIENT, repicient);
-		//
-		startActivity(intent);
-	}
-	
-	/**
-	 * @param tweet
-	 */
-	public void reply(Tweet tweet) {
+	protected void reply(Tweet tweet) {
 		Intent intent = new Intent(this, NewTweetActivity.class);
 		intent.putExtra(NewTweetActivity.PARAM_KEY_REPLY_TWEET, tweet);
 		//
@@ -213,7 +199,7 @@ public class TimelineActivity extends ListActivity implements
 	/**
 	 * @param tweet
 	 */
-	public void favorite(final Tweet tweet) {
+	protected void favorite(final Tweet tweet) {
 		final boolean isFav = isFavorite(tweet);
 		//
 		FavoriteTweetAsyncServiceCall favCall =
@@ -229,6 +215,42 @@ public class TimelineActivity extends ListActivity implements
 		//
 		favCall.execute(tweet);
 	}
+
+	//	/**
+	//	 * @param tweetId
+	//	 */
+	//	protected void saveLastTweetId(String tweetId) {
+	//		SharedPreferences.Editor editor =
+	//			getSharedPreferences(
+	//				TwAPImeApplication.PREFS_NAME, MODE_PRIVATE).edit();
+	//		//
+	//		editor.putString(getClass().getName(), tweetId);
+	//		//
+	//		editor.commit();
+	//	}
+		
+	//	/**
+	//	 * @return
+	//	 */
+	//	protected String loadSavedLastTweetId() {
+	//		SharedPreferences prefs =
+	//			getSharedPreferences(TwAPImeApplication.PREFS_NAME, MODE_PRIVATE);
+	//		//
+	//		return prefs.getString(getClass().getName(), null);
+	//		return null;
+	//	}
+		
+		/**
+		 * @param tweet
+		 * @return
+		 */
+		protected boolean isFavorite(Tweet tweet) {
+			if (favoriteHash.containsKey(tweet)) {
+				return favoriteHash.get(tweet);
+			} else {
+				return tweet.getBoolean(MetadataSet.TWEET_FAVOURITE);	
+			}
+		}
 
 	/**
 	 * @see com.twitterapime.search.SearchDeviceListener#searchCompleted()
@@ -330,9 +352,11 @@ public class TimelineActivity extends ListActivity implements
 		AdapterView.AdapterContextMenuInfo info =
 			(AdapterView.AdapterContextMenuInfo)menuInfo;
 		//
-		menu.findItem(R.id.menu_item_favorite).setTitle(
-			isFavorite(tweets.get(info.position))
-				? R.string.unfavorite : R.string.favorite);
+		if (isFavorite(tweets.get(info.position))) {
+			menu.removeItem(R.id.menu_item_favorite);
+		} else {
+			menu.removeItem(R.id.menu_item_unfavorite);
+		}
 	}
 	
 	/**
@@ -354,56 +378,17 @@ public class TimelineActivity extends ListActivity implements
 	    	comment(tweet);
 	    	//
 	        return true;
-	    case R.id.menu_item_new_dm:
-	    	newDM(tweet);
-	    	//
-	        return true;
 	    case R.id.menu_item_reply:
 	    	reply(tweet);
 	    	//
 	        return true;
 	    case R.id.menu_item_favorite:
+	    case R.id.menu_item_unfavorite:
 	    	favorite(tweet);
 	    	//
 	        return true;
 	    default:
 	        return super.onContextItemSelected(item);
 	    }
-	}
-	
-//	/**
-//	 * @param tweetId
-//	 */
-//	protected void saveLastTweetId(String tweetId) {
-//		SharedPreferences.Editor editor =
-//			getSharedPreferences(
-//				TwAPImeApplication.PREFS_NAME, MODE_PRIVATE).edit();
-//		//
-//		editor.putString(getClass().getName(), tweetId);
-//		//
-//		editor.commit();
-//	}
-	
-//	/**
-//	 * @return
-//	 */
-//	protected String loadSavedLastTweetId() {
-//		SharedPreferences prefs =
-//			getSharedPreferences(TwAPImeApplication.PREFS_NAME, MODE_PRIVATE);
-//		//
-//		return prefs.getString(getClass().getName(), null);
-//		return null;
-//	}
-	
-	/**
-	 * @param tweet
-	 * @return
-	 */
-	private boolean isFavorite(Tweet tweet) {
-		if (favoriteHash.containsKey(tweet)) {
-			return favoriteHash.get(tweet);
-		} else {
-			return tweet.getBoolean(MetadataSet.TWEET_FAVOURITE);	
-		}
 	}
 }

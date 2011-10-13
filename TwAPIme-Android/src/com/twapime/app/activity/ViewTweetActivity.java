@@ -76,7 +76,7 @@ public class ViewTweetActivity extends Activity {
 	/**
 	 * 
 	 */
-	public void retweet() {
+	protected void retweet() {
 		new RepostTweetAsyncServiceCall(this) {
 			@Override
 			protected void onPostRun(List<Tweet> result) {
@@ -89,7 +89,7 @@ public class ViewTweetActivity extends Activity {
 	/**
 	 * 
 	 */
-	public void comment() {
+	protected void comment() {
 		String content =
 			"RT @" +
 			tweet.getUserAccount().getString(MetadataSet.USERACCOUNT_USER_NAME)+
@@ -105,22 +105,7 @@ public class ViewTweetActivity extends Activity {
 	/**
 	 * 
 	 */
-	public void newDM() {
-		String recipient =
-			tweet.getUserAccount().getString(MetadataSet.USERACCOUNT_USER_NAME);
-		//
-		Intent intent = new Intent(this, NewDirectMessageActivity.class);
-		//
-		intent.putExtra(
-			NewDirectMessageActivity.PARAM_KEY_DM_RECIPIENT, recipient);
-		//
-		startActivity(intent);
-	}
-	
-	/**
-	 * 
-	 */
-	public void reply() {
+	protected void reply() {
 		Intent intent = new Intent(this, NewTweetActivity.class);
 		intent.putExtra(NewTweetActivity.PARAM_KEY_REPLY_TWEET, tweet);
 		//
@@ -130,7 +115,7 @@ public class ViewTweetActivity extends Activity {
 	/**
 	 * 
 	 */
-	public void favorite() {
+	protected void favorite() {
 		FavoriteTweetAsyncServiceCall favCall =
 			new FavoriteTweetAsyncServiceCall(this) {
 			@Override
@@ -147,7 +132,7 @@ public class ViewTweetActivity extends Activity {
 	/**
 	 * 
 	 */
-	public void viewUserProfile() {
+	protected void viewUserProfile() {
 		UserAccount account = tweet.getUserAccount();
 		//
 		if (tweet.getRepostedTweet() != null) {
@@ -161,91 +146,37 @@ public class ViewTweetActivity extends Activity {
 	}
 	
 	/**
-	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
-	 */
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		boolean result = super.onPrepareOptionsMenu(menu);
-		//
-		menu.findItem(R.id.menu_item_favorite).setTitle(
-			isFavorite ? R.string.unfavorite : R.string.favorite);	
-		//
-		return result;
-	}
-	
-	/**
-	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.tweet, menu);
-	    //
-	    return true;
-	}
-	
-	/**
-	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	    case R.id.menu_item_retweet:
-	    	retweet();
-	    	//
-	        return true;
-	    case R.id.menu_item_comment:
-	    	comment();
-	    	//
-	        return true;
-	    case R.id.menu_item_new_dm:
-	    	newDM();
-	    	//
-	        return true;
-	    case R.id.menu_item_reply:
-	    	reply();
-	    	//
-	        return true;
-	    case R.id.menu_item_favorite:
-	    	favorite();
-	    	//
-	        return true;
-	    default:
-	        return super.onOptionsItemSelected(item);
-	    }
-	}
-	
-	/**
 	 * 
 	 */
-	public void displayTweet() {
+	protected void displayTweet() {
 		Tweet dTweet = tweet;
 		TextView txtv = (TextView)findViewById(R.id.view_tweet_txtv_reply);
 		txtv.setVisibility(View.VISIBLE);
 		//
 		if (dTweet.getRepostedTweet() != null) { //retweeted?
-        	String username =
-        		dTweet.getUserAccount().getString(MetadataSet.USERACCOUNT_NAME);
-        	//
-        	txtv.setText(getString(R.string.retweeted_by, username));
-            //
-        	dTweet = tweet.getRepostedTweet();
+	    	String username =
+	    		dTweet.getUserAccount().getString(MetadataSet.USERACCOUNT_NAME);
+	    	//
+	    	txtv.setText(getString(R.string.retweeted_by, username));
+	        //
+	    	dTweet = tweet.getRepostedTweet();
 		} else {
 			if (dTweet.isEmpty(MetadataSet.TWEET_IN_REPLY_TO_TWEET_ID)) {
 				txtv.setVisibility(View.GONE);
-        	} else {
-        		String username = "";
-        		//
-        		if (dTweet.getEntity() != null) {
-        			TweetEntity[] entities = dTweet.getEntity().getMentions();
-        			if (entities.length > 0) {
-        				username =
-        					entities[0].getString(
-        						MetadataSet.TWEETENTITY_USERACCOUNT_NAME);
-        			}
-        		}
-        		//
-        		txtv.setText(getString(R.string.in_reply_to, username));
-        	}
+	    	} else {
+	    		String username = "";
+	    		//
+	    		if (dTweet.getEntity() != null) {
+	    			TweetEntity[] entities = dTweet.getEntity().getMentions();
+	    			if (entities.length > 0) {
+	    				username =
+	    					entities[0].getString(
+	    						MetadataSet.TWEETENTITY_USERACCOUNT_NAME);
+	    			}
+	    		}
+	    		//
+	    		txtv.setText(getString(R.string.in_reply_to, username));
+	    	}
 		}
 		//
 		UserAccount ua = dTweet.getUserAccount();
@@ -289,18 +220,72 @@ public class ViewTweetActivity extends Activity {
 		if (ua != null) {
 			imgUrl = ua.getString(MetadataSet.USERACCOUNT_PICTURE_URI);	
 		}
-        //
-        if (imgUrl != null) {
-        	imgV.setTag(imgUrl);
-            cachedImage =
-            	AsyncImageLoader.getInstance(this).loadDrawable(
-            		imgUrl, new ImageViewCallback(null, getCurrentFocus()));
-        }
-        //
-        if (cachedImage == null) {
-        	cachedImage = getResources().getDrawable(R.drawable.icon);
-        }
-        //
-        imgV.setImageDrawable(cachedImage);
+	    //
+	    if (imgUrl != null) {
+	    	imgV.setTag(imgUrl);
+	        cachedImage =
+	        	AsyncImageLoader.getInstance(this).loadDrawable(
+	        		imgUrl, new ImageViewCallback(null, getCurrentFocus()));
+	    }
+	    //
+	    if (cachedImage == null) {
+	    	cachedImage = getResources().getDrawable(R.drawable.icon);
+	    }
+	    //
+	    imgV.setImageDrawable(cachedImage);
+	}
+
+	/**
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.tweet, menu);
+	    //
+	    return true;
+	}
+
+	/**
+	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+	 */
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		boolean result = super.onPrepareOptionsMenu(menu);
+		//
+		if (isFavorite) {
+			menu.removeItem(R.id.menu_item_favorite);
+		} else {
+			menu.removeItem(R.id.menu_item_unfavorite);
+		}
+		//
+		return result;
+	}
+	
+	/**
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.menu_item_retweet:
+	    	retweet();
+	    	//
+	        return true;
+	    case R.id.menu_item_comment:
+	    	comment();
+	    	//
+	        return true;
+	    case R.id.menu_item_reply:
+	    	reply();
+	    	//
+	        return true;
+	    case R.id.menu_item_favorite:
+	    case R.id.menu_item_unfavorite:
+	    	favorite();
+	    	//
+	        return true;
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
 	}
 }

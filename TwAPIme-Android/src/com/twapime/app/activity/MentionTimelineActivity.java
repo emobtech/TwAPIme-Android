@@ -29,7 +29,7 @@ public class MentionTimelineActivity extends TimelineActivity {
 	 * @see com.twapime.app.activity.TimelineActivity#refresh()
 	 */
 	@Override
-	public void refresh() {
+	protected void refresh() {
 		super.refresh();
 		//
 		Query query =

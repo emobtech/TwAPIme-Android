@@ -23,6 +23,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.twapime.app.R;
+import com.twapime.app.TwAPImeApplication;
+import com.twapime.app.service.AddMemberAsyncServiceCall;
 import com.twapime.app.service.BlockAsyncServiceCall;
 import com.twapime.app.service.FollowAsyncServiceCall;
 import com.twapime.app.service.GetFriendshipAsyncServiceCall;
@@ -44,16 +46,16 @@ public class UserProfileActivity extends Activity {
 	 * 
 	 */
 	private static final int REQUEST_EDIT_USER = 0;
-	
+
+	/**
+	 * 
+	 */
+	private static final int REQUEST_ADD_TO_LIST = 1;
+
 	/**
 	 * 
 	 */
 	static final String PARAM_KEY_USER = "PARAM_KEY_USER";
-	
-	/**
-	 * 
-	 */
-	static final String PARAM_KEY_IS_LOGGED_USER = "PARAM_KEY_IS_LOGGED_USER";
 
 	/**
 	 * 
@@ -73,7 +75,22 @@ public class UserProfileActivity extends Activity {
 	/**
 	 * 
 	 */
+	private boolean isFollowed;
+
+	/**
+	 * 
+	 */
+	private boolean canDM;
+
+	/**
+	 * 
+	 */
 	private boolean isLoggedUser;
+	
+	/**
+	 * 
+	 */
+	private Friendship friendship;
 
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -84,19 +101,22 @@ public class UserProfileActivity extends Activity {
 		//
 		setContentView(R.layout.view_profile);
 		//
+		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		Intent intent = getIntent();
 		//
 		user = (UserAccount)intent.getSerializableExtra(PARAM_KEY_USER);
-		isLoggedUser = intent.getBooleanExtra(PARAM_KEY_IS_LOGGED_USER, false);
+		isLoggedUser = app.isLoggedUser(user);
 		//
 		loadUserProfile();
-		loadUserFriendship();
+		if (!isLoggedUser) {
+			loadUserFriendship();
+		}
 	}
 	
 	/**
 	 * 
 	 */
-	public void loadUserProfile() {
+	protected void loadUserProfile() {
 		if (user.getObject(MetadataSet.USERACCOUNT_CREATE_DATE) == null) {
 			new GetUserAsyncServiceCall(this) {
 				@Override
@@ -113,13 +133,18 @@ public class UserProfileActivity extends Activity {
 	/**
 	 * 
 	 */
-	public void loadUserFriendship() {
+	protected void loadUserFriendship() {
 		new GetFriendshipAsyncServiceCall(this) {
 			protected void onPostRun(List<Friendship> result) {
-				Friendship f = result.get(0).getSource();
+				friendship = result.get(0).getSource();
 				//
-				isFollowing = f.getBoolean(MetadataSet.FRIENDSHIP_FOLLOWING);
-				isBlocking = f.getBoolean(MetadataSet.FRIENDSHIP_BLOCKING);
+				isFollowing =
+					friendship.getBoolean(MetadataSet.FRIENDSHIP_FOLLOWING);
+				isBlocking =
+					friendship.getBoolean(MetadataSet.FRIENDSHIP_BLOCKING);
+				isFollowed =
+					friendship.getBoolean(MetadataSet.FRIENDSHIP_FOLLOWED_BY);
+				canDM = friendship.getBoolean(MetadataSet.FRIENDSHIP_CAN_DM);
 			};
 		}.execute(user);
 	}
@@ -127,7 +152,7 @@ public class UserProfileActivity extends Activity {
 	/**
 	 * 
 	 */
-	public void displayUserProfile() {
+	protected void displayUserProfile() {
 		TextView txtv = (TextView)findViewById(R.id.user_profile_txtv_name);
 		txtv.setText(user.getString(MetadataSet.USERACCOUNT_NAME));	
 		//
@@ -182,49 +207,55 @@ public class UserProfileActivity extends Activity {
 	/**
 	 * 
 	 */
-	public void followOrUnfollow() {
-		if (isFollowing) {
-			new UnfollowAsyncServiceCall(this) {
-				@Override
-				protected void onPostRun(List<UserAccount> result) {
-					isFollowing = false;
-				}
-			}.execute(user);
-		} else {
-			new FollowAsyncServiceCall(this) {
-				@Override
-				protected void onPostRun(List<UserAccount> result) {
-					isFollowing = true;
-				}
-			}.execute(user);
-		}
+	protected void follow() {
+		new FollowAsyncServiceCall(this) {
+			@Override
+			protected void onPostRun(List<UserAccount> result) {
+				isFollowing = true;
+			}
+		}.execute(user);
 	}
 	
 	/**
 	 * 
 	 */
-	public void blockOrUnblock() {
-		if (isBlocking) {
-			new UnblockAsyncServiceCall(this) {
-				@Override
-				protected void onPostRun(List<UserAccount> result) {
-					isBlocking = false;
-				}
-			}.execute(user);
-		} else {
-			new BlockAsyncServiceCall(this) {
-				@Override
-				protected void onPostRun(List<UserAccount> result) {
-					isBlocking = true;
-				}
-			}.execute(user);
-		}
+	protected void unfollow() {
+		new UnfollowAsyncServiceCall(this) {
+			@Override
+			protected void onPostRun(List<UserAccount> result) {
+				isFollowing = false;
+			}
+		}.execute(user);
+	}
+
+	/**
+	 * 
+	 */
+	protected void block() {
+		new BlockAsyncServiceCall(this) {
+			@Override
+			protected void onPostRun(List<UserAccount> result) {
+				isBlocking = true;
+			}
+		}.execute(user);
 	}
 	
 	/**
 	 * 
 	 */
-	public void reportSpam() {
+	protected void unblock() {
+		new UnblockAsyncServiceCall(this) {
+			@Override
+			protected void onPostRun(List<UserAccount> result) {
+				isBlocking = false;
+			}
+		}.execute(user);
+	}
+
+	/**
+	 * 
+	 */
+	protected void reportSpam() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(getString(R.string.app_name));
 		builder.setMessage(getString(R.string.confirm_report_spam));
@@ -251,7 +282,7 @@ public class UserProfileActivity extends Activity {
 	/**
 	 * 
 	 */
-	public void editProfile() {
+	protected void editProfile() {
 		Intent intent = new Intent(this, EditUserProfileActivity.class);
 		intent.putExtra(EditUserProfileActivity.PARAM_KEY_USER, user);
 		//
@@ -259,32 +290,48 @@ public class UserProfileActivity extends Activity {
 	}
 	
 	/**
-	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+	 * 
 	 */
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+	protected void addToList() {
+		Intent intent = new Intent(this, ListActivity.class);
+		intent.setAction(Intent.ACTION_PICK);
+		intent.putExtra(ListActivity.PARAM_KEY_USER, user);
+		//
+		startActivityForResult(intent, REQUEST_ADD_TO_LIST);
 	}
 	
 	/**
-	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+	 * @param list
+	 */
+	protected void addMember(com.twitterapime.rest.List list) {
+		new AddMemberAsyncServiceCall(this).execute(list, user);
+	}
+	
+	/**
+	 * 
+	 */
+	protected void newDM() {
+		Intent intent = new Intent(this, NewDirectMessageActivity.class);
+		intent.putExtra(
+			NewDirectMessageActivity.PARAM_KEY_DM_RECIPIENT,
+			user.getString(MetadataSet.USERACCOUNT_USER_NAME));
+		//
+		startActivity(intent);
+	}
+	
+	/**
+	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
 	 */
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		boolean result = super.onPrepareOptionsMenu(menu);
-		//
-		if (!isLoggedUser) {
-			menu.findItem(R.id.menu_item_follow).setTitle(
-				isFollowing ? R.string.unfollow : R.string.follow);	
-			menu.findItem(R.id.menu_item_follow).setIcon(
-				isFollowing ? R.drawable.round_minus : R.drawable.round_plus);	
-			menu.findItem(R.id.menu_item_block).setTitle(
-				isBlocking ? R.string.unblock : R.string.block);
-			menu.findItem(R.id.menu_item_block).setIcon(
-				isBlocking ? R.drawable.round_checkmark : R.drawable.cancel);	
+	protected void onActivityResult(int requestCode, int resultCode,
+		Intent data) {
+		if (resultCode == RESULT_OK && requestCode == REQUEST_ADD_TO_LIST) {
+			com.twitterapime.rest.List list =
+				(com.twitterapime.rest.List)data.getSerializableExtra(
+					ListActivity.RETURN_KEY_PICK_LIST);
+			//
+			addMember(list);
 		}
-		//
-		return result;
 	}
 	
 	/**
@@ -300,6 +347,45 @@ public class UserProfileActivity extends Activity {
 		//
 		return true;
 	}
+
+	/**
+	 * @see android.app.Activity#onPrepareOptionsMenu(android.view.Menu)
+	 */
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		boolean result = super.onPrepareOptionsMenu(menu);
+		//
+		if (!isLoggedUser) {
+			if (friendship == null) {
+				menu.removeItem(R.id.menu_item_follow);
+				menu.removeItem(R.id.menu_item_unfollow);
+				menu.removeItem(R.id.menu_item_unblock);
+				menu.removeItem(R.id.menu_item_block);
+				menu.removeItem(R.id.menu_item_new_dm);
+			} else {
+				if (isFollowing) {
+					menu.removeItem(R.id.menu_item_follow);
+				} else {
+					menu.removeItem(R.id.menu_item_unfollow);
+				}
+				if (isFollowed) {
+					if (isBlocking) {
+						menu.removeItem(R.id.menu_item_block);
+					} else {
+						menu.removeItem(R.id.menu_item_unblock);
+					}
+				} else {
+					menu.removeItem(R.id.menu_item_unblock);
+					menu.removeItem(R.id.menu_item_block);
+				}
+				if (!canDM) {
+					menu.removeItem(R.id.menu_item_new_dm);
+				}
+			}
+		}
+		//
+		return result;
+	}
 	
 	/**
 	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
@@ -308,11 +394,19 @@ public class UserProfileActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.menu_item_follow:
-	    	followOrUnfollow();
+	    	follow();
+	    	//
+	        return true;
+	    case R.id.menu_item_unfollow:
+	    	unfollow();
 	    	//
 	        return true;
 	    case R.id.menu_item_block:
-	    	blockOrUnblock();
+	    	block();
+	    	//
+	        return true;
+	    case R.id.menu_item_unblock:
+	    	unblock();
 	    	//
 	        return true;
 	    case R.id.menu_item_report_spam:
@@ -321,6 +415,14 @@ public class UserProfileActivity extends Activity {
 	        return true;
 	    case R.id.menu_item_edit:
 	    	editProfile();
+	    	//
+	        return true;
+	    case R.id.menu_item_add_to_list:
+	    	addToList();
+	    	//
+	        return true;
+	    case R.id.menu_item_new_dm:
+	    	newDM();
 	    	//
 	        return true;
 	    default:

@@ -101,7 +101,7 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 	/**
 	 * 
 	 */
-	public void login() {
+	protected void login() {
 		if (IOUtil.isOnline(this)) {
 			loginWrapper.login();
 		} else {
@@ -109,6 +109,34 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 		}
 	}
 	
+	/**
+	 * @param strId
+	 */
+	protected void tryAgain(int strId) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(getString(R.string.app_name));
+		builder.setMessage(strId);
+		builder.setCancelable(false);
+		builder.setPositiveButton(
+			getString(R.string.yes), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				login();
+			}
+		});
+		builder.setNegativeButton(
+			getString(
+				R.string.exit_app), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				finish();
+			}
+		});
+		//
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+
 	/**
 	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
 	 */
@@ -185,33 +213,5 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 	@Override
 	public void onFail(String message, String description) {
 		runOnUiThread(tryAgainError);
-	}
-	
-	/**
-	 * @param strId
-	 */
-	public void tryAgain(int strId) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(getString(R.string.app_name));
-		builder.setMessage(strId);
-		builder.setCancelable(false);
-		builder.setPositiveButton(
-			getString(R.string.yes), new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				login();
-			}
-		});
-		builder.setNegativeButton(
-			getString(
-				R.string.exit_app), new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int id) {
-				finish();
-			}
-		});
-		//
-		AlertDialog alert = builder.create();
-		alert.show();
 	}
 }

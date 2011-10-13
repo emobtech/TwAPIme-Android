@@ -109,7 +109,7 @@ public class NewTweetActivity extends Activity {
 	/**
 	 * 
 	 */
-	public void post() {
+	protected void post() {
 		EditText text = (EditText)findViewById(R.id.new_tweet_txtf_content);
 		Tweet tweet = new Tweet(text.getEditableText().toString(), replyTweet);
 		//

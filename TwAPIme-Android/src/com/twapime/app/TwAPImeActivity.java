@@ -27,7 +27,7 @@ public class TwAPImeActivity extends Activity {
      * @see android.app.Activity#onCreate(android.os.Bundle)
      */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //
         verifyExistentAccount();
@@ -36,7 +36,7 @@ public class TwAPImeActivity extends Activity {
     /**
      * 
      */
-    public void verifyExistentAccount() {
+    protected void verifyExistentAccount() {
     	TwAPImeApplication app = (TwAPImeApplication)getApplication();
     	//
     	Token token = app.getAccessToken();

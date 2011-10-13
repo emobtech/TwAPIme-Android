@@ -36,12 +36,12 @@ public abstract class UserListActivity extends ListActivity {
 	/**
 	 * 
 	 */
-	private UserArrayAdapter adapter;
+	protected UserArrayAdapter adapter;
 
 	/**
 	 * 
 	 */
-	private List<UserAccount> users;
+	protected List<UserAccount> users;
 	
 	/**
 	 * 

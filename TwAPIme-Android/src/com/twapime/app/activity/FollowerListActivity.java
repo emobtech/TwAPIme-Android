@@ -14,8 +14,15 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 
+import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
+import com.twapime.app.service.BlockAsyncServiceCall;
 import com.twitterapime.model.Cursor;
 import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.FriendshipManager;
@@ -37,7 +44,12 @@ public class FollowerListActivity extends UserListActivity {
 	/**
 	 * 
 	 */
-	protected UserAccount user;
+	private UserAccount user;
+	
+	/**
+	 * 
+	 */
+	private boolean isLoggedUser;
 	
 	/**
 	 * @see com.twapime.app.activity.UserListActivity#onCreate(android.os.Bundle)
@@ -46,9 +58,11 @@ public class FollowerListActivity extends UserListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//
+		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		Intent intent = getIntent();
 		//
 		user = (UserAccount)intent.getExtras().getSerializable(PARAM_KEY_USER);
+		isLoggedUser = app.isLoggedUser(user);
 	}
 
 	/**
@@ -85,5 +99,49 @@ public class FollowerListActivity extends UserListActivity {
 			uam.lookup(nextLookupPageQuery),
 			cursorIds.getPreviousPageIndex(),
 			cursorIds.getNextPageIndex());
+	}
+	
+	/**
+	 * @param follower
+	 */
+	protected void block(final UserAccount follower) {
+		new BlockAsyncServiceCall(this) {
+			@Override
+			protected void onPostRun(List<UserAccount> result) {
+				users.remove(follower);
+				adapter.notifyDataSetChanged();
+			}
+		}.execute(follower);
+	}
+	
+	/**
+	 * @see android.app.Activity#onCreateContextMenu(android.view.ContextMenu, android.view.View, android.view.ContextMenu.ContextMenuInfo)
+	 */
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, 
+		ContextMenuInfo menuInfo) {
+		if (isLoggedUser) {
+			getMenuInflater().inflate(R.menu.follower_list, menu);
+		} else {
+			super.onCreateContextMenu(menu, v, menuInfo);
+		}
+	}
+	
+	/**
+	 * @see android.app.Activity#onContextItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		AdapterView.AdapterContextMenuInfo info =
+			(AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+		//
+	    switch (item.getItemId()) {
+	    case R.id.menu_item_block:
+	    	block(users.get(info.position));
+	    	//
+	        return true;
+	    default:
+	        return super.onContextItemSelected(item);
+	    }
 	}
 }

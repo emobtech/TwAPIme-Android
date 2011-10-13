@@ -40,7 +40,7 @@ public class EditListActivity extends Activity {
 	/**
 	 * 
 	 */
-	public static final String RETURN_KEY_LIST = "RETURN_KEY_LIST";
+	public static final String RETURN_KEY_EDIT_LIST = "RETURN_KEY_EDIT_LIST";
 
 	/**
 	 * 
@@ -123,7 +123,7 @@ public class EditListActivity extends Activity {
 	/**
 	 * 
 	 */
-	public void done() {
+	protected void done() {
 		if (list == null) {
 			List newList =
 				new List(
@@ -135,7 +135,7 @@ public class EditListActivity extends Activity {
 				@Override
 				protected void onPostRun(java.util.List<List> result) {
 					Intent intent = new Intent();
-				    intent.putExtra(RETURN_KEY_LIST, result.get(0));
+				    intent.putExtra(RETURN_KEY_EDIT_LIST, result.get(0));
 				    //
 				    setResult(RESULT_OK, intent);
 				    finish();
@@ -153,7 +153,7 @@ public class EditListActivity extends Activity {
 				@Override
 				protected void onPostRun(java.util.List<List> result) {
 					Intent intent = new Intent();
-				    intent.putExtra(RETURN_KEY_LIST, result.get(0));
+				    intent.putExtra(RETURN_KEY_EDIT_LIST, result.get(0));
 				    //
 				    setResult(RESULT_OK, intent);
 				    finish();

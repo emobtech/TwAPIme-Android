@@ -20,20 +20,10 @@ import com.twitterapime.search.SearchDevice;
  */
 public class TweetSearchTimelineActivity extends TimelineActivity {
 	/**
-	 * @see android.app.Activity#setIntent(android.content.Intent)
-	 */
-	@Override
-	public void setIntent(Intent newIntent) {
-		super.setIntent(newIntent);
-		//
-		refresh();
-	}
-
-	/**
 	 * @see com.twapime.app.activity.TimelineActivity#refresh()
 	 */
 	@Override
-	public void refresh() {
+	protected void refresh() {
 		super.refresh();
 		tweets.clear();
 		//
@@ -45,5 +35,15 @@ public class TweetSearchTimelineActivity extends TimelineActivity {
 				QueryComposer.includeEntities());
 		//
 		sd.startSearchTweets(query, this);
+	}
+
+	/**
+	 * @see android.app.Activity#setIntent(android.content.Intent)
+	 */
+	@Override
+	public void setIntent(Intent newIntent) {
+		super.setIntent(newIntent);
+		//
+		refresh();
 	}
 }

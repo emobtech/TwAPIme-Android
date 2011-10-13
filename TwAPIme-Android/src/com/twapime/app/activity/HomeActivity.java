@@ -76,14 +76,14 @@ public class HomeActivity extends TabActivity {
 	/**
 	 * 
 	 */
-	public void newTweet() {
+	protected void newTweet() {
 		startActivity(new Intent(this, NewTweetActivity.class));
 	}
 	
 	/**
 	 * 
 	 */
-	public void signOut() {
+	protected void signOut() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(getString(R.string.app_name));
 		builder.setMessage(getString(R.string.confirm_sign_out));
@@ -115,7 +115,7 @@ public class HomeActivity extends TabActivity {
 	/**
 	 * 
 	 */
-	public void viewMyProfile() {
+	protected void viewMyProfile() {
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		//
 		Intent intent = new Intent(this, UserHomeActivity.class);
@@ -129,7 +129,7 @@ public class HomeActivity extends TabActivity {
 	/**
 	 * 
 	 */
-	public void viewAbout() {
+	protected void viewAbout() {
 		startActivity(new Intent(this, AboutActivity.class));
 	}
 	

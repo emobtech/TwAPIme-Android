@@ -5,5 +5,5 @@
     <item android:title="@string/retweet" android:id="@+id/menu_item_retweet" android:icon="@drawable/round_and_up"></item>
     <item android:title="@string/comment" android:id="@+id/menu_item_comment" android:icon="@drawable/spechbubble"></item>
     <item android:title="@string/favorite" android:id="@+id/menu_item_favorite" android:icon="@drawable/star"></item>
-    <item android:title="@string/new_dm" android:id="@+id/menu_item_new_dm" android:icon="@drawable/mail"></item>
+    <item android:title="@string/unfavorite" android:id="@+id/menu_item_unfavorite" android:icon="@drawable/star"></item>
 </menu>

@@ -40,7 +40,7 @@ public class DirectMessageTimelineActivity extends TimelineActivity {
 	 * @see com.twapime.app.activity.TimelineActivity#refresh()
 	 */
 	@Override
-	public void refresh() {
+	protected void refresh() {
 		super.refresh();
 		//
 		timeline.startGetDirectMessages(sinceID, true, this);
@@ -49,6 +49,19 @@ public class DirectMessageTimelineActivity extends TimelineActivity {
 		requestCount = 0;
 	}
 	
+	/**
+	 * 
+	 */
+	protected void newDM() {
+		startActivity(new Intent(this, NewDirectMessageActivity.class));
+	}
+
+	/**
+	 * @see com.twapime.app.activity.TimelineActivity#viewTweet(com.twitterapime.search.Tweet)
+	 */
+	protected void viewTweet(Tweet tweet) {
+	}
+
 	/**
 	 * @see com.twapime.app.activity.TimelineActivity#searchCompleted()
 	 */
@@ -69,13 +82,6 @@ public class DirectMessageTimelineActivity extends TimelineActivity {
 		requestCount++;
 		//
 		super.searchFailed(exception);
-	}
-	
-	/**
-	 * 
-	 */
-	public void newDM() {
-		startActivity(new Intent(this, NewDirectMessageActivity.class));
 	}
 	
 	/**
@@ -117,11 +123,5 @@ public class DirectMessageTimelineActivity extends TimelineActivity {
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }
-	}
-	
-	/**
-	 * @see com.twapime.app.activity.TimelineActivity#viewTweet(com.twitterapime.search.Tweet)
-	 */
-	public void viewTweet(Tweet tweet) {
 	}
 }

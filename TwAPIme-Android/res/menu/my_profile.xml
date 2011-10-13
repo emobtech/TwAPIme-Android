@@ -2,4 +2,5 @@
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
   	<item android:title="@string/edit" android:id="@+id/menu_item_edit"></item>
+  	<item android:title="@string/add_to_list" android:id="@+id/menu_item_add_to_list" android:icon="@drawable/round_plus"></item>
 </menu>

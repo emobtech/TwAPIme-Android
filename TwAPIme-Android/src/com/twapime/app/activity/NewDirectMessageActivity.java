@@ -105,7 +105,7 @@ public class NewDirectMessageActivity extends Activity {
 	/**
 	 * 
 	 */
-	public void send() {
+	protected void send() {
 		String username = recipient.getText().toString();
 		if (username.startsWith("@")) {
 			username = username.substring(1);

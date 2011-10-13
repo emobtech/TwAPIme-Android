@@ -10,7 +10,11 @@ package com.twapime.app.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View;
 
+import com.twapime.app.TwAPImeApplication;
 import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.UserAccount;
 import com.twitterapime.search.Query;
@@ -29,18 +33,25 @@ public class UserTimelineActivity extends TimelineActivity {
 	 * 
 	 */
 	private String username;
+	
+	/**
+	 * 
+	 */
+	private boolean isLoggedUser;
 
 	/**
 	 * @see android.app.ActivityGroup#onCreate(android.os.Bundle)
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		Intent intent = getIntent();
 		//
 		UserAccount user =
 			(UserAccount)intent.getExtras().getSerializable(PARAM_KEY_USER);
 		//
 		username = user.getString(MetadataSet.USERACCOUNT_USER_NAME);
+		isLoggedUser = app.isLoggedUser(user);
 		//
 		super.onCreate(savedInstanceState);
 	}
@@ -49,7 +60,7 @@ public class UserTimelineActivity extends TimelineActivity {
 	 * @see com.twapime.app.activity.TimelineActivity#refresh()
 	 */
 	@Override
-	public void refresh() {
+	protected void refresh() {
 		super.refresh();
 		//
 		Query query =
@@ -63,5 +74,16 @@ public class UserTimelineActivity extends TimelineActivity {
 		}
 		//
 		timeline.startGetUserTweets(query, this);
+	}
+	
+	/**
+	 * @see com.twapime.app.activity.TimelineActivity#onCreateContextMenu(android.view.ContextMenu, android.view.View, android.view.ContextMenu.ContextMenuInfo)
+	 */
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+		ContextMenuInfo menuInfo) {
+		if (!isLoggedUser) {
+			super.onCreateContextMenu(menu, v, menuInfo);	
+		}
 	}
 }

@@ -37,7 +37,7 @@ public class EditUserProfileActivity extends Activity {
 	/**
 	 * 
 	 */
-	public static final String RETURN_KEY_USER = "RETURN_KEY_USER";
+	public static final String RETURN_KEY_EDIT_USER = "RETURN_KEY_EDIT_USER";
 
 	/**
 	 * 
@@ -116,7 +116,7 @@ public class EditUserProfileActivity extends Activity {
 	/**
 	 * 
 	 */
-	public void done() {
+	protected void done() {
 		user =
 			new UserAccount(
 				name.getEditableText().toString(),
@@ -128,7 +128,7 @@ public class EditUserProfileActivity extends Activity {
 			@Override
 			protected void onPostRun(java.util.List<UserAccount> result) {
 				Intent intent = new Intent();
-			    intent.putExtra(RETURN_KEY_USER, result.get(0));
+			    intent.putExtra(RETURN_KEY_EDIT_USER, result.get(0));
 			    //
 			    setResult(RESULT_OK, intent);
 			    finish();
