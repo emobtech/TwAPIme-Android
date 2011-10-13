@@ -61,7 +61,7 @@
     <string name="block">Block</string>
     <string name="unblock">Unblock</string>
     <string name="report_spam">Report Spam</string>
-    <string name="following">Following. Please wait...</string>
+    <string name="following_wait">Following. Please wait...</string>
     <string name="unfollowing">Unfollowing. Please wait...</string>
     <string name="reporting_spam">Reporting spam. Please wait...</string>
     <string name="blocking">Blocking. Please wait...</string>
@@ -102,4 +102,5 @@
     <string name="unknown_failure">There was an expected error.</string>
     <string name="retweeted_by">Retweeted by %1$s</string>
     <string name="in_reply_to">In reply to %1$s</string>
+    <string name="following">Following</string>
 </resources>

@@ -1,5 +1,5 @@
 /*
- * FollowAsyncServiceCall.java
+ * UnsubscribeAsyncServiceCall.java
  * 25/09/2011
  * TwAPIme for Android
  * Copyright(c) Ernandes Mourao Junior (ernandes@gmail.com)
@@ -14,46 +14,39 @@ import java.util.List;
 
 import android.app.Activity;
 
-import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.util.PostAsyncServiceCall;
-import com.twitterapime.rest.FriendshipManager;
-import com.twitterapime.rest.UserAccount;
+import com.twitterapime.rest.ListManager;
 import com.twitterapime.search.LimitExceededException;
 
 /**
  * @author ernandes@gmail.com
  */
-public class FollowAsyncServiceCall 
-	extends PostAsyncServiceCall<UserAccount, Void, List<UserAccount>> {
+public class UnsubscribeAsyncServiceCall 
+	extends PostAsyncServiceCall<
+		com.twitterapime.rest.List, Void, List<com.twitterapime.rest.List>> {
 	/**
 	 * @param context
 	 */
-	public FollowAsyncServiceCall(Activity context) {
+	public UnsubscribeAsyncServiceCall(Activity context) {
 		super(context);
-	}
-	
-	/**
-	 * @see com.twapime.app.util.PostAsyncServiceCall#getProgressStringId()
-	 */
-	@Override
-	public int getProgressStringId() {
-		return R.string.following_wait;
 	}
 
 	/**
 	 * @see com.twapime.app.util.AsyncServiceCall#run(P[])
 	 */
 	@Override
-	protected List<UserAccount> run(UserAccount... params) throws IOException,
+	protected List<com.twitterapime.rest.List> run(
+		com.twitterapime.rest.List... params) throws IOException,
 		LimitExceededException {
 		TwAPImeApplication app = 
 			(TwAPImeApplication)getContext().getApplicationContext();
-		FriendshipManager fmgr = app.getFriendshipManager();
-		List<UserAccount> result = new ArrayList<UserAccount>();
+		ListManager lmgr = app.getListManager();
+		List<com.twitterapime.rest.List> result =
+			new ArrayList<com.twitterapime.rest.List>();
 		//
-		for (UserAccount user : params) {
-			result.add(fmgr.follow(user));
+		for (com.twitterapime.rest.List list : params) {
+			result.add(lmgr.unsubscribe(list));
 		}
 		//
 		return result;

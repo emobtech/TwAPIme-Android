@@ -130,11 +130,15 @@ public class TimelineArrayAdapter extends ArrayAdapter<Tweet> {
         tv.setText(tweet.getString(MetadataSet.TWEET_CONTENT));
         //
         tv = (TextView)rowView.findViewById(R.id.tweet_row_txtv_time);
-        tv.setText(
-        	DateUtil.formatTweetDate(
-        		Long.parseLong(
-        			tweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
-        			context));
+        try {
+            tv.setText(
+            	DateUtil.formatTweetDate(
+            		Long.parseLong(
+            			tweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
+            			context));
+		} catch (Exception e) {
+			tv.setText("");
+		}
         //
         ImageView imgView =
         	(ImageView)rowView.findViewById(R.id.tweet_row_img_avatar);

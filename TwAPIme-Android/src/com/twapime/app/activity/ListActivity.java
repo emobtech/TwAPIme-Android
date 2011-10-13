@@ -10,6 +10,7 @@ package com.twapime.app.activity;
 
 import static com.twapime.app.activity.EditListActivity.PARAM_KEY_LIST;
 import static com.twapime.app.activity.EditListActivity.RETURN_KEY_LIST;
+import static com.twitterapime.model.MetadataSet.USERACCOUNT_USER_NAME;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,10 +29,14 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.twapime.app.R;
+import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.service.DeleteListAsyncServiceCall;
-import com.twapime.app.service.GetListsAsyncServiceCall;
+import com.twapime.app.service.GetSubscriptionsAsyncServiceCall;
+import com.twapime.app.service.SubscribeAsyncServiceCall;
+import com.twapime.app.service.UnsubscribeAsyncServiceCall;
 import com.twapime.app.util.UIUtil;
 import com.twapime.app.widget.ListArrayAdapter;
+import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.UserAccount;
 
 /**
@@ -47,6 +52,11 @@ public class ListActivity extends android.app.ListActivity {
 	 * 
 	 */
 	private static final int REQUEST_EDIT_LIST = 1;
+	
+	/**
+	 * 
+	 */
+	static final String PARAM_KEY_USER = "PARAM_KEY_USER";
 
 	/**
 	 * 
@@ -62,6 +72,16 @@ public class ListActivity extends android.app.ListActivity {
 	 * 
 	 */
 	private int selectedItemPos;
+	
+	/**
+	 * 
+	 */
+	private UserAccount user;
+	
+	/**
+	 * 
+	 */
+	private boolean isLoggedUser;
 
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -71,7 +91,8 @@ public class ListActivity extends android.app.ListActivity {
 		super.onCreate(savedInstanceState);
 		//
 		lists = new ArrayList<com.twitterapime.rest.List>();
-		adapter = new ListArrayAdapter(this, R.layout.row_list, lists);
+		user = (UserAccount)getIntent().getSerializableExtra(PARAM_KEY_USER);
+		adapter = new ListArrayAdapter(this, R.layout.row_list, lists, user);
 		setListAdapter(adapter);
 		registerForContextMenu(getListView());
 		//
@@ -86,13 +107,16 @@ public class ListActivity extends android.app.ListActivity {
 		);
 		//
 		refreshLists();
+		//
+		TwAPImeApplication app = (TwAPImeApplication)getApplicationContext();
+		isLoggedUser = app.isLoggedUser(user);
 	}
 	
 	/**
 	 * 
 	 */
 	public void refreshLists() {
-		new GetListsAsyncServiceCall(this) {
+		new GetSubscriptionsAsyncServiceCall(this) {
 			@Override
 			protected void onPostRun(com.twitterapime.rest.List[] result) {
 				lists.clear();
@@ -103,7 +127,7 @@ public class ListActivity extends android.app.ListActivity {
 					UIUtil.showMessage(getContext(), R.string.no_list_found);
 				}
 			}
-		}.execute((UserAccount[])null);
+		}.execute(user);
 	}
 	
 	/**
@@ -170,10 +194,41 @@ public class ListActivity extends android.app.ListActivity {
 	}
 	
 	/**
+	 * @param list
+	 */
+	public void unfollowList(com.twitterapime.rest.List list) {
+		new UnsubscribeAsyncServiceCall(this) {
+			@Override
+			protected void onPostRun(List<com.twitterapime.rest.List> result) {
+				if (isLoggedUser) {
+					lists.remove(selectedItemPos);
+				} else {
+					lists.set(selectedItemPos, result.get(0));
+				}
+				//
+				adapter.notifyDataSetChanged();
+			}
+		}.execute(list);
+	}
+	
+	/**
+	 * @param list
+	 */
+	public void followList(com.twitterapime.rest.List list) {
+		new SubscribeAsyncServiceCall(this) {
+			@Override
+			protected void onPostRun(List<com.twitterapime.rest.List> result) {
+				lists.set(selectedItemPos, result.get(0));
+				adapter.notifyDataSetChanged();
+			}
+		}.execute(list);
+	}
+
+	/**
 	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
 	 */
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode,
+	public void onActivityResult(int requestCode, int resultCode,
 		Intent data) {
 		if (resultCode == RESULT_OK) {
 			if (data != null && data.hasExtra(RETURN_KEY_LIST)) {
@@ -199,7 +254,10 @@ public class ListActivity extends android.app.ListActivity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean result = super.onPrepareOptionsMenu(menu);
 		//
-		menu.findItem(R.id.menu_item_new_tweet).setTitle(R.string.new_list);
+		MenuItem item = menu.findItem(R.id.menu_item_new_tweet);
+		if (item != null) {
+			item.setTitle(R.string.new_list);
+		}
 		//
 		return result;
 	}
@@ -231,6 +289,26 @@ public class ListActivity extends android.app.ListActivity {
 		ContextMenuInfo menuInfo) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.list, menu);
+		//
+		AdapterView.AdapterContextMenuInfo info =
+			(AdapterView.AdapterContextMenuInfo)menuInfo;
+		com.twitterapime.rest.List list = lists.get(info.position); 
+		UserAccount listOwner = list.getUserAccount();
+		//
+		if (user.getString(USERACCOUNT_USER_NAME).equalsIgnoreCase(
+				listOwner.getString(USERACCOUNT_USER_NAME))	&& isLoggedUser) { //is list owner and logged user?
+			menu.removeItem(R.id.menu_item_unfollow);
+			menu.removeItem(R.id.menu_item_follow);
+		} else {
+			menu.removeItem(R.id.menu_item_edit);
+			menu.removeItem(R.id.menu_item_delete);
+			//
+			if (list.getBoolean(MetadataSet.LIST_FOLLOWING)) {
+				menu.removeItem(R.id.menu_item_follow);
+			} else {
+				menu.removeItem(R.id.menu_item_unfollow);
+			}
+		}
 	}
 	
 	/**
@@ -252,6 +330,16 @@ public class ListActivity extends android.app.ListActivity {
 	    case R.id.menu_item_delete:
 	    	selectedItemPos = info.position;
 	    	deleteList(list);
+	    	//
+	        return true;
+	    case R.id.menu_item_unfollow:
+	    	selectedItemPos = info.position;
+	    	unfollowList(list);
+	    	//
+	        return true;
+	    case R.id.menu_item_follow:
+	    	selectedItemPos = info.position;
+	    	followList(list);
 	    	//
 	        return true;
 	    default:

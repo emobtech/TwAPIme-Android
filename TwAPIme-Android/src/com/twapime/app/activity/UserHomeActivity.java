@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.widget.TabHost;
 
 import com.twapime.app.R;
+import com.twapime.app.TwAPImeApplication;
 import com.twitterapime.rest.UserAccount;
 
 /**
@@ -25,11 +26,6 @@ public class UserHomeActivity extends TabActivity {
 	 * 
 	 */
 	static final String PARAM_KEY_USER = "PARAM_KEY_USER";
-	
-	/**
-	 * 
-	 */
-	static final String PARAM_KEY_IS_LOGGED_USER = "PARAM_KEY_IS_LOGGED_USER";
 	
 	/**
 	 * @see android.app.ActivityGroup#onCreate(android.os.Bundle)
@@ -43,10 +39,9 @@ public class UserHomeActivity extends TabActivity {
 		Resources res = getResources();
 		Intent intent = getIntent();
 		//
+		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		UserAccount user =
 			(UserAccount)intent.getSerializableExtra(PARAM_KEY_USER);
-		boolean isLoggedUser =
-			intent.getBooleanExtra(PARAM_KEY_IS_LOGGED_USER, false);
 		//
 		TabHost tabHost = getTabHost();
 	    TabHost.TabSpec spec;
@@ -57,8 +52,6 @@ public class UserHomeActivity extends TabActivity {
 	    //
 		intent = new Intent(this, UserProfileActivity.class);
 		intent.putExtra(UserProfileActivity.PARAM_KEY_USER, user);
-		intent.putExtra(
-			UserProfileActivity.PARAM_KEY_IS_LOGGED_USER, isLoggedUser);
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);
@@ -83,14 +76,28 @@ public class UserHomeActivity extends TabActivity {
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);
 	    //
-	    spec = tabHost.newTabSpec("followers");
-	    spec.setIndicator(
-	    	getString(R.string.followers), res.getDrawable(R.drawable.users));
-	    //
-		intent = new Intent(this, FollowerListActivity.class);
-		intent.putExtra(FollowerListActivity.PARAM_KEY_USER, user);
-	    //
-	    spec.setContent(intent);
-	    tabHost.addTab(spec);
+	    if (app.isLoggedUser(user)) {
+		    spec = tabHost.newTabSpec("followers");
+		    spec.setIndicator(
+		    	getString(R.string.followers),
+		    	res.getDrawable(R.drawable.users));
+		    //
+			intent = new Intent(this, FollowerListActivity.class);
+			intent.putExtra(FollowerListActivity.PARAM_KEY_USER, user);
+		    //
+		    spec.setContent(intent);
+		    tabHost.addTab(spec);
+	    } else {
+		    spec = tabHost.newTabSpec("lists");
+		    spec.setIndicator(
+		    	getString(R.string.lists),
+		    	res.getDrawable(R.drawable.doc_lines));
+		    //
+			intent = new Intent(this, ListActivity.class);
+			intent.putExtra(ListActivity.PARAM_KEY_USER, user);
+		    //
+		    spec.setContent(intent);
+		    tabHost.addTab(spec);
+	    }
 	}
 }

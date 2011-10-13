@@ -8,8 +8,6 @@
  */
 package com.twapime.app.activity;
 
-import java.io.IOException;
-
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.DialogInterface;
@@ -22,10 +20,7 @@ import android.widget.TabHost;
 
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
-import com.twapime.app.util.GetAsyncServiceCall;
 import com.twitterapime.rest.UserAccount;
-import com.twitterapime.rest.UserAccountManager;
-import com.twitterapime.search.LimitExceededException;
 
 /**
  * @author ernandes@gmail.com
@@ -66,21 +61,29 @@ public class HomeActivity extends TabActivity {
 	    spec = tabHost.newTabSpec("list");
 	    spec.setIndicator(
 	    	getString(R.string.lists), res.getDrawable(R.drawable.doc_lines));
-	    spec.setContent(new Intent(this, ListActivity.class));
+	    //
+	    TwAPImeApplication app = (TwAPImeApplication)getApplication();
+	    //
+	    Intent intent = new Intent(this, ListActivity.class);
+	    intent.putExtra(
+	    	ListActivity.PARAM_KEY_USER,
+	    	new UserAccount(app.getAccessToken().getUsername()));
+	    //
+	    spec.setContent(intent);
 	    tabHost.addTab(spec);
 	}
 	
 	/**
 	 * 
 	 */
-	protected void newTweet() {
+	public void newTweet() {
 		startActivity(new Intent(this, NewTweetActivity.class));
 	}
 	
 	/**
 	 * 
 	 */
-	protected void signOut() {
+	public void signOut() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(getString(R.string.app_name));
 		builder.setMessage(getString(R.string.confirm_sign_out));
@@ -112,36 +115,21 @@ public class HomeActivity extends TabActivity {
 	/**
 	 * 
 	 */
-	protected void viewMyProfile() {
-		new GetAsyncServiceCall<UserAccountManager, Void, UserAccount>(this) {
-			@Override
-			protected UserAccount run(UserAccountManager... params)
-				throws IOException, LimitExceededException {
-				return params[0].getUserAccount();
-			};
-			
-			@Override
-			protected void onPostRun(UserAccount result) {
-				Intent intent = new Intent(getContext(),UserHomeActivity.class);
-				intent.putExtra(UserHomeActivity.PARAM_KEY_USER, result);
-				intent.putExtra(UserHomeActivity.PARAM_KEY_IS_LOGGED_USER,true);
-				//
-				startActivity(intent);
-			};
-			
-			@Override
-			public int getProgressStringId() {
-				return R.string.loading_user_profile;
-			};
-		}.execute(
-			((TwAPImeApplication)getApplicationContext()
-				).getUserAccountManager());
+	public void viewMyProfile() {
+		TwAPImeApplication app = (TwAPImeApplication)getApplication();
+		//
+		Intent intent = new Intent(this, UserHomeActivity.class);
+		intent.putExtra(
+			UserHomeActivity.PARAM_KEY_USER,
+			new UserAccount(app.getAccessToken().getUsername()));
+		//
+		startActivity(intent);
 	}
 	
 	/**
 	 * 
 	 */
-	protected void viewAbout() {
+	public void viewAbout() {
 		startActivity(new Intent(this, AboutActivity.class));
 	}
 	

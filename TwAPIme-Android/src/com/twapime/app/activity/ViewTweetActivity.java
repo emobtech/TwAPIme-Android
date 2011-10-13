@@ -77,7 +77,13 @@ public class ViewTweetActivity extends Activity {
 	 * 
 	 */
 	public void retweet() {
-		new RepostTweetAsyncServiceCall(this).execute(tweet);
+		new RepostTweetAsyncServiceCall(this) {
+			@Override
+			protected void onPostRun(List<Tweet> result) {
+				tweet = result.get(0);
+				displayTweet();
+			};
+		}.execute(tweet);
 	}
 	
 	/**
@@ -214,6 +220,7 @@ public class ViewTweetActivity extends Activity {
 	public void displayTweet() {
 		Tweet dTweet = tweet;
 		TextView txtv = (TextView)findViewById(R.id.view_tweet_txtv_reply);
+		txtv.setVisibility(View.VISIBLE);
 		//
 		if (dTweet.getRepostedTweet() != null) { //retweeted?
         	String username =
@@ -264,11 +271,15 @@ public class ViewTweetActivity extends Activity {
 		txtv.setText(dTweet.getString(MetadataSet.TWEET_SOURCE));	
 		//
 		txtv = (TextView)findViewById(R.id.view_tweet_txtv_time);
-		txtv.setText(
-			DateUtil.formatTweetDate(
-        		Long.parseLong(
-        			dTweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
-            		this));
+		try {
+			txtv.setText(
+				DateUtil.formatTweetDate(
+	        		Long.parseLong(
+	        			dTweet.getString(MetadataSet.TWEET_PUBLISH_DATE)),
+	            		this));
+		} catch (NumberFormatException e) {
+			txtv.setText("");
+		}
 		//
 		ImageView imgV = (ImageView)findViewById(R.id.view_tweet_imgv_avatar);
 		//

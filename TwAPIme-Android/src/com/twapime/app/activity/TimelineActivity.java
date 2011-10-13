@@ -160,8 +160,14 @@ public class TimelineActivity extends ListActivity implements
 	/**
 	 * 
 	 */
-	public void retweet(Tweet tweet) {
-		new RepostTweetAsyncServiceCall(this).execute(tweet);
+	public void retweet(final Tweet tweet) {
+		new RepostTweetAsyncServiceCall(this) {
+			@Override
+			protected void onPostRun(List<Tweet> result) {
+				tweets.set(tweets.indexOf(tweet), result.get(0));
+				adapter.notifyDataSetChanged();
+			};
+		}.execute(tweet);
 	}
 	
 	/**

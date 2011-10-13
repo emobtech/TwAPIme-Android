@@ -11,6 +11,6 @@
 				android:layout_height="wrap_content" android:textStyle="bold" android:text="list name" android:id="@+id/list_row_txtv_list_name" android:textSize="17dp" android:layout_weight="1"></TextView>
 			<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TextView" android:id="@+id/list_row_txtv_list_privacy" android:textSize="12dp"></TextView>
 		</LinearLayout>
-			<TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="username" android:id="@+id/list_row_txtv_username"></TextView>
+			<TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="username" android:id="@+id/list_row_txtv_username" android:textSize="12dp"></TextView>
 	</LinearLayout>
 </LinearLayout>

@@ -8,6 +8,10 @@
  */
 package com.twapime.app.widget;
 
+import static com.twitterapime.model.MetadataSet.LIST_FOLLOWING;
+import static com.twitterapime.model.MetadataSet.LIST_MODE;
+import static com.twitterapime.model.MetadataSet.USERACCOUNT_USER_NAME;
+
 import java.util.List;
 
 import android.content.Context;
@@ -18,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.twapime.app.R;
+import com.twapime.app.TwAPImeApplication;
 import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.UserAccount;
 
@@ -36,16 +41,23 @@ public class ListArrayAdapter extends ArrayAdapter<com.twitterapime.rest.List> {
 	private List<com.twitterapime.rest.List> lists;
 	
 	/**
+	 * 
+	 */
+	private UserAccount owner;
+	
+	/**
 	 * @param context
 	 * @param textViewResourceId
 	 * @param lists
+	 * @param owner
 	 */
 	public ListArrayAdapter(Context context, int textViewResourceId,
-		List<com.twitterapime.rest.List> lists) {
+		List<com.twitterapime.rest.List> lists, UserAccount owner) {
 		super(context, textViewResourceId, lists);
 		//
 		this.context = context;
 		this.lists = lists;
+		this.owner = owner;
 	}
 	
 	/**
@@ -61,26 +73,43 @@ public class ListArrayAdapter extends ArrayAdapter<com.twitterapime.rest.List> {
             v = vi.inflate(R.layout.row_list, null);
         }
         //
+        TwAPImeApplication app =
+        	(TwAPImeApplication)context.getApplicationContext();
         com.twitterapime.rest.List list = lists.get(position);
-        TextView tv = (TextView) v.findViewById(R.id.list_row_txtv_username);
-        UserAccount ua = list.getUserAccount();
-        //
-        if (ua != null) {
-        	tv.setText(ua.getString(MetadataSet.USERACCOUNT_NAME));	
-        }
-        //
-        tv = (TextView) v.findViewById(R.id.list_row_txtv_list_name);
-        tv.setText(list.getString(MetadataSet.LIST_NAME));
+        UserAccount listOwner = list.getUserAccount();
+        boolean isListOwner =
+        	listOwner.getString(USERACCOUNT_USER_NAME).equalsIgnoreCase(
+        		owner.getString(USERACCOUNT_USER_NAME));
+        boolean isLoggedUser = app.isLoggedUser(owner);
         //
         String[] privacy =
         	context.getResources().getStringArray(R.array.privacy_array);
         //
-        tv = (TextView) v.findViewById(R.id.list_row_txtv_list_privacy);
-        if ("Public".equalsIgnoreCase(list.getString(MetadataSet.LIST_MODE))) {
-            tv.setText(privacy[1]);
+        TextView tv = (TextView)v.findViewById(R.id.list_row_txtv_list_privacy);
+        //
+        if (isListOwner && isLoggedUser) {
+        	if ("Public".equalsIgnoreCase(list.getString(LIST_MODE))) {
+                tv.setText(privacy[1]);
+            } else {
+            	tv.setText(privacy[0]);
+            }
+        } else if (list.getBoolean(LIST_FOLLOWING)) { //is logged user following?
+        	tv.setText(R.string.following);
         } else {
-        	tv.setText(privacy[0]);
+        	tv.setText("");
         }
+        //
+        tv = (TextView) v.findViewById(R.id.list_row_txtv_username);
+        //
+        if (isListOwner) {
+        	tv.setVisibility(View.GONE);
+        } else {
+        	tv.setVisibility(View.VISIBLE);
+           	tv.setText(listOwner.getString(MetadataSet.USERACCOUNT_NAME));	
+        }
+        //
+        tv = (TextView) v.findViewById(R.id.list_row_txtv_list_name);
+        tv.setText(list.getString(MetadataSet.LIST_NAME));
         //
 		return v;
 	}
