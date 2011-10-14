@@ -38,7 +38,7 @@ public class SendTweetAsyncServiceCall
 	 */
 	@Override
 	public int getProgressStringId() {
-		return R.string.sending_dm;
+		return R.string.sending_dm_wait;
 	}
 
 	/**

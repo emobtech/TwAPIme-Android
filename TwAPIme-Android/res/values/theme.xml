@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<style name="TwAPImeTheme" parent="@android:style/Theme.NoTitleBar">
+	<style name="TwAPImeTheme" parent="@android:style/Theme">
 		<item name="android:textColorLink">@color/white</item>
+		<item name="android:windowTitleStyle">@style/TwAPImeThemeWindowTitle</item>
+		<item name="android:windowTitleBackgroundStyle">@style/TwAPImeThemeWindowTitleBar</item>
+		<item name="android:windowTitleSize">30dp</item>
 	</style>
+
+	<style name="TwAPImeThemeWindowTitleBar">
+		<item name="android:background">@color/orange</item>
+	</style>
+	
+	<style name="TwAPImeThemeWindowTitle" parent="@android:style/WindowTitle">
+        <item name="android:textAppearance">@style/TwAPImeThemeWindowWindowTitleTitleTextAppearance</item>
+        <item name="android:shadowRadius">0</item>
+        <item name="android:paddingLeft">4dp</item>
+    </style>
+    
+    <style name="TwAPImeThemeWindowWindowTitleTitleTextAppearance">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>

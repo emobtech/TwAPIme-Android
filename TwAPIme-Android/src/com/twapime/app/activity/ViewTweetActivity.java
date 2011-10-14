@@ -124,7 +124,7 @@ public class ViewTweetActivity extends Activity {
 			}
 		};
 		favCall.setProgressStringId(
-			isFavorite ? R.string.unfavoriting : R.string.favoriting);
+			isFavorite ? R.string.unfavoriting_wait : R.string.favoriting_wait);
 		//
 		favCall.execute(tweet);
 	}

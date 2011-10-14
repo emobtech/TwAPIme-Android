@@ -38,7 +38,7 @@ public class ReportSpamAsyncServiceCall
 	 */
 	@Override
 	public int getProgressStringId() {
-		return R.string.reporting_spam;
+		return R.string.reporting_spam_wait;
 	}
 
 	/**

@@ -38,7 +38,7 @@ public class UnfollowAsyncServiceCall
 	 */
 	@Override
 	public int getProgressStringId() {
-		return R.string.unfollowing;
+		return R.string.unfollowing_wait;
 	}
 
 	/**

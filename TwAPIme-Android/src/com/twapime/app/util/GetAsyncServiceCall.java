@@ -21,6 +21,6 @@ public abstract class GetAsyncServiceCall<P, G, R>
 	public GetAsyncServiceCall(Activity context) {
 		super(context);
 		//
-		setProgressStringId(com.twapime.app.R.string.refreshing);
+		setProgressStringId(com.twapime.app.R.string.refreshing_wait);
 	}
 }

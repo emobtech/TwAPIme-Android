@@ -14,6 +14,7 @@ import java.util.List;
 
 import android.app.Activity;
 
+import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.util.PostAsyncServiceCall;
 import com.twitterapime.rest.ListManager;
@@ -30,6 +31,14 @@ public class UnsubscribeAsyncServiceCall
 	 */
 	public UnsubscribeAsyncServiceCall(Activity context) {
 		super(context);
+	}
+	
+	/**
+	 * @see com.twapime.app.util.AsyncServiceCall#getProgressStringId()
+	 */
+	@Override
+	public int getProgressStringId() {
+		return R.string.unsubscribing_wait;
 	}
 
 	/**

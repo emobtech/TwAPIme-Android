@@ -89,7 +89,8 @@ public abstract class UserListActivity extends ListActivity {
 						@Override
 						public void run() {
 							UIUtil.showMessage(
-								getApplicationContext(), R.string.refreshing);
+								getApplicationContext(),
+								R.string.refreshing_wait);
 						}
 					});
 					//
@@ -110,7 +111,7 @@ public abstract class UserListActivity extends ListActivity {
 	protected void reload() {
 		final ProgressDialog progressDialog =
 			ProgressDialog.show(
-				this, "", getString(R.string.refreshing), false);
+				this, "", getString(R.string.refreshing_wait), false);
 		//
 		new Thread() {
 			public void run() {

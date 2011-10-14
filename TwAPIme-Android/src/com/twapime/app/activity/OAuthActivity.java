@@ -61,7 +61,8 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 		setContentView(webView);
 		//
 		progressDialog =
-			ProgressDialog.show(this, "", getString(R.string.loading), false);
+			ProgressDialog.show(
+				this, "", getString(R.string.loading_wait), false);
 		//
 		webView.setWebChromeClient(new WebChromeClient() {
 			public void onProgressChanged(WebView view, int progress) {

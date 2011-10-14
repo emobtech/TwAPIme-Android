@@ -38,7 +38,7 @@ public class GetUserAsyncServiceCall
 	 */
 	@Override
 	public int getProgressStringId() {
-		return R.string.loading_user_profile;
+		return R.string.loading_wait;
 	}
 
 	/**

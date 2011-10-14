@@ -38,7 +38,7 @@ public class BlockAsyncServiceCall
 	 */
 	@Override
 	public int getProgressStringId() {
-		return R.string.blocking;
+		return R.string.blocking_wait;
 	}
 
 	/**

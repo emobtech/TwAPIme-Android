@@ -105,7 +105,7 @@ public class AuthActivity extends Activity {
 					startActivity(new Intent(getContext(), HomeActivity.class));
 				} else {
 					UIUtil.showMessage(
-						getContext(), R.string.credentials_invalid);
+						getContext(), R.string.invalid_credentials);
 				}
 			}
 		}.execute(credential);

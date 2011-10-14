@@ -113,11 +113,6 @@ public class TimelineActivity extends ListActivity implements
 			public void run() {
 				adapter.notifyDataSetChanged();
 				progressDialog.dismiss();
-				//
-				if (tweets.size() == 0) {
-					UIUtil.showMessage(
-						getApplicationContext(), R.string.no_tweet_found);
-				}
 			}
 		};
 		//
@@ -144,7 +139,7 @@ public class TimelineActivity extends ListActivity implements
 	protected void refresh() {
 		progressDialog =
 			ProgressDialog.show(
-				this, "", getString(R.string.refreshing), false);
+				this, "", getString(R.string.refreshing_wait), false);
 	}
 	
 	/**
@@ -211,7 +206,7 @@ public class TimelineActivity extends ListActivity implements
 			}
 		};
 		favCall.setProgressStringId(
-			isFav ? R.string.unfavoriting : R.string.favoriting);
+			isFav ? R.string.unfavoriting_wait : R.string.favoriting_wait);
 		//
 		favCall.execute(tweet);
 	}

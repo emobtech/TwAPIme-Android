@@ -35,7 +35,7 @@ public class AuthAsyncServiceCall
 	 */
 	@Override
 	public int getProgressStringId() {
-		return R.string.authenticating;
+		return R.string.signing_in_wait;
 	}
 
 	/**

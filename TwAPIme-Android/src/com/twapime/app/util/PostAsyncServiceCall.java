@@ -21,6 +21,6 @@ public abstract class PostAsyncServiceCall<P, G, R>
 	public PostAsyncServiceCall(Activity context) {
 		super(context);
 		//
-		setProgressStringId(com.twapime.app.R.string.processing);
+		setProgressStringId(com.twapime.app.R.string.processing_wait);
 	}
 }

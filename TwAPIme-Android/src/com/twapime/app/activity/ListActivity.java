@@ -35,7 +35,6 @@ import com.twapime.app.service.GetListsAsyncServiceCall;
 import com.twapime.app.service.GetSubscriptionsAsyncServiceCall;
 import com.twapime.app.service.SubscribeAsyncServiceCall;
 import com.twapime.app.service.UnsubscribeAsyncServiceCall;
-import com.twapime.app.util.UIUtil;
 import com.twapime.app.widget.ListArrayAdapter;
 import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.UserAccount;
@@ -141,11 +140,6 @@ public class ListActivity extends android.app.ListActivity {
 					lists.clear();
 					lists.addAll(Arrays.asList(result));
 					adapter.notifyDataSetChanged();
-					//
-					if (result.length == 0) {
-						UIUtil.showMessage(
-							getContext(), R.string.no_list_found);
-					}
 				}
 			}.execute(user);
 		} else {
@@ -155,11 +149,6 @@ public class ListActivity extends android.app.ListActivity {
 					lists.clear();
 					lists.addAll(Arrays.asList(result));
 					adapter.notifyDataSetChanged();
-					//
-					if (result.length == 0) {
-						UIUtil.showMessage(
-							getContext(), R.string.no_list_found);
-					}
 				}
 			}.execute(user);
 		}

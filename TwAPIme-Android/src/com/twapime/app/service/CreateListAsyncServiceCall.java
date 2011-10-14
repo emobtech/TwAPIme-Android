@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 
+import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.util.PostAsyncServiceCall;
 import com.twitterapime.rest.List;
@@ -29,6 +30,14 @@ public class CreateListAsyncServiceCall
 	 */
 	public CreateListAsyncServiceCall(Activity context) {
 		super(context);
+	}
+	
+	/**
+	 * @see com.twapime.app.util.AsyncServiceCall#getProgressStringId()
+	 */
+	@Override
+	public int getProgressStringId() {
+		return R.string.creating_wait;
 	}
 
 	/**
