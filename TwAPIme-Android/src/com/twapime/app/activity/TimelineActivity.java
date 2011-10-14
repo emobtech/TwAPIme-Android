@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.service.FavoriteTweetAsyncServiceCall;
@@ -85,6 +86,16 @@ public class TimelineActivity extends ListActivity implements
 	protected Timeline timeline;
 	
 	/**
+	 * 
+	 */
+	protected GoogleAnalyticsTracker tracker;
+	
+	/**
+	 * 
+	 */
+	protected String trackerPage = "/timeline";
+	
+	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -131,6 +142,9 @@ public class TimelineActivity extends ListActivity implements
 //		}
 		//
 		refresh();
+		//
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.trackPageView(trackerPage);
 	}
 	
 	/**
@@ -140,6 +154,8 @@ public class TimelineActivity extends ListActivity implements
 		progressDialog =
 			ProgressDialog.show(
 				this, "", getString(R.string.refreshing_wait), false);
+		//
+		tracker.trackEvent(trackerPage, "refresh", null, -1);
 	}
 	
 	/**
@@ -150,6 +166,8 @@ public class TimelineActivity extends ListActivity implements
 		intent.putExtra(ViewTweetActivity.PARAM_KEY_TWEET, tweet);
 		//
 		startActivity(intent);
+		//
+		tracker.trackEvent(trackerPage, "view", null, -1);
 	}
 	
 	/**
@@ -161,6 +179,8 @@ public class TimelineActivity extends ListActivity implements
 			protected void onPostRun(List<Tweet> result) {
 				tweets.set(tweets.indexOf(tweet), result.get(0));
 				adapter.notifyDataSetChanged();
+				//
+				tracker.trackEvent(trackerPage, "retweet", null, -1);
 			};
 		}.execute(tweet);
 	}
@@ -179,6 +199,8 @@ public class TimelineActivity extends ListActivity implements
 		intent.putExtra(NewTweetActivity.PARAM_KEY_TWEET_CONTENT, content);
 		//
 		startActivity(intent);
+		//
+		tracker.trackEvent(trackerPage, "comment", null, -1);
 	}
 	
 	/**
@@ -189,6 +211,8 @@ public class TimelineActivity extends ListActivity implements
 		intent.putExtra(NewTweetActivity.PARAM_KEY_REPLY_TWEET, tweet);
 		//
 		startActivity(intent);
+		//
+		tracker.trackEvent(trackerPage, "reply", null, -1);
 	}
 	
 	/**
@@ -203,6 +227,9 @@ public class TimelineActivity extends ListActivity implements
 			protected void onPostRun(List<Tweet> result) {
 				tweets.set(tweets.indexOf(tweet), result.get(0));
 				favoriteHash.put(result.get(0), !isFav);
+				//
+				tracker.trackEvent(
+					trackerPage, isFav ? "unfavorite" : "favorite", null, -1);
 			}
 		};
 		favCall.setProgressStringId(

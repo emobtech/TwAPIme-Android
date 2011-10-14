@@ -33,6 +33,8 @@ public class DirectMessageTimelineActivity extends TimelineActivity {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		trackerPage = "/dm_timeline";
+		//
 		super.onCreate(savedInstanceState);
 	}
 	
@@ -54,6 +56,8 @@ public class DirectMessageTimelineActivity extends TimelineActivity {
 	 */
 	protected void newDM() {
 		startActivity(new Intent(this, NewDirectMessageActivity.class));
+	    //
+	    tracker.trackEvent(trackerPage, "new_dm", null, -1);
 	}
 
 	/**

@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
 import com.twapime.app.service.UpdateProfileAsyncServiceCall;
 import com.twapime.app.widget.SimpleTextWatcher;
@@ -65,6 +66,11 @@ public class EditUserProfileActivity extends Activity {
 	private EditText location;
 	
 	/**
+	 * 
+	 */
+	private GoogleAnalyticsTracker tracker;
+	
+	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -90,6 +96,8 @@ public class EditUserProfileActivity extends Activity {
 			public void onClick(View v) {
 				setResult(RESULT_CANCELED);
 				finish();
+			    //
+			    tracker.trackEvent("/edit_profile", "cancel", null, -1);
 			}
 		});
 	    //
@@ -111,6 +119,9 @@ public class EditUserProfileActivity extends Activity {
 		bio.setText(user.getString(USERACCOUNT_DESCRIPTION));
 		web.setText(user.getString(USERACCOUNT_URL));
 		location.setText(user.getString(USERACCOUNT_LOCATION));
+	    //
+		tracker = GoogleAnalyticsTracker.getInstance();
+	    tracker.trackPageView("/edit_profile");
 	}
 	
 	/**
@@ -132,6 +143,8 @@ public class EditUserProfileActivity extends Activity {
 			    //
 			    setResult(RESULT_OK, intent);
 			    finish();
+			    //
+			    tracker.trackEvent("/edit_profile", "done", null, -1);
 			}
 		}.execute(user);
 	}

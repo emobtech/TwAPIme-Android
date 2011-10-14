@@ -22,7 +22,7 @@ import android.webkit.WebView;
 
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
-import com.twapime.app.service.AuthAsyncServiceCall;
+import com.twapime.app.service.VerifyCredentialAsyncServiceCall;
 import com.twapime.app.util.IOUtil;
 import com.twitterapime.rest.Credential;
 import com.twitterapime.rest.UserAccountManager;
@@ -183,7 +183,7 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 	public void onAuthorize(Token token) {
 		final TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		//
-		new AuthAsyncServiceCall(this) {
+		new VerifyCredentialAsyncServiceCall(this) {
 			@Override
 			protected void onPostRun(UserAccountManager result) {
 				if (result != null) {

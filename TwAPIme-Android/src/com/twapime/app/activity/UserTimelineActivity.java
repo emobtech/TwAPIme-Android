@@ -52,6 +52,7 @@ public class UserTimelineActivity extends TimelineActivity {
 		//
 		username = user.getString(MetadataSet.USERACCOUNT_USER_NAME);
 		isLoggedUser = app.isLoggedUser(user);
+		trackerPage = "/user_timeline";
 		//
 		super.onCreate(savedInstanceState);
 	}

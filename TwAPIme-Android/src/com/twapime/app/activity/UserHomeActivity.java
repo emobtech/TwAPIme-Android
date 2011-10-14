@@ -14,6 +14,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
 import com.twitterapime.rest.UserAccount;
@@ -26,6 +27,11 @@ public class UserHomeActivity extends TabActivity {
 	 * 
 	 */
 	static final String PARAM_KEY_USER = "PARAM_KEY_USER";
+	
+	/**
+	 * 
+	 */
+	private GoogleAnalyticsTracker tracker;
 	
 	/**
 	 * @see android.app.ActivityGroup#onCreate(android.os.Bundle)
@@ -99,5 +105,8 @@ public class UserHomeActivity extends TabActivity {
 		    spec.setContent(intent);
 		    tabHost.addTab(spec);
 	    }
+		//
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.trackPageView("/profile_home");
 	}
 }

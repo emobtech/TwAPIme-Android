@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
 import com.twapime.app.service.FavoriteTweetAsyncServiceCall;
 import com.twapime.app.service.RepostTweetAsyncServiceCall;
@@ -52,6 +53,11 @@ public class ViewTweetActivity extends Activity {
 	private boolean isFavorite;
 	
 	/**
+	 * 
+	 */
+	private GoogleAnalyticsTracker tracker;
+	
+	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -71,6 +77,9 @@ public class ViewTweetActivity extends Activity {
 		isFavorite = tweet.getBoolean(MetadataSet.TWEET_FAVOURITE);
 		//
 		displayTweet();
+		//
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.trackPageView("/tweet");
 	}
 	
 	/**
@@ -82,6 +91,8 @@ public class ViewTweetActivity extends Activity {
 			protected void onPostRun(List<Tweet> result) {
 				tweet = result.get(0);
 				displayTweet();
+				//
+				tracker.trackEvent("/tweet", "retweet", null, -1);
 			};
 		}.execute(tweet);
 	}
@@ -100,6 +111,8 @@ public class ViewTweetActivity extends Activity {
 		intent.putExtra(NewTweetActivity.PARAM_KEY_TWEET_CONTENT, content);
 		//
 		startActivity(intent);
+		//
+		tracker.trackEvent("/tweet", "comment", null, -1);
 	}
 	
 	/**
@@ -110,6 +123,8 @@ public class ViewTweetActivity extends Activity {
 		intent.putExtra(NewTweetActivity.PARAM_KEY_REPLY_TWEET, tweet);
 		//
 		startActivity(intent);
+		//
+		tracker.trackEvent("/tweet", "reply", null, -1);
 	}
 	
 	/**
@@ -120,6 +135,9 @@ public class ViewTweetActivity extends Activity {
 			new FavoriteTweetAsyncServiceCall(this) {
 			@Override
 			protected void onPostRun(List<Tweet> result) {
+				tracker.trackEvent(
+					"/tweet", isFavorite ? "unfavorite" : "favorite", null, -1);
+				//
 				isFavorite = !isFavorite;
 			}
 		};
@@ -143,6 +161,7 @@ public class ViewTweetActivity extends Activity {
 		intent.putExtra(UserHomeActivity.PARAM_KEY_USER, account);
 		//
 		startActivity(intent);
+		tracker.trackEvent("/tweet", "profile", null, -1);
 	}
 	
 	/**

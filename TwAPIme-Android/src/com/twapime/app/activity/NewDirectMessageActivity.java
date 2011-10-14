@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
 import com.twapime.app.service.SendTweetAsyncServiceCall;
 import com.twapime.app.widget.SimpleTextWatcher;
@@ -42,6 +43,11 @@ public class NewDirectMessageActivity extends Activity {
 	private EditText content;
 
 	/**
+	 * 
+	 */
+	private GoogleAnalyticsTracker tracker;
+
+	/**
 	 * @see com.twapime.app.activity.NewTweetActivity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -65,6 +71,8 @@ public class NewDirectMessageActivity extends Activity {
 			public void onClick(View v) {
 				setResult(RESULT_CANCELED);
 				finish();
+				//
+				tracker.trackEvent("/new_dm", "cancel", null, -1);
 			}
 		});
 		//
@@ -100,6 +108,9 @@ public class NewDirectMessageActivity extends Activity {
 		} else {
 			recipient.requestFocus();
 		}
+		//
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.trackPageView("/new_dm");
 	}
 	
 	/**
@@ -116,6 +127,8 @@ public class NewDirectMessageActivity extends Activity {
 		new SendTweetAsyncServiceCall(this) {
 			protected void onPostRun(java.util.List<Tweet> result) {
 				finish();
+				//
+				tracker.trackEvent("/new_dm", "send", null, -1);
 			};
 		}.execute(tweet);
 	}

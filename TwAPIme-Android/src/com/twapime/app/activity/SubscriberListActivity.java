@@ -32,13 +32,14 @@ public class SubscriberListActivity extends UserListActivity {
 	 * 
 	 */
 	private List list;
-	
+
 	/**
 	 * @see com.twapime.app.activity.TimelineActivity#onCreate(android.os.Bundle)
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		list = (List)getIntent().getExtras().getSerializable(PARAM_KEY_LIST);
+		trackerPage = "/subscriber_list";
 		//
 		super.onCreate(savedInstanceState);
 	}

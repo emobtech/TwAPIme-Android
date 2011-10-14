@@ -45,13 +45,14 @@ public class MemberListActivity extends UserListActivity {
 	 * 
 	 */
 	private boolean belongsLoggedUser;
-	
+
 	/**
 	 * @see com.twapime.app.activity.TimelineActivity#onCreate(android.os.Bundle)
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		list = (List)getIntent().getExtras().getSerializable(PARAM_KEY_LIST);
+		trackerPage = "/member_list";
 		//
 		super.onCreate(savedInstanceState);
 		//
@@ -84,6 +85,8 @@ public class MemberListActivity extends UserListActivity {
 			protected void onPostRun(java.util.List<List> result) {
 				users.remove(member);
 				adapter.notifyDataSetChanged();
+				//
+				tracker.trackEvent(trackerPage, "remove", null, -1);
 			}
 		}.execute(list, member);
 	}

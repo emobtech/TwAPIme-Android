@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
 import com.twapime.app.util.UIUtil;
 import com.twapime.app.widget.LoadingScrollListener;
@@ -59,6 +60,16 @@ public abstract class UserListActivity extends ListActivity {
 	protected Query nextPageQuery;
 	
 	/**
+	 * 
+	 */
+	protected GoogleAnalyticsTracker tracker;
+	
+	/**
+	 * 
+	 */
+	protected String trackerPage = "/user_list";
+	
+	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -91,6 +102,9 @@ public abstract class UserListActivity extends ListActivity {
 							UIUtil.showMessage(
 								getApplicationContext(),
 								R.string.refreshing_wait);
+							//
+							tracker.trackEvent(
+								trackerPage, "load_next_page", null, -1);
 						}
 					});
 					//
@@ -103,6 +117,9 @@ public abstract class UserListActivity extends ListActivity {
 			new LoadingScrollListener(5, loadNextPageTask));
 		//
 		reload();
+		//
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.trackPageView(trackerPage);
 	}
 	
 	/**
@@ -168,6 +185,8 @@ public abstract class UserListActivity extends ListActivity {
 		intent.putExtra(UserHomeActivity.PARAM_KEY_USER, user);
 		//
 		startActivity(intent);
+		//
+		tracker.trackEvent(trackerPage, "view", null, -1);
 	}
 
 	/**

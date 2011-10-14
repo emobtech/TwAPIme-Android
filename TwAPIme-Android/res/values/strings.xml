@@ -107,4 +107,5 @@
     <string name="deleting_wait">Deleting. Please wait...</string>
     <string name="creating_wait">Creating. Please wait...</string>
     <string name="adding_wait">Adding. Please wait...</string>
+    <string name="signing_out_wait">Signing out. Please wait...</string>
 </resources>

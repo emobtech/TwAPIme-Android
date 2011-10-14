@@ -19,7 +19,7 @@ import android.widget.EditText;
 
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
-import com.twapime.app.service.AuthAsyncServiceCall;
+import com.twapime.app.service.VerifyCredentialAsyncServiceCall;
 import com.twapime.app.util.UIUtil;
 import com.twapime.app.widget.SimpleTextWatcher;
 import com.twitterapime.rest.Credential;
@@ -95,7 +95,7 @@ public class AuthActivity extends Activity {
 				app.getOAuthConsumerKey(),
 				app.getOAuthConsumerSecret());
 		//
-		new AuthAsyncServiceCall(this) {
+		new VerifyCredentialAsyncServiceCall(this) {
 			@Override
 			public void onPostRun(UserAccountManager result) {
 				if (result != null) {

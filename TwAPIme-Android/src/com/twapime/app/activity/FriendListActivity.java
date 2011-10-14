@@ -56,6 +56,8 @@ public class FriendListActivity extends UserListActivity {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		trackerPage = "/friend_list";
+		//
 		super.onCreate(savedInstanceState);
 		//
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
@@ -110,6 +112,8 @@ public class FriendListActivity extends UserListActivity {
 			protected void onPostRun(List<UserAccount> result) {
 				users.remove(friend);
 				adapter.notifyDataSetChanged();
+			    //
+			    tracker.trackEvent(trackerPage, "unfollow", null, -1);
 			}
 		}.execute(friend);
 	}

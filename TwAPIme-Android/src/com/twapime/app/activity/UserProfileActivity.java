@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.service.AddMemberAsyncServiceCall;
@@ -91,6 +92,11 @@ public class UserProfileActivity extends Activity {
 	 * 
 	 */
 	private Friendship friendship;
+	
+	/**
+	 * 
+	 */
+	private GoogleAnalyticsTracker tracker;
 
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -111,6 +117,9 @@ public class UserProfileActivity extends Activity {
 		if (!isLoggedUser) {
 			loadUserFriendship();
 		}
+		//
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.trackPageView("/profile");
 	}
 	
 	/**
@@ -212,6 +221,8 @@ public class UserProfileActivity extends Activity {
 			@Override
 			protected void onPostRun(List<UserAccount> result) {
 				isFollowing = true;
+				//
+				tracker.trackEvent("/profile", "follow", null, -1);
 			}
 		}.execute(user);
 	}
@@ -224,6 +235,8 @@ public class UserProfileActivity extends Activity {
 			@Override
 			protected void onPostRun(List<UserAccount> result) {
 				isFollowing = false;
+				//
+				tracker.trackEvent("/profile", "unfollow", null, -1);
 			}
 		}.execute(user);
 	}
@@ -236,6 +249,8 @@ public class UserProfileActivity extends Activity {
 			@Override
 			protected void onPostRun(List<UserAccount> result) {
 				isBlocking = true;
+				//
+				tracker.trackEvent("/profile", "block", null, -1);
 			}
 		}.execute(user);
 	}
@@ -248,6 +263,8 @@ public class UserProfileActivity extends Activity {
 			@Override
 			protected void onPostRun(List<UserAccount> result) {
 				isBlocking = false;
+				//
+				tracker.trackEvent("/profile", "unblock", null, -1);
 			}
 		}.execute(user);
 	}
@@ -264,7 +281,12 @@ public class UserProfileActivity extends Activity {
 			getString(R.string.yes), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
-				new ReportSpamAsyncServiceCall(getParent()).execute(user);
+				new ReportSpamAsyncServiceCall(getParent()) {
+					@Override
+					protected void onPostRun(List<UserAccount> result) {
+						tracker.trackEvent("/profile", "report_spam", "yes",-1);
+					};
+				}.execute(user);
 			}
 		});
 		builder.setNegativeButton(
@@ -272,11 +294,15 @@ public class UserProfileActivity extends Activity {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.cancel();
+				//
+				tracker.trackEvent("/profile", "report_spam", "no", -1);
 			}
 		});
 		//
 		AlertDialog alert = builder.create();
 		alert.show();
+		//
+		tracker.trackEvent("/profile", "report_spam", null, -1);
 	}
 	
 	/**
@@ -287,6 +313,8 @@ public class UserProfileActivity extends Activity {
 		intent.putExtra(EditUserProfileActivity.PARAM_KEY_USER, user);
 		//
 		startActivityForResult(intent, REQUEST_EDIT_USER);
+		//
+		tracker.trackEvent("/profile", "edit", null, -1);
 	}
 	
 	/**
@@ -298,13 +326,20 @@ public class UserProfileActivity extends Activity {
 		intent.putExtra(ListActivity.PARAM_KEY_USER, user);
 		//
 		startActivityForResult(intent, REQUEST_ADD_TO_LIST);
+		//
+		tracker.trackEvent("/profile", "add_to_list", null, -1);
 	}
 	
 	/**
 	 * @param list
 	 */
 	protected void addMember(com.twitterapime.rest.List list) {
-		new AddMemberAsyncServiceCall(this).execute(list, user);
+		new AddMemberAsyncServiceCall(this) {
+			@Override
+			protected void onPostRun(List<com.twitterapime.rest.List> result) {
+				tracker.trackEvent("/profile", "add_to_list", "add_member", -1);
+			};
+		}.execute(list, user);
 	}
 	
 	/**
@@ -317,6 +352,8 @@ public class UserProfileActivity extends Activity {
 			user.getString(MetadataSet.USERACCOUNT_USER_NAME));
 		//
 		startActivity(intent);
+		//
+		tracker.trackEvent("/profile", "new_dm", null, -1);
 	}
 	
 	/**

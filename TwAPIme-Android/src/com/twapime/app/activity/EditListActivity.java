@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
 import com.twapime.app.service.CreateListAsyncServiceCall;
 import com.twapime.app.service.UpdateListAsyncServiceCall;
@@ -63,6 +64,11 @@ public class EditListActivity extends Activity {
 	private Spinner privacy;
 	
 	/**
+	 * 
+	 */
+	private GoogleAnalyticsTracker tracker;
+	
+	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -96,6 +102,8 @@ public class EditListActivity extends Activity {
 			public void onClick(View v) {
 				setResult(RESULT_CANCELED);
 				finish();
+			    //
+			    tracker.trackEvent("/edit_list", "cancel", null, -1);
 			}
 		});
 	    //
@@ -118,6 +126,9 @@ public class EditListActivity extends Activity {
 				"private".equals(list.getString(LIST_MODE)) ? 0 : 1);
 			description.setText(list.getString(LIST_DESCRIPTION));
 		}
+	    //
+		tracker = GoogleAnalyticsTracker.getInstance();
+	    tracker.trackPageView("/edit_list");
 	}
 	
 	/**
@@ -139,6 +150,8 @@ public class EditListActivity extends Activity {
 				    //
 				    setResult(RESULT_OK, intent);
 				    finish();
+				    //
+				    tracker.trackEvent("/edit_list", "done", "create", -1);
 				}
 			}.execute(newList);
 		} else {
@@ -157,6 +170,8 @@ public class EditListActivity extends Activity {
 				    //
 				    setResult(RESULT_OK, intent);
 				    finish();
+				    //
+				    tracker.trackEvent("/edit_list", "done", "update", -1);
 				}
 			}.execute(editList);
 		}

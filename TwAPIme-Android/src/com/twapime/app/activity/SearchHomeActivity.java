@@ -42,21 +42,21 @@ public class SearchHomeActivity extends TabActivity {
 		TabHost tabHost = getTabHost();
 		TabHost.TabSpec spec;
 		//
-		spec = tabHost.newTabSpec("tweets");
-		spec.setIndicator(
-			getString(R.string.tweets), res.getDrawable(R.drawable.chat));
-		//
-		intent = new Intent(this, TweetSearchTimelineActivity.class);
-		intent.putExtra(SearchManager.QUERY, queryStr);
-		//
-		spec.setContent(intent);
-		tabHost.addTab(spec);
-		//
 		spec = tabHost.newTabSpec("users");
 		spec.setIndicator(
 			getString(R.string.users), res.getDrawable(R.drawable.users));
 		//
 		intent = new Intent(this, UserSearchListActivity.class);
+		intent.putExtra(SearchManager.QUERY, queryStr);
+		//
+		spec.setContent(intent);
+		tabHost.addTab(spec);
+		//
+		spec = tabHost.newTabSpec("tweets");
+		spec.setIndicator(
+			getString(R.string.tweets), res.getDrawable(R.drawable.chat));
+		//
+		intent = new Intent(this, TweetSearchTimelineActivity.class);
 		intent.putExtra(SearchManager.QUERY, queryStr);
 		//
 		spec.setContent(intent);

@@ -8,9 +8,9 @@
  */
 package com.twapime.app.activity;
 
-import com.twitterapime.search.QueryComposer;
-
 import android.os.Bundle;
+
+import com.twitterapime.search.QueryComposer;
 
 /**
  * @author ernandes@gmail.com
@@ -21,6 +21,8 @@ public class HomeTimelineActivity extends TimelineActivity {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		trackerPage = "/home_timeine";
+		//
 		super.onCreate(savedInstanceState);
 	}
 	

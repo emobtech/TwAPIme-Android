@@ -10,6 +10,7 @@ package com.twapime.app.activity;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.twitterapime.search.Query;
 import com.twitterapime.search.QueryComposer;
@@ -19,6 +20,16 @@ import com.twitterapime.search.SearchDevice;
  * @author ernandes@gmail.com
  */
 public class TweetSearchTimelineActivity extends TimelineActivity {
+	/**
+	 * @see com.twapime.app.activity.TimelineActivity#onCreate(android.os.Bundle)
+	 */
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		trackerPage = "/tweet_search_timeline";
+		//
+		super.onCreate(savedInstanceState);
+	}
+
 	/**
 	 * @see com.twapime.app.activity.TimelineActivity#refresh()
 	 */

@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import android.app.SearchManager;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.twapime.app.TwAPImeApplication;
 import com.twitterapime.model.Cursor;
@@ -23,6 +24,16 @@ import com.twitterapime.search.QueryComposer;
  * @author ernandes@gmail.com
  */
 public class UserSearchListActivity extends UserListActivity {
+	/**
+	 * @see com.twapime.app.activity.UserListActivity#onCreate(android.os.Bundle)
+	 */
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		trackerPage = "/user_search_list";
+		//
+		super.onCreate(savedInstanceState);
+	}
+	
 	/**
 	 * @see com.twapime.app.activity.UserListActivity#loadNextPage()
 	 */

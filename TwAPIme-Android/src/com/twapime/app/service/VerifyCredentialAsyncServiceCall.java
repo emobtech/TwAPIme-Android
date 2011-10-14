@@ -1,5 +1,5 @@
 /*
- * AuthAsyncServiceCall.java
+ * VerifyCredentialAsyncServiceCall.java
  * 24/09/2011
  * TwAPIme for Android
  * Copyright(c) Ernandes Mourao Junior (ernandes@gmail.com)
@@ -21,12 +21,12 @@ import com.twitterapime.search.LimitExceededException;
 /**
  * @author ernandes@gmail.com
  */
-public class AuthAsyncServiceCall 
+public class VerifyCredentialAsyncServiceCall 
 	extends GetAsyncServiceCall<Credential, Void, UserAccountManager> {
 	/**
 	 * @param context
 	 */
-	public AuthAsyncServiceCall(Activity context) {
+	public VerifyCredentialAsyncServiceCall(Activity context) {
 		super(context);
 	}
 	

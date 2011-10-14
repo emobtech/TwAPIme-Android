@@ -14,6 +14,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
 import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.List;
@@ -25,7 +26,12 @@ public class ListHomeActivity extends TabActivity {
 	/**
 	 * 
 	 */
-	public static final String PARAM_KEY_LIST = "PARAM_KEY_LIST";
+	static final String PARAM_KEY_LIST = "PARAM_KEY_LIST";
+	
+	/**
+	 * 
+	 */
+	private GoogleAnalyticsTracker tracker;
 
 	/**
 	 * @see android.app.ActivityGroup#onCreate(android.os.Bundle)
@@ -76,5 +82,8 @@ public class ListHomeActivity extends TabActivity {
 		    spec.setContent(intent);
 		    tabHost.addTab(spec);
 	    }
+		//
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.trackPageView("/list_home");
 	}
 }

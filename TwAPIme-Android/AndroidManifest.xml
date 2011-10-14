@@ -82,5 +82,12 @@
 			android:label="@string/app_name" android:configChanges="orientation|keyboardHidden" />
 		<activity android:name=".activity.SubscriberListActivity"
 			android:label="@string/app_name" android:configChanges="orientation|keyboardHidden" />
+
+		<receiver android:name="com.google.android.apps.analytics.AnalyticsReceiver"
+			android:exported="true">
+			<intent-filter>
+				<action android:name="com.android.vending.INSTALL_REFERRER" />
+			</intent-filter>
+		</receiver>
 	</application>
 </manifest>

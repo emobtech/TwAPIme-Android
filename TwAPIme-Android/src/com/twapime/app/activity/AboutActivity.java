@@ -20,6 +20,7 @@ import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
 import com.twapime.app.service.GetUserAsyncServiceCall;
 import com.twitterapime.rest.UserAccount;
@@ -28,6 +29,11 @@ import com.twitterapime.rest.UserAccount;
  * @author ernandes@gmail.com
  */
 public class AboutActivity extends Activity {
+	/**
+	 * 
+	 */
+	private GoogleAnalyticsTracker tracker;
+
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
@@ -77,5 +83,8 @@ public class AboutActivity extends Activity {
 				}.execute(new UserAccount(getString(R.string.app_twitter)));
 			}
 		});
+	    //
+		tracker = GoogleAnalyticsTracker.getInstance();
+	    tracker.trackPageView("/about");
 	}
 }

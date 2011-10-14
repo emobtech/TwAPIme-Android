@@ -8,6 +8,8 @@
  */
 package com.twapime.app.activity;
 
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.DialogInterface;
@@ -18,14 +20,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
+import com.twapime.app.service.SignOutAsyncServiceCall;
 import com.twitterapime.rest.UserAccount;
+import com.twitterapime.rest.UserAccountManager;
 
 /**
  * @author ernandes@gmail.com
  */
 public class HomeActivity extends TabActivity {
+	/**
+	 * 
+	 */
+	private GoogleAnalyticsTracker tracker;
+	
 	/**
 	 * @see android.app.ActivityGroup#onCreate(android.os.Bundle)
 	 */
@@ -34,6 +44,12 @@ public class HomeActivity extends TabActivity {
 		super.onCreate(savedInstanceState);
 		//
 		setContentView(R.layout.home);
+		//
+		TwAPImeApplication app = (TwAPImeApplication)getApplication();
+		//
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.startNewSession(
+			app.getGAAccountId(), app.getGAInterval(), this);
 		//
 		Resources res = getResources();
 		TabHost tabHost = getTabHost();
@@ -62,8 +78,6 @@ public class HomeActivity extends TabActivity {
 	    spec.setIndicator(
 	    	getString(R.string.lists), res.getDrawable(R.drawable.doc_lines));
 	    //
-	    TwAPImeApplication app = (TwAPImeApplication)getApplication();
-	    //
 	    Intent intent = new Intent(this, ListActivity.class);
 	    intent.putExtra(
 	    	ListActivity.PARAM_KEY_USER,
@@ -71,6 +85,18 @@ public class HomeActivity extends TabActivity {
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);
+	    //
+	    tracker.trackPageView("/home");
+	}
+	
+	/**
+	 * @see android.app.ActivityGroup#onDestroy()
+	 */
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		//
+		tracker.stopSession();
 	}
 	
 	/**
@@ -78,6 +104,8 @@ public class HomeActivity extends TabActivity {
 	 */
 	protected void newTweet() {
 		startActivity(new Intent(this, NewTweetActivity.class));
+		//
+		tracker.trackEvent("/home", "new_tweet", null, -1);
 	}
 	
 	/**
@@ -92,12 +120,23 @@ public class HomeActivity extends TabActivity {
 			getString(R.string.yes), new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
-				((TwAPImeApplication)getApplication()).saveAccessToken(null);
+				final TwAPImeApplication app =
+					(TwAPImeApplication)getApplication();
 				//
-				startActivity(
-					new Intent(HomeActivity.this, OAuthActivity.class));
-				//
-				finish();
+				new SignOutAsyncServiceCall(getParent()) {
+					@Override
+					protected void onPostRun(List<UserAccountManager> result) {
+						app.saveAccessToken(null);
+						app.setUserAccountManager(null);
+						//
+						startActivity(
+							new Intent(getParent(), OAuthActivity.class));
+						//
+						finish();
+						//
+						tracker.trackEvent("/home", "sign_out", "yes", -1);
+					};
+				}.execute(app.getUserAccountManager());
 			}
 		});
 		builder.setNegativeButton(
@@ -105,11 +144,15 @@ public class HomeActivity extends TabActivity {
 			@Override
 			public void onClick(DialogInterface dialog, int id) {
 				dialog.cancel();
+				//
+				tracker.trackEvent("/home", "sign_out", "no", -1);
 			}
 		});
 		//
 		AlertDialog alert = builder.create();
 		alert.show();
+		//
+		tracker.trackEvent("/home", "sign_out", null, -1);
 	}
 	
 	/**
@@ -124,6 +167,8 @@ public class HomeActivity extends TabActivity {
 			new UserAccount(app.getAccessToken().getUsername()));
 		//
 		startActivity(intent);
+		//
+		tracker.trackEvent("/home", "my_profile", null, -1);
 	}
 	
 	/**
@@ -131,6 +176,8 @@ public class HomeActivity extends TabActivity {
 	 */
 	protected void viewAbout() {
 		startActivity(new Intent(this, AboutActivity.class));
+		//
+		tracker.trackEvent("/home", "about", null, -1);
 	}
 	
 	/**
@@ -171,6 +218,8 @@ public class HomeActivity extends TabActivity {
 	        return true;
 	    case R.id.menu_item_search:
 	    	onSearchRequested();
+			//
+			tracker.trackEvent("/home", "search", null, -1);
 	    	//
 	        return true;
 	    case R.id.menu_item_about:

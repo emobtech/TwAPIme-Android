@@ -15,6 +15,7 @@ import java.util.Properties;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.util.Log;
 
 import com.twitterapime.model.MetadataSet;
@@ -50,6 +51,11 @@ public class TwAPImeApplication extends Application {
 	private Properties oauthProps;
 	
 	/**
+	 * 
+	 */
+	private Properties gaProps;
+
+	/**
 	 * @see android.app.Application#onCreate()
 	 */
 	@Override
@@ -67,11 +73,19 @@ public class TwAPImeApplication extends Application {
 		//
 		try {
 			Context ctx = getApplicationContext();
+			Resources res = ctx.getResources();
 			//
-		    resource = ctx.getResources().openRawResource(R.raw.oauth);
+		    resource = res.openRawResource(R.raw.oauth);
 		    //
 		    oauthProps = new Properties();
 		    oauthProps.load(resource);
+		    //
+		    resource.close();
+		    //
+		    resource = res.openRawResource(R.raw.google_analytics);
+		    //
+		    gaProps = new Properties();
+		    gaProps.load(resource);
 		} catch (Exception e) {
 			Log.e("twapime", "Error by loading Oauth.properties");
 		} finally {
@@ -133,6 +147,22 @@ public class TwAPImeApplication extends Application {
 				return Token.parse(prefs.getString(PREFS_KEY_TOKEN, null));
 			}
 		}
+	}
+	
+	/**
+	 * @return
+	 */
+	public String getGAAccountId() {
+		return gaProps.getProperty("twapime.ga.account_id");
+	}
+
+	/**
+	 * @return
+	 */
+	public int getGAInterval() {
+		String value = gaProps.getProperty("twapime.ga.interval");
+		//
+		return value != null ? Integer.parseInt(value) : 20;
 	}
 	
 	/**

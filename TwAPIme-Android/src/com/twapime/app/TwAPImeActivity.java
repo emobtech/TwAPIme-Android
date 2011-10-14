@@ -14,7 +14,7 @@ import android.os.Bundle;
 
 import com.twapime.app.activity.HomeActivity;
 import com.twapime.app.activity.OAuthActivity;
-import com.twapime.app.service.AuthAsyncServiceCall;
+import com.twapime.app.service.VerifyCredentialAsyncServiceCall;
 import com.twitterapime.rest.Credential;
 import com.twitterapime.rest.UserAccountManager;
 import com.twitterapime.xauth.Token;
@@ -50,7 +50,7 @@ public class TwAPImeActivity extends Activity {
         			app.getOAuthConsumerSecret(),
         			token);
         	//
-        	new AuthAsyncServiceCall(this) {
+        	new VerifyCredentialAsyncServiceCall(this) {
         		@Override
         		protected void onPostRun(UserAccountManager result) {
     				if (result != null) {

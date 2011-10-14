@@ -28,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.service.DeleteListAsyncServiceCall;
@@ -94,6 +95,11 @@ public class ListActivity extends android.app.ListActivity {
 	private boolean pickMode;
 
 	/**
+	 * 
+	 */
+	private GoogleAnalyticsTracker tracker;
+
+	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -127,6 +133,13 @@ public class ListActivity extends android.app.ListActivity {
 		//
 		TwAPImeApplication app = (TwAPImeApplication)getApplicationContext();
 		isLoggedUser = app.isLoggedUser(user);
+	    //
+		tracker = GoogleAnalyticsTracker.getInstance();
+		if (pickMode) {
+			tracker.trackPageView("/pick_list");
+		} else {
+			tracker.trackPageView("/list");
+		}
 	}
 	
 	/**
@@ -163,6 +176,8 @@ public class ListActivity extends android.app.ListActivity {
 	    //
 		setResult(RESULT_OK, intent);
 		finish();
+	    //
+	    tracker.trackEvent("/pick_list", "pick", null, -1);
 	}
 	
 	/**
@@ -173,6 +188,8 @@ public class ListActivity extends android.app.ListActivity {
 		intent.putExtra(ListHomeActivity.PARAM_KEY_LIST, list);
 		//
 		startActivity(intent);
+	    //
+	    tracker.trackEvent("/list", "view", null, -1);
 	}
 	
 	/**
@@ -181,6 +198,8 @@ public class ListActivity extends android.app.ListActivity {
 	protected void newList() {
 		startActivityForResult(
 			new Intent(this, EditListActivity.class), REQUEST_NEW_LIST);
+	    //
+	    tracker.trackEvent("/list", "new", null, -1);
 	}
 	
 	/**
@@ -191,6 +210,8 @@ public class ListActivity extends android.app.ListActivity {
 		intent.putExtra(PARAM_KEY_LIST, list);
 		//
 		startActivityForResult(intent, REQUEST_EDIT_LIST);
+	    //
+	    tracker.trackEvent("/list", "edit", null, -1);
 	}
 	
 	/**
@@ -211,6 +232,8 @@ public class ListActivity extends android.app.ListActivity {
 							java.util.List<com.twitterapime.rest.List> result) {
 							lists.remove(selectedItemPos);
 							adapter.notifyDataSetChanged();
+						    //
+						    tracker.trackEvent("/list", "delete", "yes", -1);
 						};
 						
 					}.execute(list);
@@ -221,11 +244,15 @@ public class ListActivity extends android.app.ListActivity {
 				@Override
 				public void onClick(DialogInterface dialog, int id) {
 					dialog.cancel();
+				    //
+				    tracker.trackEvent("/list", "delete", "no", -1);
 				}
 			});
 		//
 		AlertDialog alert = builder.create();
 		alert.show();
+	    //
+	    tracker.trackEvent("/list", "delete", null, -1);
 	}
 	
 	/**
@@ -242,6 +269,8 @@ public class ListActivity extends android.app.ListActivity {
 				}
 				//
 				adapter.notifyDataSetChanged();
+			    //
+			    tracker.trackEvent("/list", "unfollow", null, -1);
 			}
 		}.execute(list);
 	}
@@ -255,6 +284,8 @@ public class ListActivity extends android.app.ListActivity {
 			protected void onPostRun(List<com.twitterapime.rest.List> result) {
 				lists.set(selectedItemPos, result.get(0));
 				adapter.notifyDataSetChanged();
+			    //
+			    tracker.trackEvent("/list", "follow", null, -1);
 			}
 		}.execute(list);
 	}

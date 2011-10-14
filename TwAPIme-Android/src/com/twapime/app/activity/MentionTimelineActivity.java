@@ -8,10 +8,10 @@
  */
 package com.twapime.app.activity;
 
+import android.os.Bundle;
+
 import com.twitterapime.search.Query;
 import com.twitterapime.search.QueryComposer;
-
-import android.os.Bundle;
 
 /**
  * @author ernandes@gmail.com
@@ -22,6 +22,8 @@ public class MentionTimelineActivity extends TimelineActivity {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		trackerPage = "/mention_timeline";
+		//
 		super.onCreate(savedInstanceState);
 	}
 	

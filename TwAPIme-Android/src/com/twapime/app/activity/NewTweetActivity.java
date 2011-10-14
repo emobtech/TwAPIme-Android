@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
 import com.twapime.app.service.PostTweetAsyncServiceCall;
 import com.twapime.app.widget.SimpleTextWatcher;
@@ -46,6 +47,11 @@ public class NewTweetActivity extends Activity {
 	private Tweet replyTweet;
 
 	/**
+	 * 
+	 */
+	private GoogleAnalyticsTracker tracker;
+
+	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -69,6 +75,8 @@ public class NewTweetActivity extends Activity {
 			public void onClick(View v) {
 				setResult(RESULT_CANCELED);
 				finish();
+				//
+				tracker.trackEvent("/new_tweet", "cancel", null, -1);
 			}
 		});
 		//
@@ -104,6 +112,9 @@ public class NewTweetActivity extends Activity {
 			t.setText("@" + usename + " ");
 			t.setSelection(t.getText().length());
 		}
+		//
+		tracker = GoogleAnalyticsTracker.getInstance();
+		tracker.trackPageView("/new_tweet");
 	}
 	
 	/**
@@ -117,6 +128,8 @@ public class NewTweetActivity extends Activity {
 			@Override
 			protected void onPostRun(List<Tweet> result) {
 				finish();
+				//
+				tracker.trackEvent("/new_tweet", "post", null, -1);
 			};
 		}.execute(tweet);
 	}

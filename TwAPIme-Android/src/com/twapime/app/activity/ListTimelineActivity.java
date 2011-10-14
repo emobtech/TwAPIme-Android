@@ -34,6 +34,7 @@ public class ListTimelineActivity extends TimelineActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		list = (List)getIntent().getExtras().getSerializable(PARAM_KEY_LIST);
+		trackerPage = "/list_timeline";
 		//
 		super.onCreate(savedInstanceState);
 	}

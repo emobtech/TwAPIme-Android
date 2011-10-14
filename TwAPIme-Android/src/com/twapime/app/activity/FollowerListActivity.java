@@ -56,6 +56,8 @@ public class FollowerListActivity extends UserListActivity {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		trackerPage = "/follower_list";
+		//
 		super.onCreate(savedInstanceState);
 		//
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
@@ -110,6 +112,8 @@ public class FollowerListActivity extends UserListActivity {
 			protected void onPostRun(List<UserAccount> result) {
 				users.remove(follower);
 				adapter.notifyDataSetChanged();
+			    //
+			    tracker.trackEvent(trackerPage, "block", null, -1);
 			}
 		}.execute(follower);
 	}
