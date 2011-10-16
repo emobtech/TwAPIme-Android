@@ -141,10 +141,10 @@ public class TimelineActivity extends ListActivity implements
 		sinceID = QueryComposer.count(TWEET_COUNT / 4);
 //		}
 		//
-		refresh();
-		//
 		tracker = GoogleAnalyticsTracker.getInstance();
 		tracker.trackPageView(trackerPage);
+		//
+		refresh();
 	}
 	
 	/**
