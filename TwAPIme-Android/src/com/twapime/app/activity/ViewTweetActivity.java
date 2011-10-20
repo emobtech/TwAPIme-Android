@@ -269,15 +269,10 @@ public class ViewTweetActivity extends Activity {
 	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		boolean result = super.onPrepareOptionsMenu(menu);
+		menu.findItem(R.id.menu_item_favorite).setVisible(!isFavorite);
+		menu.findItem(R.id.menu_item_unfavorite).setVisible(isFavorite);
 		//
-		if (isFavorite) {
-			menu.removeItem(R.id.menu_item_favorite);
-		} else {
-			menu.removeItem(R.id.menu_item_unfavorite);
-		}
-		//
-		return result;
+		return super.onPrepareOptionsMenu(menu);
 	}
 	
 	/**

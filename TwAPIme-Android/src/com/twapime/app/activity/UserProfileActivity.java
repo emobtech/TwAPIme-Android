@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -127,11 +128,15 @@ public class UserProfileActivity extends Activity {
 	 */
 	protected void loadUserProfile() {
 		if (user.getObject(MetadataSet.USERACCOUNT_CREATE_DATE) == null) {
+			findViewById(R.id.view_profile_layout).setVisibility(View.INVISIBLE);
+			//
 			new GetUserAsyncServiceCall(this) {
 				@Override
 				protected void onPostRun(List<UserAccount> result) {
 					user = result.get(0);
 					displayUserProfile();
+					findViewById(R.id.view_profile_layout).setVisibility(
+						View.VISIBLE);
 				}
 			}.execute(user); //load all user data.
 		} else {
@@ -249,6 +254,7 @@ public class UserProfileActivity extends Activity {
 			@Override
 			protected void onPostRun(List<UserAccount> result) {
 				isBlocking = true;
+				canDM = false;
 				//
 				tracker.trackEvent("/profile", "block", null, -1);
 			}
@@ -321,9 +327,13 @@ public class UserProfileActivity extends Activity {
 	 * 
 	 */
 	protected void addToList() {
+		TwAPImeApplication app = (TwAPImeApplication)getApplication();
+		//
 		Intent intent = new Intent(this, ListActivity.class);
 		intent.setAction(Intent.ACTION_PICK);
-		intent.putExtra(ListActivity.PARAM_KEY_USER, user);
+		intent.putExtra(
+			ListActivity.PARAM_KEY_USER,
+			new UserAccount(app.getAccessToken().getUsername()));
 		//
 		startActivityForResult(intent, REQUEST_ADD_TO_LIST);
 		//
@@ -390,38 +400,31 @@ public class UserProfileActivity extends Activity {
 	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		boolean result = super.onPrepareOptionsMenu(menu);
-		//
 		if (!isLoggedUser) {
 			if (friendship == null) {
-				menu.removeItem(R.id.menu_item_follow);
-				menu.removeItem(R.id.menu_item_unfollow);
-				menu.removeItem(R.id.menu_item_unblock);
-				menu.removeItem(R.id.menu_item_block);
-				menu.removeItem(R.id.menu_item_new_dm);
+				menu.findItem(R.id.menu_item_follow).setVisible(false);
+				menu.findItem(R.id.menu_item_unfollow).setVisible(false);
+				menu.findItem(R.id.menu_item_unblock).setVisible(false);
+				menu.findItem(R.id.menu_item_block).setVisible(false);
+				menu.findItem(R.id.menu_item_new_dm).setVisible(false);
 			} else {
-				if (isFollowing) {
-					menu.removeItem(R.id.menu_item_follow);
-				} else {
-					menu.removeItem(R.id.menu_item_unfollow);
-				}
+				menu.findItem(R.id.menu_item_follow).setVisible(!isFollowing);
+				menu.findItem(R.id.menu_item_unfollow).setVisible(isFollowing);
+				//
 				if (isFollowed) {
-					if (isBlocking) {
-						menu.removeItem(R.id.menu_item_block);
-					} else {
-						menu.removeItem(R.id.menu_item_unblock);
-					}
+					menu.findItem(R.id.menu_item_block).setVisible(!isBlocking);
+					menu.findItem(
+						R.id.menu_item_unblock).setVisible(isBlocking);
 				} else {
-					menu.removeItem(R.id.menu_item_unblock);
-					menu.removeItem(R.id.menu_item_block);
+					menu.findItem(R.id.menu_item_block).setVisible(false);
+					menu.findItem(R.id.menu_item_unblock).setVisible(false);
 				}
-				if (!canDM) {
-					menu.removeItem(R.id.menu_item_new_dm);
-				}
+				//
+				menu.findItem(R.id.menu_item_new_dm).setVisible(canDM);
 			}
 		}
 		//
-		return result;
+		return super.onPrepareOptionsMenu(menu);
 	}
 	
 	/**

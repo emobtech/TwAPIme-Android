@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingBottom="2dp" android:paddingTop="4dp">
+	android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingBottom="2dp" android:paddingTop="4dp" android:paddingLeft="2dp" android:paddingRight="2dp">
 	<ImageView android:src="@drawable/icon" android:id="@+id/tweet_row_img_avatar" android:layout_height="48dp" android:layout_width="48dp"/>
 	<LinearLayout android:orientation="vertical"
 		android:layout_weight="1"
