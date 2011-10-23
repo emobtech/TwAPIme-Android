@@ -5,15 +5,15 @@
   android:orientation="vertical" android:id="@+id/edit_list" android:layout_height="fill_parent">
     <ScrollView android:layout_width="fill_parent" android:id="@+id/scrollView1" android:layout_weight="1" android:layout_height="wrap_content">
         <LinearLayout android:layout_width="fill_parent" android:id="@+id/linearLayout2" android:layout_height="fill_parent" android:orientation="vertical">
-            <TextView android:text="@string/name" android:id="@+id/edit_list_txtv_name" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+            <TextView android:text="@string/name" android:id="@+id/edit_list_txtv_name" android:layout_width="wrap_content" android:layout_height="wrap_content" style="@style/TwAPImeThemeFieldTitle"></TextView>
             <EditText android:layout_width="fill_parent" android:id="@+id/edit_list_txtf_name" android:layout_height="wrap_content" android:maxLength="25"></EditText>
-            <TextView android:text="@string/privacy" android:id="@+id/edit_list_txtv_privacy" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+            <TextView android:text="@string/privacy" android:id="@+id/edit_list_txtv_privacy" android:layout_width="wrap_content" android:layout_height="wrap_content" style="@style/TwAPImeThemeFieldTitle"></TextView>
             <Spinner android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/edit_list_spnr_privacy" android:prompt="@string/privacy"></Spinner>
-            <TextView android:text="@string/description" android:id="@+id/edit_list_txtv_description" android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
+            <TextView android:text="@string/description" android:id="@+id/edit_list_txtv_description" android:layout_width="fill_parent" android:layout_height="wrap_content" style="@style/TwAPImeThemeFieldTitle"></TextView>
             <EditText android:layout_width="fill_parent" android:gravity="top" android:layout_height="wrap_content" android:lines="5" android:id="@+id/edit_list_txtf_description" android:maxLength="100"></EditText>
         </LinearLayout>
     </ScrollView>
-    <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout1" android:gravity="center">
+    <LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/linearLayout1" android:gravity="center" style="@style/TwAPImeThemePanelButton">
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/done" android:id="@+id/edit_list_btn_done" android:layout_weight="1"></Button>
         <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/edit_list_btn_cancel" android:text="@string/cancel" android:layout_weight="1"></Button>
     </LinearLayout>

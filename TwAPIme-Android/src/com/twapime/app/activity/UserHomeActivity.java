@@ -17,6 +17,7 @@ import android.widget.TabHost;
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
 import com.twapime.app.TwAPImeApplication;
+import com.twitterapime.model.MetadataSet;
 import com.twitterapime.rest.UserAccount;
 
 /**
@@ -48,6 +49,8 @@ public class UserHomeActivity extends TabActivity {
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		UserAccount user =
 			(UserAccount)intent.getSerializableExtra(PARAM_KEY_USER);
+		//
+		setTitle("@" + user.getString(MetadataSet.USERACCOUNT_USER_NAME));
 		//
 		TabHost tabHost = getTabHost();
 	    TabHost.TabSpec spec;

@@ -72,6 +72,11 @@ public final class AsyncImageLoader {
 	/**
 	 * 
 	 */
+	private final HashMap<String, List<ImageLoaderCallback>> callbacks;
+
+	/**
+	 * 
+	 */
 	private final List<String> urlsBeingDownloaded;
 	
 	/**
@@ -91,6 +96,7 @@ public final class AsyncImageLoader {
     	this.context = context;
     	//
     	urlsBeingDownloaded = new Vector<String>();
+    	callbacks = new HashMap<String, List<ImageLoaderCallback>>();
     	hardCache =
             new LinkedHashMap<String, Drawable>(
             	HARD_CACHE_CAPACITY, 0.75f, true) {
@@ -122,12 +128,23 @@ public final class AsyncImageLoader {
      * @return
      */
     public Drawable loadDrawable(final String imageUrl, 
-    	final ImageLoaderCallback imageCallback) {
+    	ImageLoaderCallback imageCallback) {
     	Drawable drawable = getDrawableFromCache(imageUrl);
     	//
     	if (drawable != null) {
     		return drawable;
     	}
+    	//
+    	synchronized (callbacks) {
+        	List<ImageLoaderCallback> callbacksList = callbacks.get(imageUrl);
+        	//
+        	if (callbacksList == null) {
+        		callbacksList = new Vector<ImageLoaderCallback>();
+        		callbacks.put(imageUrl, callbacksList);
+        	}
+        	//
+        	callbacksList.add(imageCallback);
+		}
     	//
         if (urlsBeingDownloaded.contains(imageUrl)) {
         	return null;
@@ -145,7 +162,15 @@ public final class AsyncImageLoader {
 	        protected void onPostExecute(Drawable drawable) {
 	        	if (drawable != null) {
 	            	addDrawableToCache(imageUrl, drawable);
-	            	imageCallback.imageLoaded(drawable, imageUrl);
+	            	//
+	            	synchronized (callbacks) {
+            			for (ImageLoaderCallback callback
+            					: callbacks.get(imageUrl)) {
+            				callback.imageLoaded(drawable, imageUrl);
+						}
+            			//
+            			callbacks.remove(imageUrl);
+					}
 	        	}
 	        	//
 	        	urlsBeingDownloaded.remove(imageUrl);

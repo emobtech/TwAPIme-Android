@@ -46,7 +46,11 @@ public class ImageViewCallback implements ImageLoaderCallback {
 	        ImageView imageView = null;
 	        //
 	        if (parent != null) {
-	        	imageView = (ImageView)parent.findViewWithTag(url);
+	        	if (url.equals(parent.getTag())) {
+	        		imageView = (ImageView)parent;
+	        	} else {
+	        		imageView = (ImageView)parent.findViewWithTag(url);	
+	        	}
 	        }
 	        //
 	        if (imageView != null) {

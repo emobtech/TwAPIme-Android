@@ -37,6 +37,11 @@ public abstract class UserListActivity extends ListActivity {
 	/**
 	 * 
 	 */
+	public static final String RETURN_KEY_PICK_USER = "RETURN_KEY_PICK_LIST";
+
+	/**
+	 * 
+	 */
 	protected UserArrayAdapter adapter;
 
 	/**
@@ -70,12 +75,18 @@ public abstract class UserListActivity extends ListActivity {
 	protected String trackerPage = "/user_list";
 	
 	/**
+	 * 
+	 */
+	protected boolean pickMode;
+	
+	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//
+		pickMode = Intent.ACTION_PICK.equals(getIntent().getAction());
 		users = new ArrayList<UserAccount>();
 		adapter = new UserArrayAdapter(this, R.layout.row_user, users);
 		setListAdapter(adapter);
@@ -87,7 +98,11 @@ public abstract class UserListActivity extends ListActivity {
 				@Override
 				public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-					viewUser(users.get(position));
+					if (pickMode) {
+						picked(users.get(position));
+					} else {
+						viewUser(users.get(position));
+					}
 				}
 			}
 		);
@@ -116,10 +131,10 @@ public abstract class UserListActivity extends ListActivity {
 		getListView().setOnScrollListener(
 			new LoadingScrollListener(5, loadNextPageTask));
 		//
-		reload();
-		//
 		tracker = GoogleAnalyticsTracker.getInstance();
 		tracker.trackPageView(trackerPage);
+		//
+		reload();
 	}
 	
 	/**
@@ -187,6 +202,19 @@ public abstract class UserListActivity extends ListActivity {
 		startActivity(intent);
 		//
 		tracker.trackEvent(trackerPage, "view", null, -1);
+	}
+	
+	/**
+	 * @param user
+	 */
+	protected void picked(UserAccount user) {
+		Intent intent = new Intent();
+	    intent.putExtra(RETURN_KEY_PICK_USER, user);
+	    //
+		setResult(RESULT_OK, intent);
+		finish();
+	    //
+	    tracker.trackEvent(trackerPage, "pick", null, -1);
 	}
 
 	/**

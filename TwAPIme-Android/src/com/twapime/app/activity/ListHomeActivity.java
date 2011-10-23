@@ -47,6 +47,8 @@ public class ListHomeActivity extends TabActivity {
 		//
 		List list = (List)intent.getExtras().getSerializable(PARAM_KEY_LIST);
 		//
+		setTitle(list.getString(MetadataSet.LIST_NAME));
+		//
 		TabHost tabHost = getTabHost();
 	    TabHost.TabSpec spec;
 	    //

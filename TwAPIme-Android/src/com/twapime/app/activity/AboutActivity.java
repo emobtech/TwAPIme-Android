@@ -8,8 +8,6 @@
  */
 package com.twapime.app.activity;
 
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -22,8 +20,6 @@ import android.widget.TextView;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
-import com.twapime.app.service.GetUserAsyncServiceCall;
-import com.twitterapime.rest.UserAccount;
 
 /**
  * @author ernandes@gmail.com
@@ -71,18 +67,18 @@ public class AboutActivity extends Activity {
 		tv.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new GetUserAsyncServiceCall(AboutActivity.this) {
-					protected void onPostRun(List<UserAccount> result) {
-						Intent intent =
-							new Intent(getContext(), UserHomeActivity.class);
-						intent.putExtra(
-							UserHomeActivity.PARAM_KEY_USER, result.get(0));
-						//
-						startActivity(intent);
-					};
-				}.execute(new UserAccount(getString(R.string.app_twitter)));
+				Intent intent =
+					new Intent(AboutActivity.this, NewTweetActivity.class);
+				intent.putExtra(
+					NewTweetActivity.PARAM_KEY_TWEET_CONTENT,
+					"@" + getString(R.string.app_twitter) + " ");
+				//
+				startActivity(intent);
 			}
 		});
+		//
+		tv = (TextView) findViewById(R.id.about_txtv_feedback);
+		tv.setText(getString(R.string.app_email_feedback));
 	    //
 		tracker = GoogleAnalyticsTracker.getInstance();
 	    tracker.trackPageView("/about");

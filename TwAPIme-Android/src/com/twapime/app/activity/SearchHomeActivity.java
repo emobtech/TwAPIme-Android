@@ -37,6 +37,8 @@ public class SearchHomeActivity extends TabActivity {
 		//
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			queryStr = intent.getStringExtra(SearchManager.QUERY);
+			//
+			setTitle(queryStr);
 		}
 		//
 		TabHost tabHost = getTabHost();

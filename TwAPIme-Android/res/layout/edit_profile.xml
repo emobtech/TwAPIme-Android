@@ -7,49 +7,29 @@
 		<LinearLayout android:layout_width="fill_parent"
 			android:id="@+id/linearLayout2" android:layout_height="fill_parent"
 			android:orientation="vertical">
-			<LinearLayout android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:id="@+id/linearLayout3"
-				android:orientation="horizontal">
-				<ImageView android:paddingTop="2px" android:src="@drawable/icon"
-					android:paddingLeft="2px" android:layout_height="48dp" android:layout_width="48dp" android:id="@+id/edit_user_profile_imgv_avatar"></ImageView>
-				<LinearLayout android:layout_width="wrap_content"
-					android:layout_height="fill_parent" android:id="@+id/linearLayout2"
-					android:orientation="vertical">
-					<TextView android:paddingTop="2px" android:paddingRight="2px"
-						android:textStyle="bold"
-						android:text="" android:layout_width="wrap_content"
-						android:paddingLeft="2px" android:layout_height="wrap_content" android:id="@+id/edit_user_profile_txtv_avatar_name"></TextView>
-					<TextView android:paddingRight="2px"
-						android:text=""
-						android:layout_width="wrap_content" android:paddingLeft="2px"
-						android:layout_height="wrap_content" android:id="@+id/edit_user_profile_txtv_avatar_username"></TextView>
-				</LinearLayout>
-			</LinearLayout>
-			<TextView android:text="@string/name" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:id="@+id/edit_user_profile_txtv_name"></TextView>
-			<EditText android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:id="@+id/edit_user_profile_txtf_name" android:maxLength="20"></EditText>
+			<TextView android:id="@+id/edit_user_profile_txtv_name" android:text="@string/name" android:layout_width="wrap_content" android:layout_height="wrap_content" style="@style/TwAPImeThemeFieldTitle"></TextView>
+			<EditText android:maxLength="20" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="EditText" android:id="@+id/edit_user_profile_txtf_name"></EditText>
 			<TextView android:layout_width="fill_parent"
 				android:layout_height="wrap_content" android:text="@string/bio"
-				android:id="@+id/edit_user_profile_txtv_bio" android:capitalize="none"></TextView>
+				android:id="@+id/edit_user_profile_txtv_bio" style="@style/TwAPImeThemeFieldTitle"></TextView>
 			<EditText android:layout_width="fill_parent"
 				android:gravity="top" android:layout_height="wrap_content"
-				android:id="@+id/edit_user_profile_txtf_bio" android:maxLength="160" android:lines="3"></EditText>
+				android:id="@+id/edit_user_profile_txtf_bio" android:maxLength="160" android:lines="4"></EditText>
 			<TextView android:layout_height="wrap_content"
 				android:layout_width="wrap_content" android:text="@string/web"
-				android:id="@+id/edit_user_profile_txtv_web"></TextView>
+				android:id="@+id/edit_user_profile_txtv_web" style="@style/TwAPImeThemeFieldTitle"></TextView>
 			<EditText android:layout_height="wrap_content"
 				android:layout_width="fill_parent" android:id="@+id/edit_user_profile_txtf_web" android:inputType="textWebEditText" android:maxLength="100"></EditText>
 			<TextView android:layout_height="wrap_content"
 				android:layout_width="wrap_content" android:text="@string/location"
-				android:id="@+id/edit_user_profile_txtv_location"></TextView>
+				android:id="@+id/edit_user_profile_txtv_location" style="@style/TwAPImeThemeFieldTitle"></TextView>
 			<EditText android:layout_height="wrap_content"
 				android:layout_width="fill_parent" android:id="@+id/edit_user_profile_txtf_location" android:maxLength="30"></EditText>
 		</LinearLayout>
 	</ScrollView>
 	<LinearLayout android:layout_height="wrap_content"
 		android:layout_width="fill_parent" android:id="@+id/linearLayout1"
-		android:gravity="center">
+		android:gravity="center" style="@style/TwAPImeThemePanelButton">
 		<Button android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:text="@string/done"
 			android:layout_weight="1" android:id="@+id/edit_user_profile_btn_done"></Button>

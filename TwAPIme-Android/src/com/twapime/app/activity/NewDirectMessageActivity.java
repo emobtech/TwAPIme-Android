@@ -19,14 +19,22 @@ import android.widget.TextView;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
+import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.service.SendTweetAsyncServiceCall;
 import com.twapime.app.widget.SimpleTextWatcher;
+import com.twitterapime.model.MetadataSet;
+import com.twitterapime.rest.UserAccount;
 import com.twitterapime.search.Tweet;
 
 /**
  * @author ernandes@gmail.com
  */
 public class NewDirectMessageActivity extends Activity {
+	/**
+	 * 
+	 */
+	private static final int REQUEST_SEARCH_USER = 0;
+
 	/**
 	 * 
 	 */
@@ -75,7 +83,15 @@ public class NewDirectMessageActivity extends Activity {
 				tracker.trackEvent("/new_dm", "cancel", null, -1);
 			}
 		});
-		//
+	    //
+	    Button btnSearch = (Button)findViewById(R.id.new_dm_btn_search);
+	    btnSearch.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				searchUser();
+			}
+		});
+	    //
 		recipient =	(EditText)findViewById(R.id.new_dm_txtf_recipient);
 		content = (EditText)findViewById(R.id.new_dm_txtf_content);
 		//
@@ -131,5 +147,39 @@ public class NewDirectMessageActivity extends Activity {
 				tracker.trackEvent("/new_dm", "send", null, -1);
 			};
 		}.execute(tweet);
+	}
+	
+	/**
+	 * 
+	 */
+	protected void searchUser() {
+		TwAPImeApplication app = (TwAPImeApplication)getApplication();
+		//
+		Intent intent = new Intent(this, FollowerListActivity.class);
+		intent.setAction(Intent.ACTION_PICK);
+		intent.putExtra(
+			FollowerListActivity.PARAM_KEY_USER,
+			new UserAccount(app.getAccessToken().getUsername()));
+		//
+		startActivityForResult(intent, REQUEST_SEARCH_USER);
+		//
+		tracker.trackEvent("/new_dm", "search_user", null, -1);
+	}
+	
+	/**
+	 * @see android.app.Activity#onActivityResult(int, int, android.content.Intent)
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode,
+		Intent data) {
+		if (resultCode == RESULT_OK && requestCode == REQUEST_SEARCH_USER) {
+			UserAccount user =
+				(UserAccount)data.getSerializableExtra(
+					FollowerListActivity.RETURN_KEY_PICK_USER);
+			//
+			recipient.setText(
+				user.getString(MetadataSet.USERACCOUNT_USER_NAME));
+			content.requestFocus();
+		}
 	}
 }

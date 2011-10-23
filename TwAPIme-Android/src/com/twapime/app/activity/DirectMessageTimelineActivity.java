@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.twapime.app.R;
+import com.twitterapime.model.MetadataSet;
 import com.twitterapime.search.Tweet;
 
 /**
@@ -64,6 +65,15 @@ public class DirectMessageTimelineActivity extends TimelineActivity {
 	 * @see com.twapime.app.activity.TimelineActivity#viewTweet(com.twitterapime.search.Tweet)
 	 */
 	protected void viewTweet(Tweet tweet) {
+		Intent intent = new Intent(this, NewDirectMessageActivity.class);
+		intent.putExtra(
+			NewDirectMessageActivity.PARAM_KEY_DM_RECIPIENT,
+			tweet.getUserAccount().getString(
+				MetadataSet.USERACCOUNT_USER_NAME));
+		//
+		startActivity(intent);
+		//
+		tracker.trackEvent(trackerPage, "view", null, -1);
 	}
 
 	/**

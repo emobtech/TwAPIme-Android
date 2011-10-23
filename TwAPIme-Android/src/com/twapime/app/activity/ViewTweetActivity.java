@@ -244,7 +244,7 @@ public class ViewTweetActivity extends Activity {
 	    	imgV.setTag(imgUrl);
 	        cachedImage =
 	        	AsyncImageLoader.getInstance(this).loadDrawable(
-	        		imgUrl, new ImageViewCallback(null, getCurrentFocus()));
+	        		imgUrl, new ImageViewCallback(null, imgV));
 	    }
 	    //
 	    if (cachedImage == null) {

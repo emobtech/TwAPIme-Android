@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="?android:attr/listPreferredItemHeight" android:paddingBottom="2dp" android:paddingTop="4dp">
-	<ImageView android:src="@drawable/icon" android:layout_height="48dp" android:layout_width="48dp" android:id="@+id/list_row_img_avatar"/>
+	android:layout_width="fill_parent" android:layout_height="wrap_content" style="@style/TwAPImeThemeRowLayout">
+	<ImageView android:layout_height="48dp" android:layout_width="48dp" android:id="@+id/list_row_img_avatar" style="@style/TwAPImeThemeAvatar.RowList"/>
 	<LinearLayout android:orientation="vertical"
 		android:layout_width="0dip" android:layout_weight="1"
-		android:layout_height="fill_parent" android:gravity="center_vertical" android:paddingBottom="2dp" android:paddingLeft="6dp" android:paddingRight="2dp">
+		android:layout_height="fill_parent" android:gravity="center_vertical" android:paddingLeft="4dp" android:paddingRight="4dp">
 		<LinearLayout android:layout_height="wrap_content"
 			android:layout_width="fill_parent" android:id="@+id/linearLayout1">
-			<TextView android:gravity="center_vertical" android:layout_width="fill_parent"
-				android:layout_height="wrap_content" android:textStyle="bold" android:text="list name" android:id="@+id/list_row_txtv_list_name" android:textSize="17dp" android:layout_weight="1"></TextView>
-			<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="TextView" android:id="@+id/list_row_txtv_list_privacy" android:textSize="12dp"></TextView>
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="list name" android:id="@+id/list_row_txtv_list_name" android:layout_weight="1" style="@style/TwAPImeThemeListName.RowList"></TextView>
+			<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/list_row_txtv_list_privacy" android:text="privacy" style="@style/TwAPImeThemeListPrivacy.RowList"></TextView>
 		</LinearLayout>
-			<TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="username" android:id="@+id/list_row_txtv_username" android:textSize="12dp"></TextView>
+			<TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="username" android:id="@+id/list_row_txtv_username" style="@style/TwAPImeThemeProfileName.RowList"></TextView>
 	</LinearLayout>
 </LinearLayout>

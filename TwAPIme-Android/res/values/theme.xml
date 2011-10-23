@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<style name="TwAPImeTheme" parent="@android:style/Theme">
-		<item name="android:textColorLink">@color/white</item>
 		<item name="android:windowTitleStyle">@style/TwAPImeThemeWindowTitle</item>
 		<item name="android:windowTitleBackgroundStyle">@style/TwAPImeThemeWindowTitleBar</item>
 		<item name="android:windowTitleSize">30dp</item>
+		<item name="android:windowContentOverlay">@null</item>
 	</style>
-
+	
 	<style name="TwAPImeThemeWindowTitleBar">
-		<item name="android:background">@color/orange</item>
+		<item name="android:background">@color/blue</item>
 	</style>
 	
 	<style name="TwAPImeThemeWindowTitle" parent="@android:style/WindowTitle">
@@ -21,5 +21,158 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">16dp</item>
         <item name="android:textStyle">bold</item>
+    </style>
+    
+    <style name="TwAPImeThemeRowLayout">
+    	<item name="android:paddingLeft">2dp</item>
+    	<item name="android:paddingRight">2dp</item>
+    	<item name="android:paddingTop">4dp</item>
+    	<item name="android:paddingBottom">2dp</item>
+    </style>
+    
+    <style name="TwAPImeThemeRowLayout.ViewTweet">
+    	<item name="android:background">@color/gray</item>
+    	<item name="android:paddingTop">2dp</item>
+    </style>
+
+    <style name="TwAPImeThemeRowLayout.ViewProfile">
+    	<item name="android:background">@color/gray</item>
+    	<item name="android:paddingTop">2dp</item>
+    </style>
+
+    <style name="TwAPImeThemePanelButton">
+    	<item name="android:padding">2dp</item>
+    	<item name="android:background">@color/gray</item>
+    </style>
+
+    <style name="TwAPImeThemeProfileName">
+        <item name="android:textColor">@color/orange</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TwAPImeThemeProfileName.ViewTweet" />
+
+    <style name="TwAPImeThemeProfileName.ViewProfile" />
+    
+    <style name="TwAPImeThemeProfileName.RowTweet" />
+    
+    <style name="TwAPImeThemeProfileName.RowUser" />
+    
+    <style name="TwAPImeThemeProfileName.RowList">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TwAPImeThemeProfileUsername">
+    	<item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TwAPImeThemeProfileUsername.ViewTweet">
+    	<item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TwAPImeThemeProfileUsername.ViewProfile">
+        <item name="android:textColor">@color/black</item>
+    </style>
+    
+    <style name="TwAPImeThemeProfileUsername.RowUser" />
+
+    <style name="TwAPImeThemeTweetContent">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="TwAPImeThemeTweetContent.RowTweet" />
+
+    <style name="TwAPImeThemeTweetContent.ViewTweet">
+    	<item name="android:padding">4dp</item>
+    	<item name="android:textSize">18dp</item>
+    	<item name="android:minLines">2</item>
+    </style>
+
+    <style name="TwAPImeThemeTweetTime">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="TwAPImeThemeTweetTime.RowTweet">
+    	<item name="android:textSize">12dp</item>
+    </style>
+
+    <style name="TwAPImeThemeTweetTime.ViewTweet">
+    	<item name="android:textStyle">bold</item>
+    	<item name="android:paddingLeft">4dp</item>
+    	<item name="android:paddingTop">2dp</item>
+    </style>
+
+    <style name="TwAPImeThemeTweetSource">
+        <item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="TwAPImeThemeTweetSource.ViewTweet">
+    	<item name="android:textStyle">bold</item>
+    	<item name="android:paddingRight">4dp</item>
+    	<item name="android:paddingTop">2dp</item>
+    </style>
+
+    <style name="TwAPImeThemeTweetReply">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="TwAPImeThemeTweetReply.RowTweet">
+        <item name="android:textSize">12dp</item>
+    </style>
+
+    <style name="TwAPImeThemeTweetReply.ViewTweet">
+        <item name="android:textSize">12dp</item>
+        <item name="android:paddingLeft">4dp</item>
+    	<item name="android:paddingTop">2dp</item>
+    </style>
+
+    <style name="TwAPImeThemeAvatar">
+    	<item name="android:src">@drawable/icon</item>
+    </style>
+    
+    <style name="TwAPImeThemeAvatar.RowTweet" />
+    
+    <style name="TwAPImeThemeAvatar.RowUser" />
+    
+    <style name="TwAPImeThemeAvatar.RowList">
+    	<item name="android:src">@drawable/icon</item>
+    </style>
+    
+    <style name="TwAPImeThemeAvatar.ViewTweet" />
+    
+    <style name="TwAPImeThemeAvatar.ViewProfile" />
+
+    <style name="TwAPImeThemeListName">
+        <item name="android:textColor">@color/orange</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TwAPImeThemeListName.RowList">
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="TwAPImeThemeListPrivacy">
+    	<item name="android:textColor">@color/gray</item>
+    </style>
+
+    <style name="TwAPImeThemeListPrivacy.RowList">
+    	<item name="android:textSize">12dp</item>
+    </style>
+
+    <style name="TwAPImeThemeProfileInfoFieldTitle">
+	    <item name="android:textColor">@color/orange</item>
+	    <item name="android:textSize">18dp</item>
+	    <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TwAPImeThemeProfileInfoFieldValue">
+	    <item name="android:textColor">@color/white</item>
+	    <item name="android:textColorLink">@color/white</item>
+    </style>
+    
+    <style name="TwAPImeThemeFieldTitle">
+	    <item name="android:textColor">@color/white</item>
     </style>
 </resources>

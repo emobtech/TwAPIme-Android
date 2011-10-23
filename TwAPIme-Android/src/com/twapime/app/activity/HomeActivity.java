@@ -46,6 +46,9 @@ public class HomeActivity extends TabActivity {
 		setContentView(R.layout.home);
 		//
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
+		final String username = app.getAccessToken().getUsername();
+		//
+		setTitle("@" + username);
 		//
 		tracker = GoogleAnalyticsTracker.getInstance();
 		tracker.startNewSession(
@@ -79,9 +82,7 @@ public class HomeActivity extends TabActivity {
 	    	getString(R.string.lists), res.getDrawable(R.drawable.doc_lines));
 	    //
 	    Intent intent = new Intent(this, ListActivity.class);
-	    intent.putExtra(
-	    	ListActivity.PARAM_KEY_USER,
-	    	new UserAccount(app.getAccessToken().getUsername()));
+	    intent.putExtra(ListActivity.PARAM_KEY_USER, new UserAccount(username));
 	    //
 	    spec.setContent(intent);
 	    tabHost.addTab(spec);

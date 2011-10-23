@@ -57,7 +57,7 @@ public class ListActivity extends android.app.ListActivity {
 	/**
 	 * 
 	 */
-	static final String PARAM_KEY_USER = "PARAM_KEY_USER";
+	public static final String PARAM_KEY_USER = "PARAM_KEY_USER";
 	
 	/**
 	 * 

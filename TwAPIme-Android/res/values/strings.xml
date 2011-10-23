@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="enter_credentials">Enter credentials</string>
     <string name="app_name">TwAPIme</string>
     <string name="sign_in">Sign In</string>
     <string name="username">Username:</string>
@@ -72,6 +71,7 @@
     <string name="app_website">http://www.twapime.com</string>
     <string name="app_twitter">twapime</string>
     <string name="app_description">TwAPIme for Android is an open source Twitter client app powered by Twitter API ME project. The idea behind this app is to provide to Twitter API ME developers another channel of learning. Developers will be able to see and learn how the API\'s features are implemented in a real and professional app. End users are also welcome to enjoy TwAPIme. Have fun!</string>
+    <string name="app_email_feedback">feedback@twapime.com</string>
     <string name="name">Name</string>
     <string name="description">Description</string>
     <string name="done">Done</string>
@@ -108,4 +108,5 @@
     <string name="creating_wait">Creating. Please wait...</string>
     <string name="adding_wait">Adding. Please wait...</string>
     <string name="signing_out_wait">Signing out. Please wait...</string>
+    <string name="feedback">Feedback</string>
 </resources>
