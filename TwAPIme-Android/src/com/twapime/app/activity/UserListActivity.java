@@ -87,6 +87,11 @@ public abstract class UserListActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		//
 		pickMode = Intent.ACTION_PICK.equals(getIntent().getAction());
+		//
+		if (pickMode) {
+			setTitle(R.string.pick_user);
+		}
+		//
 		users = new ArrayList<UserAccount>();
 		adapter = new UserArrayAdapter(this, R.layout.row_user, users);
 		setListAdapter(adapter);

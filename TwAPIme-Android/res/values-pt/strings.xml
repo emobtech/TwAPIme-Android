@@ -5,9 +5,9 @@
     <string name="username">Usuário:</string>
     <string name="password">Senha:</string>
     <string name="ok">OK</string>
-    <string name="invalid_credentials">Usuário e/ou senha inválida.</string>
+    <string name="invalid_credentials">Usuário e/ou senha não conferem.</string>
     <string name="signing_in_wait">Autenticando. Por favor aguarde...</string>
-    <string name="rate_limit_exceeded">O seu limite de acesso por hora foi excedido. Tente novamente mais tarde.</string>
+    <string name="rate_limit_exceeded">O seu limite de acesso por hora ao Twitter foi excedido. Tente novamente mais tarde.</string>
     <string name="network_access_failure">Não foi possível acessar a rede. Verifique a sua conexão com a internet.</string>
     <string name="yes">Sim</string>
     <string name="no">Não</string>
@@ -30,7 +30,7 @@
     <string name="post">Postar</string>
     <string name="posting_wait">Postando. Por favor aguarde...</string>
     <string name="confirm_sign_out">Você tem certeza que deseja desconectar?</string>
-    <string name="confirm_report_spam">Você tem certeza que deseja reportar este usuário como Spammer?</string>
+    <string name="confirm_report_spam">Você tem certeza que deseja reportar este usuário como spammer?</string>
     <string name="retweet">Retuitar</string>
     <string name="retweeting_wait">Retuitando. Por favor aguarde...</string>
     <string name="comment">Comentar</string>
@@ -70,7 +70,7 @@
     <string name="website">Website</string>
     <string name="app_website">http://www.twapime.com</string>
     <string name="app_twitter">twapime</string>
-    <string name="app_description">TwAPIme for Android is an open source Twitter client app powered by Twitter API ME project. The idea behind this app is to provide to Twitter API ME developers another channel of learning. Developers will be able to see and learn how the API\'s features are implemented in a real and professional app. End users are also welcome to enjoy TwAPIme. Have fun!</string>
+    <string name="app_description">TwAPIme para Android é um projeto de código-live de um cliente para o Twitter, desenvolvido com o projeto Twitter API ME. A idéia atrás deste aplicativo é proporcionar aos desenvolvedores que trabalham com este projeto, mais um canal de aprendizagem. Os desenvolvedores serão capazes de ver e aprender sobre como as funcionalidades da API são construídas em um aplicativo real e profissional. Usuários finais também são bem-vindos a aproveitar o TwAPIme. Divirta-se!</string>
     <string name="app_email_feedback">feedback@twapime.com</string>
     <string name="name">Nome</string>
     <string name="description">Descrição</string>
@@ -87,14 +87,14 @@
     <string name="processing_wait">Processando. Por favor aguarde...</string>
     <string name="confirm_delete_list">Você tem certeza que deseja apagar esta lista?</string>
     <string name="sign_up">Criar Conta</string>
-    <string name="oauth_error_question">Não foi possível te autenticar. Gostaria de tentar novamente?</string>
+    <string name="oauth_error_question">Não foi possível autenticar-te. Gostaria de tentar novamente?</string>
     <string name="oauth_deny_question">Você negou acesso a sua conta. Gostaria de reconsiderar esta decisão?</string>
     <string name="exit_app">Sair</string>
     <string name="loading_wait">Carregando. Por favor aguarde...</string>
     <string name="location">Localização</string>
     <string name="subscribers">Assinantes</string>
     <string name="try_again">Você gostaria de tentar novamente?</string>
-    <string name="unknown_failure">Houve um erro inexperado.</string>
+    <string name="unknown_failure">Houve um erro inesperado.</string>
     <string name="retweeted_by">Retuitado por %1$s</string>
     <string name="in_reply_to">Em resposta a %1$s</string>
     <string name="following">Seguindo</string>
@@ -109,4 +109,11 @@
     <string name="adding_wait">Adicionando. Por favor aguarde...</string>
     <string name="signing_out_wait">Desconectando. Por favor aguarde...</string>
     <string name="feedback">Feedback</string>
+    <string name="edit_profile">Editar Perfil</string>
+    <string name="edit_list">Editar Lista</string>
+    <string name="tweet">Tuite</string>
+    <string name="pick_list">Selecione uma Lista</string>
+    <string name="pick_user">Selecione um Usuário</string>
+    <string name="confirm_block">Você tem certeza que deseja bloquear este usuário?</string>
+    <string name="confirm_unfollow">Você tem certeza que deseja parar de seguir este usuário?</string>
 </resources>

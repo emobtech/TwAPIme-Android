@@ -8,10 +8,6 @@
 			<TextView android:text="TextView" android:id="@+id/about_txtv_description" android:layout_height="wrap_content" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldValue"></TextView>
 		</LinearLayout>
 		<LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout4" android:layout_width="fill_parent" android:orientation="vertical" android:paddingTop="5dp">
-			<TextView android:id="@+id/textView1" android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/version" style="@style/TwAPImeThemeProfileInfoFieldTitle"></TextView>
-			<TextView android:text="TextView" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/about_txtv_version" style="@style/TwAPImeThemeProfileInfoFieldValue"></TextView>
-		</LinearLayout>
-		<LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout4" android:layout_width="fill_parent" android:orientation="vertical" android:paddingTop="5dp">
 			<TextView android:id="@+id/textView1" android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/website" style="@style/TwAPImeThemeProfileInfoFieldTitle"></TextView>
 			<TextView android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/about_txtv_website" android:text="TextView" android:autoLink="web" style="@style/TwAPImeThemeProfileInfoFieldValue"></TextView>
 		</LinearLayout>
@@ -22,6 +18,10 @@
 		<LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout5" android:layout_width="fill_parent" android:orientation="vertical" android:paddingTop="5dp">
 			<TextView android:id="@+id/textView1" android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/feedback" style="@style/TwAPImeThemeProfileInfoFieldTitle"></TextView>
 			<TextView android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/about_txtv_feedback" android:text="TextView" android:autoLink="email" style="@style/TwAPImeThemeProfileInfoFieldValue"></TextView>
+		</LinearLayout>
+		<LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout4" android:layout_width="fill_parent" android:orientation="vertical" android:paddingTop="5dp">
+			<TextView android:id="@+id/textView1" android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/version" style="@style/TwAPImeThemeProfileInfoFieldTitle"></TextView>
+			<TextView android:text="TextView" android:layout_width="fill_parent" android:layout_height="fill_parent" android:id="@+id/about_txtv_version" style="@style/TwAPImeThemeProfileInfoFieldValue"></TextView>
 		</LinearLayout>
 	</LinearLayout>
 </ScrollView>

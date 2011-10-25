@@ -48,7 +48,7 @@ public class HomeActivity extends TabActivity {
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		final String username = app.getAccessToken().getUsername();
 		//
-		setTitle("@" + username);
+		setTitle(username);
 		//
 		tracker = GoogleAnalyticsTracker.getInstance();
 		tracker.startNewSession(
@@ -124,14 +124,14 @@ public class HomeActivity extends TabActivity {
 				final TwAPImeApplication app =
 					(TwAPImeApplication)getApplication();
 				//
-				new SignOutAsyncServiceCall(getParent()) {
+				new SignOutAsyncServiceCall(HomeActivity.this) {
 					@Override
 					protected void onPostRun(List<UserAccountManager> result) {
 						app.saveAccessToken(null);
 						app.setUserAccountManager(null);
 						//
 						startActivity(
-							new Intent(getParent(), OAuthActivity.class));
+							new Intent(HomeActivity.this, OAuthActivity.class));
 						//
 						finish();
 						//

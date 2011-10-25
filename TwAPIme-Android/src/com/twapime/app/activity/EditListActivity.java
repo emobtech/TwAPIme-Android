@@ -119,6 +119,8 @@ public class EditListActivity extends Activity {
 		//
 		Intent intent = getIntent();
 		if (intent.hasExtra(PARAM_KEY_LIST)) {
+			setTitle(R.string.edit_list);
+			//
 			list = (List)intent.getExtras().get(PARAM_KEY_LIST);
 			//
 			name.setText(list.getString(LIST_NAME));

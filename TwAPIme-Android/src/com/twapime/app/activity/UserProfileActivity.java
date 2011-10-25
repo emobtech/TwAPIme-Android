@@ -236,29 +236,77 @@ public class UserProfileActivity extends Activity {
 	 * 
 	 */
 	protected void unfollow() {
-		new UnfollowAsyncServiceCall(this) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(getString(R.string.app_name));
+		builder.setMessage(getString(R.string.confirm_unfollow));
+		builder.setCancelable(false);
+		builder.setPositiveButton(
+			getString(R.string.yes), new DialogInterface.OnClickListener() {
 			@Override
-			protected void onPostRun(List<UserAccount> result) {
-				isFollowing = false;
-				//
-				tracker.trackEvent("/profile", "unfollow", null, -1);
+			public void onClick(DialogInterface dialog, int id) {
+				new UnfollowAsyncServiceCall(getParent()) {
+					@Override
+					protected void onPostRun(List<UserAccount> result) {
+						isFollowing = false;
+						//
+						tracker.trackEvent("/profile", "unfollow", "yes", -1);
+					}
+				}.execute(user);
 			}
-		}.execute(user);
+		});
+		builder.setNegativeButton(
+			getString(R.string.no), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+				//
+				tracker.trackEvent("/profile", "unfollow", "no", -1);
+			}
+		});
+		//
+		AlertDialog alert = builder.create();
+		alert.show();
+		//
+		tracker.trackEvent("/profile", "unfollow", null, -1);
 	}
 
 	/**
 	 * 
 	 */
 	protected void block() {
-		new BlockAsyncServiceCall(this) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(getString(R.string.app_name));
+		builder.setMessage(getString(R.string.confirm_block));
+		builder.setCancelable(false);
+		builder.setPositiveButton(
+			getString(R.string.yes), new DialogInterface.OnClickListener() {
 			@Override
-			protected void onPostRun(List<UserAccount> result) {
-				isBlocking = true;
-				canDM = false;
-				//
-				tracker.trackEvent("/profile", "block", null, -1);
+			public void onClick(DialogInterface dialog, int id) {
+				new BlockAsyncServiceCall(getParent()) {
+					@Override
+					protected void onPostRun(List<UserAccount> result) {
+						isBlocking = true;
+						canDM = false;
+						//
+						tracker.trackEvent("/profile", "block", "yes", -1);
+					}
+				}.execute(user);
 			}
-		}.execute(user);
+		});
+		builder.setNegativeButton(
+			getString(R.string.no), new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int id) {
+				dialog.cancel();
+				//
+				tracker.trackEvent("/profile", "block", "no", -1);
+			}
+		});
+		//
+		AlertDialog alert = builder.create();
+		alert.show();
+		//
+		tracker.trackEvent("/profile", "block", null, -1);
 	}
 	
 	/**

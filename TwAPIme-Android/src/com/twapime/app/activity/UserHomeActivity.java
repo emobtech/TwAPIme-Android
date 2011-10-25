@@ -50,7 +50,7 @@ public class UserHomeActivity extends TabActivity {
 		UserAccount user =
 			(UserAccount)intent.getSerializableExtra(PARAM_KEY_USER);
 		//
-		setTitle("@" + user.getString(MetadataSet.USERACCOUNT_USER_NAME));
+		setTitle(user.getString(MetadataSet.USERACCOUNT_USER_NAME));
 		//
 		TabHost tabHost = getTabHost();
 	    TabHost.TabSpec spec;

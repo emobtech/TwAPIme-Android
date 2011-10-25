@@ -11,12 +11,12 @@ package com.twapime.app.activity;
 import impl.android.com.twitterapime.xauth.ui.WebViewOAuthDialogWrapper;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
@@ -43,10 +43,10 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 	 */
 	private Runnable tryAgainError;
 	
-	/**
-	 * 
-	 */
-	private ProgressDialog progressDialog;
+//	/**
+//	 * 
+//	 */
+//	private ProgressDialog progressDialog;
 
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -55,21 +55,17 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		//
 		WebView webView = new WebView(this);
 		webView.getSettings().setJavaScriptEnabled(true);
 		//
 		setContentView(webView);
 		//
-		progressDialog =
-			ProgressDialog.show(
-				this, "", getString(R.string.loading_wait), false);
-		//
 		webView.setWebChromeClient(new WebChromeClient() {
 			public void onProgressChanged(WebView view, int progress) {
-				if (!progressDialog.isShowing() && progress < 100) {
-					progressDialog.show();
-				} else if (progress == 100 && progressDialog.isShowing()) {
-					progressDialog.dismiss();
+				if (progress == 100) {
+					setProgressBarIndeterminateVisibility(false);
 				}
 			}
 		});
@@ -105,6 +101,7 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 	protected void login() {
 		if (IOUtil.isOnline(this)) {
 			loginWrapper.login();
+			setProgressBarIndeterminateVisibility(true);
 		} else {
 			tryAgain(R.string.network_access_failure);
 		}

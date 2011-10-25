@@ -30,7 +30,7 @@
     <string name="post">Post</string>
     <string name="posting_wait">Posting. Please wait...</string>
     <string name="confirm_sign_out">Are you sure you want to sign out?</string>
-    <string name="confirm_report_spam">Are you sure you want to report this user as Spammer?</string>
+    <string name="confirm_report_spam">Are you sure you want to report this user as spammer?</string>
     <string name="retweet">Retweet</string>
     <string name="retweeting_wait">Retweeting. Please wait...</string>
     <string name="comment">Comment</string>
@@ -70,7 +70,7 @@
     <string name="website">Website</string>
     <string name="app_website">http://www.twapime.com</string>
     <string name="app_twitter">twapime</string>
-    <string name="app_description">TwAPIme for Android is an open source Twitter client app powered by Twitter API ME project. The idea behind this app is to provide to Twitter API ME developers another channel of learning. Developers will be able to see and learn how the API\'s features are implemented in a real and professional app. End users are also welcome to enjoy TwAPIme. Have fun!</string>
+    <string name="app_description">TwAPIme for Android is an open source Twitter client app powered by Twitter API ME project. The idea behind this app is to provide to this project\'s developers, one more channel of learning. Developers will be able to see and learn how the API\'s features are implemented in a real and professional app. End users are also welcome to enjoy TwAPIme. Have fun!</string>
     <string name="app_email_feedback">feedback@twapime.com</string>
     <string name="name">Name</string>
     <string name="description">Description</string>
@@ -109,4 +109,11 @@
     <string name="adding_wait">Adding. Please wait...</string>
     <string name="signing_out_wait">Signing out. Please wait...</string>
     <string name="feedback">Feedback</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="edit_list">Edit List</string>
+    <string name="tweet">Tweet</string>
+    <string name="pick_list">Pick a List</string>
+    <string name="pick_user">Pick a User</string>
+    <string name="confirm_block">Are you sure you want to block this user?</string>
+    <string name="confirm_unfollow">Are you sure you want to unfollow this user?</string>
 </resources>

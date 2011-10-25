@@ -115,6 +115,10 @@ public class ListActivity extends android.app.ListActivity {
 		setListAdapter(adapter);
 		registerForContextMenu(getListView());
 		//
+		if (pickMode) {
+			setTitle(R.string.pick_list);
+		}
+		//
 		getListView().setOnItemClickListener(
 			new AdapterView.OnItemClickListener() {
 				@Override
