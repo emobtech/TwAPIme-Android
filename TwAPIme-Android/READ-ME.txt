@@ -1,16 +1,15 @@
 ********************************************************************************
-*                      TwAPIme for Android 1.0 - READ ME                       *
+*                      TwAPIme for Android 1.1 - READ ME                       *
 ********************************************************************************
 *                           http://www.twapime.com                             *
 ********************************************************************************
 
  DESCRIPTION:
 ********************************************************************************
-TwAPIme for Android is an open source Twitter client app built on Android 
-platform and powered by Twitter API ME project. The idea behind this app is to 
-provide to Twitter API ME developers another channel of learning. Developers 
-will be able to see and learn how the API's features are implemented in a real 
-and professional app.
+TwAPIme for Android is an open source Twitter client app powered by Twitter API 
+ME project. The idea behind this app is to provide to this project's developers,
+one more channel of learning. Developers will be able to see and learn how the 
+API's features are implemented in a real and professional app.
 
  LICENSE:
 ********************************************************************************
@@ -31,32 +30,47 @@ powered by Twitter API ME project and providing a link to website's project.
 + Development Environment
   - Java SDK 1.6
   - Android SDK 1.1 or newer
-  - Twitter API ME for Android v1.7
+  - Twitter API ME for Android v1.8
 
- XAUTH SET UP:
+ OAUTH SET UP:
 ********************************************************************************
-To set up the code with your own app's xAuth keys (consumer key and secret), you
-must replace the value of the properties CONSUMER_KEY and CONSUMER_SECRET, 
-defined in the com.twapime.app.activity.AuthActivity class, to your app's.
+To set up the app with your own OAuth keys and Url callback, you must replace 
+the properties values in the "res/raw/oauth.properties" file.
 
-To enable Single Access Token authentication, just uncomment the code in the 
-method signIn() in com.twapime.app.activity.AuthActivity class, besides 
-replacing the token's keys (access and secret) to your app's.
+- twapime.oauth.consumer_key=<your consumer key goes here>
+- twapime.oauth.consumer_secret=<your consumer secret goes here>
+- twapime.oauth.callback_url=<your url callback goes here>
+
+To enable Single Access Token authentication, just set "true" in the property 
+"twapime.oauth.use_single_access_token" and replace the other properties values.
+
+- twapime.oauth.use_single_access_token=[true|false]
+- twapime.oauth.token=<your token goes here>
+- twapime.oauth.token_secret=<your token secret goes here>
+- twapime.oauth.user_id=<your user id (just put 12345 if you want) goes here>
+- twapime.oauth.screen_name=<your scree name (username) goes here>
+
+ GOOGLE ANALYTICS SET UP:
+********************************************************************************
+To set up the app with your own Google Analytics account, you must replace the 
+properties values in the "res/raw/google_analytics.properties" file.
+
+- twapime.ga.account_id=<your account id goes here>
+- twapime.ga.interval=[1...N seconds]
 
  AVAILABLE IN THIS VERSION:
 ********************************************************************************
-- View Home, Mentions, DM and List timeline
+- Home, Mentions, DM and List timelines
 - Post Tweet
-- Send DM
 - Reply and comment tweet
-- Favorite/unfavorite tweet
 - Retweet
-- View user profile
-- View user's lists
-- View List's members
-- Follow/unfollow user
-- Block/unblock user
-- Users search
+- Send DM
+- Favorite/unfavorite tweet
+- User profile management
+- List management
+- Follow and unfollow users
+- Block and unblock users
+- Users and tweet search
 - Report spammer
 
  KNOWN BUGS IN THIS VERSION:
@@ -67,6 +81,6 @@ replacing the token's keys (access and secret) to your app's.
 ********************************************************************************
 - None.
 
- COMING NEXT VERSION: 1.1
+ COMING NEXT VERSION: 1.2
 ********************************************************************************
 - Let us know what you need.
