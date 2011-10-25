@@ -70,7 +70,7 @@
     <string name="website">Website</string>
     <string name="app_website">http://www.twapime.com</string>
     <string name="app_twitter">twapime</string>
-    <string name="app_description">TwAPIme para Android é um projeto de código-live de um cliente para o Twitter, desenvolvido com o projeto Twitter API ME. A idéia atrás deste aplicativo é proporcionar aos desenvolvedores que trabalham com este projeto, mais um canal de aprendizagem. Os desenvolvedores serão capazes de ver e aprender sobre como as funcionalidades da API são construídas em um aplicativo real e profissional. Usuários finais também são bem-vindos a aproveitar o TwAPIme. Divirta-se!</string>
+    <string name="app_description">TwAPIme para Android é um projeto de código aberto de um cliente para o Twitter, desenvolvido com o projeto Twitter API ME. A idéia atrás deste aplicativo é proporcionar aos desenvolvedores que trabalham com este projeto, mais um canal de aprendizagem. Os desenvolvedores serão capazes de ver e aprender sobre como as funcionalidades da API são construídas em um aplicativo real e profissional. Usuários finais também são bem-vindos a aproveitar o TwAPIme. Divirta-se!</string>
     <string name="app_email_feedback">feedback@twapime.com</string>
     <string name="name">Nome</string>
     <string name="description">Descrição</string>
