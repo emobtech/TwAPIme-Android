@@ -135,7 +135,7 @@
     <style name="TwAPImeThemeAvatar.RowUser" />
     
     <style name="TwAPImeThemeAvatar.RowList">
-    	<item name="android:src">@drawable/icon</item>
+    	<item name="android:src">@drawable/list</item>
     </style>
     
     <style name="TwAPImeThemeAvatar.ViewTweet" />
