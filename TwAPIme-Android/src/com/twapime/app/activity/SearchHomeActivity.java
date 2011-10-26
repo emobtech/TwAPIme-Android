@@ -56,7 +56,7 @@ public class SearchHomeActivity extends TabActivity {
 		//
 		spec = tabHost.newTabSpec("tweets");
 		spec.setIndicator(
-			getString(R.string.tweets), res.getDrawable(R.drawable.chat));
+			getString(R.string.tweets), res.getDrawable(R.drawable.tweets));
 		//
 		intent = new Intent(this, TweetSearchTimelineActivity.class);
 		intent.putExtra(SearchManager.QUERY, queryStr);

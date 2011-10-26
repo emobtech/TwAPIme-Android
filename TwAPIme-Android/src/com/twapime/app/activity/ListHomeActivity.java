@@ -54,7 +54,7 @@ public class ListHomeActivity extends TabActivity {
 	    //
 	    spec = tabHost.newTabSpec("timeline");
 	    spec.setIndicator(
-	    	getString(R.string.tweets), res.getDrawable(R.drawable.chat));
+	    	getString(R.string.tweets), res.getDrawable(R.drawable.tweets));
 	    //
 		intent = new Intent(this, ListTimelineActivity.class);
 		intent.putExtra(ListTimelineActivity.PARAM_KEY_LIST, list);

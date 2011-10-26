@@ -14,7 +14,7 @@
 			android:value=".activity.SearchHomeActivity" />
 
 		<activity android:name=".TwAPImeActivity" android:label="@string/app_name"
-			android:noHistory="true" android:configChanges="orientation|keyboardHidden">
+			android:configChanges="orientation|keyboardHidden">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -30,7 +30,7 @@
 				android:resource="@xml/searchable" />
 		</activity>
 
-		<activity android:name=".activity.AuthActivity"
+		<activity android:name=".activity.XAuthActivity"
 			android:label="@string/app_name" android:noHistory="true"
 			android:configChanges="orientation|keyboardHidden" />
 		<activity android:name=".activity.OAuthActivity"

@@ -43,11 +43,6 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 	 */
 	private Runnable tryAgainError;
 	
-//	/**
-//	 * 
-//	 */
-//	private ProgressDialog progressDialog;
-
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
@@ -64,9 +59,7 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 		//
 		webView.setWebChromeClient(new WebChromeClient() {
 			public void onProgressChanged(WebView view, int progress) {
-				if (progress == 100) {
-					setProgressBarIndeterminateVisibility(false);
-				}
+				setProgressBarIndeterminateVisibility(progress != 100);
 			}
 		});
 		//
@@ -101,7 +94,6 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 	protected void login() {
 		if (IOUtil.isOnline(this)) {
 			loginWrapper.login();
-			setProgressBarIndeterminateVisibility(true);
 		} else {
 			tryAgain(R.string.network_access_failure);
 		}

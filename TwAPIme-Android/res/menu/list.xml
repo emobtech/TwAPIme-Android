@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="@string/edit" android:id="@+id/menu_item_edit"></item>
-    <item android:title="@string/delete" android:id="@+id/menu_item_delete"></item>
-    <item android:title="@string/unfollow" android:id="@+id/menu_item_unfollow"></item>
-    <item android:title="@string/follow" android:id="@+id/menu_item_follow"></item>
+    <item android:title="@string/edit" android:id="@+id/menu_item_edit" android:icon="@drawable/edit"></item>
+    <item android:title="@string/delete" android:id="@+id/menu_item_delete" android:icon="@drawable/delete"></item>
+    <item android:title="@string/unfollow" android:id="@+id/menu_item_unfollow" android:icon="@drawable/unfollow"></item>
+    <item android:title="@string/follow" android:id="@+id/menu_item_follow" android:icon="@drawable/follow"></item>
 </menu>

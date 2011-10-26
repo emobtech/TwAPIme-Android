@@ -22,6 +22,7 @@ import android.widget.TabHost;
 
 import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.twapime.app.R;
+import com.twapime.app.TwAPImeActivity;
 import com.twapime.app.TwAPImeApplication;
 import com.twapime.app.service.SignOutAsyncServiceCall;
 import com.twitterapime.rest.UserAccount;
@@ -60,26 +61,26 @@ public class HomeActivity extends TabActivity {
 	    //
 	    spec = tabHost.newTabSpec("home");
 	    spec.setIndicator(
-	    	getString(R.string.home), res.getDrawable(R.drawable.chat));
+	    	getString(R.string.home), res.getDrawable(R.drawable.home));
 	    spec.setContent(new Intent(this, HomeTimelineActivity.class));
 	    tabHost.addTab(spec);
 	    //
 	    spec = tabHost.newTabSpec("mention");
 	    spec.setIndicator(
-	    	getString(R.string.mentions), res.getDrawable(R.drawable.at));
+	    	getString(R.string.mentions), res.getDrawable(R.drawable.mentions));
 	    spec.setContent(new Intent(this, MentionTimelineActivity.class));
 	    tabHost.addTab(spec);
 	    //
 	    spec = tabHost.newTabSpec("dm");
 	    spec.setIndicator(
 	    	getString(
-	    		R.string.direct_message), res.getDrawable(R.drawable.mail));
+	    		R.string.direct_message), res.getDrawable(R.drawable.dms));
 	    spec.setContent(new Intent(this, DirectMessageTimelineActivity.class));
 	    tabHost.addTab(spec);
 	    //
 	    spec = tabHost.newTabSpec("list");
 	    spec.setIndicator(
-	    	getString(R.string.lists), res.getDrawable(R.drawable.doc_lines));
+	    	getString(R.string.lists), res.getDrawable(R.drawable.lists));
 	    //
 	    Intent intent = new Intent(this, ListActivity.class);
 	    intent.putExtra(ListActivity.PARAM_KEY_USER, new UserAccount(username));
@@ -131,7 +132,8 @@ public class HomeActivity extends TabActivity {
 						app.setUserAccountManager(null);
 						//
 						startActivity(
-							new Intent(HomeActivity.this, OAuthActivity.class));
+							new Intent(
+								HomeActivity.this, TwAPImeActivity.class));
 						//
 						finish();
 						//

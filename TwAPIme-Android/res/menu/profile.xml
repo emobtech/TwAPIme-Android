@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="@string/follow" android:id="@+id/menu_item_follow" android:icon="@drawable/round_plus"></item>
-    <item android:title="@string/new_dm" android:id="@+id/menu_item_new_dm" android:icon="@drawable/round_plus"></item>
-    <item android:title="@string/add_to_list" android:id="@+id/menu_item_add_to_list" android:icon="@drawable/round_plus"></item>
-    <item android:title="@string/unfollow" android:id="@+id/menu_item_unfollow" android:icon="@drawable/round_minus"></item>
-    <item android:title="@string/block" android:id="@+id/menu_item_block" android:icon="@drawable/cancel"></item>
-    <item android:title="@string/unblock" android:id="@+id/menu_item_unblock" android:icon="@drawable/round_checkmark"></item>
-    <item android:title="@string/report_spam" android:id="@+id/menu_item_report_spam" android:icon="@drawable/hand"></item>
+    <item android:title="@string/follow" android:id="@+id/menu_item_follow" android:icon="@drawable/follow"></item>
+    <item android:title="@string/new_dm" android:id="@+id/menu_item_new_dm" android:icon="@drawable/compose"></item>
+    <item android:title="@string/add_to_list" android:id="@+id/menu_item_add_to_list" android:icon="@drawable/add_to_list"></item>
+    <item android:title="@string/unfollow" android:id="@+id/menu_item_unfollow" android:icon="@drawable/unfollow"></item>
+    <item android:title="@string/block" android:id="@+id/menu_item_block" android:icon="@drawable/block"></item>
+    <item android:title="@string/unblock" android:id="@+id/menu_item_unblock" android:icon="@drawable/unblock"></item>
+    <item android:title="@string/report_spam" android:id="@+id/menu_item_report_spam" android:icon="@drawable/report_spam"></item>
 </menu>

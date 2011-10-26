@@ -57,7 +57,8 @@ public class UserHomeActivity extends TabActivity {
 	    //
 	    spec = tabHost.newTabSpec("profile");
 	    spec.setIndicator(
-	    	getString(R.string.profile), res.getDrawable(R.drawable.user));
+	    	getString(R.string.profile),
+	    	res.getDrawable(R.drawable.my_profile));
 	    //
 		intent = new Intent(this, UserProfileActivity.class);
 		intent.putExtra(UserProfileActivity.PARAM_KEY_USER, user);
@@ -67,7 +68,7 @@ public class UserHomeActivity extends TabActivity {
 	    //
 	    spec = tabHost.newTabSpec("tweets");
 	    spec.setIndicator(
-	    	getString(R.string.tweets), res.getDrawable(R.drawable.chat));
+	    	getString(R.string.tweets), res.getDrawable(R.drawable.tweets));
 	    //
 		intent = new Intent(this, UserTimelineActivity.class);
 		intent.putExtra(UserTimelineActivity.PARAM_KEY_USER, user);
@@ -100,7 +101,7 @@ public class UserHomeActivity extends TabActivity {
 		    spec = tabHost.newTabSpec("lists");
 		    spec.setIndicator(
 		    	getString(R.string.lists),
-		    	res.getDrawable(R.drawable.doc_lines));
+		    	res.getDrawable(R.drawable.lists));
 		    //
 			intent = new Intent(this, ListActivity.class);
 			intent.putExtra(ListActivity.PARAM_KEY_USER, user);
