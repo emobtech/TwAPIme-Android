@@ -339,6 +339,7 @@ public class ListActivity extends android.app.ListActivity {
 		MenuItem item = menu.findItem(R.id.menu_item_new_tweet);
 		if (item != null) {
 			item.setTitle(R.string.new_list);
+			item.setIcon(R.drawable.follow);
 		}
 		//
 		return result;
