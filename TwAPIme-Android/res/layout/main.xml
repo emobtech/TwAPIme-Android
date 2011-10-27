@@ -59,7 +59,7 @@
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/app_website" android:autoLink="web" android:paddingBottom="6dp"/>
+                android:text="@string/app_website" android:autoLink="web" style="@style/TwAPImeThemeMainAppWebsite"/>
 
         </LinearLayout>
 

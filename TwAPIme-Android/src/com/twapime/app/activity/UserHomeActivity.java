@@ -57,8 +57,7 @@ public class UserHomeActivity extends TabActivity {
 	    //
 	    spec = tabHost.newTabSpec("profile");
 	    spec.setIndicator(
-	    	getString(R.string.profile),
-	    	res.getDrawable(R.drawable.my_profile));
+	    	getString(R.string.profile), res.getDrawable(R.drawable.profile));
 	    //
 		intent = new Intent(this, UserProfileActivity.class);
 		intent.putExtra(UserProfileActivity.PARAM_KEY_USER, user);

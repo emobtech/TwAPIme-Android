@@ -3,7 +3,7 @@
 	<style name="TwAPImeTheme" parent="@android:style/Theme">
 		<item name="android:windowTitleStyle">@style/TwAPImeThemeWindowTitle</item>
 		<item name="android:windowTitleBackgroundStyle">@style/TwAPImeThemeWindowTitleBar</item>
-		<item name="android:windowTitleSize">30dp</item>
+		<item name="android:windowTitleSize">40dp</item>
 		<item name="android:windowContentOverlay">@null</item>
 		<item name="android:colorBackground">@color/white</item>
 		<item name="android:windowBackground">@color/white</item>
@@ -175,5 +175,11 @@
     <style name="TwAPImeThemeFieldTitle">
     	<item name="android:padding">2dp</item>
 	    <item name="android:textColor">@color/gray</item>
+    </style>
+    
+    <style name="TwAPImeThemeMainAppWebsite">
+    	<item name="android:textSize">18dp</item>
+	    <item name="android:textColorLink">@color/gray</item>
+	    <item name="android:paddingBottom">10dp</item>
     </style>
 </resources>
