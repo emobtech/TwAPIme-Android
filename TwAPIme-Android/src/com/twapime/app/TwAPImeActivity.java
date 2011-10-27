@@ -48,6 +48,8 @@ public class TwAPImeActivity extends Activity {
 			public void onClick(View v) {
 				startActivity(
 					new Intent(TwAPImeActivity.this, OAuthActivity.class));
+				//
+				finish();
 			}
 		});
 		//

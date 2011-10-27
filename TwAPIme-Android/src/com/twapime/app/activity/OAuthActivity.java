@@ -57,6 +57,8 @@ public class OAuthActivity extends Activity implements OAuthDialogListener {
 		//
 		setContentView(webView);
 		//
+		setProgressBarIndeterminateVisibility(true);
+		//
 		webView.setWebChromeClient(new WebChromeClient() {
 			public void onProgressChanged(WebView view, int progress) {
 				setProgressBarIndeterminateVisibility(progress != 100);
