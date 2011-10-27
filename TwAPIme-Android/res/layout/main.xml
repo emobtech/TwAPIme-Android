@@ -18,8 +18,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="2dp"
             android:paddingLeft="2dp"
-            android:paddingTop="2dp"
-            android:src="@drawable/icon" >
+            android:paddingTop="2dp" android:src="@drawable/logo">
         </ImageView>
     </LinearLayout>
 
