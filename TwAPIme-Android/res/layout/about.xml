@@ -4,7 +4,6 @@
 	<LinearLayout android:id="@+id/linearLayout1"
 		android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="fill_parent">
 		<LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout4" android:layout_width="fill_parent" android:orientation="vertical" android:paddingTop="5dp">
-			<TextView android:id="@+id/textView1" android:layout_height="wrap_content" android:layout_width="fill_parent" android:text="@string/about" style="@style/TwAPImeThemeProfileInfoFieldTitle"></TextView>
 			<TextView android:text="TextView" android:id="@+id/about_txtv_description" android:layout_height="wrap_content" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldValue"></TextView>
 		</LinearLayout>
 		<LinearLayout android:layout_height="wrap_content" android:id="@+id/linearLayout4" android:layout_width="fill_parent" android:orientation="vertical" android:paddingTop="5dp">

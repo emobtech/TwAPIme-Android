@@ -33,7 +33,7 @@ public class NewDirectMessageActivity extends Activity {
 	/**
 	 * 
 	 */
-	private static final int REQUEST_SEARCH_USER = 0;
+	private static final int REQUEST_LOOKUP_USER = 0;
 
 	/**
 	 * 
@@ -84,11 +84,11 @@ public class NewDirectMessageActivity extends Activity {
 			}
 		});
 	    //
-	    Button btnSearch = (Button)findViewById(R.id.new_dm_btn_search);
-	    btnSearch.setOnClickListener(new View.OnClickListener() {
+	    Button btnLookup = (Button)findViewById(R.id.new_dm_btn_lookup);
+	    btnLookup.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				searchUser();
+				lookupUser();
 			}
 		});
 	    //
@@ -152,7 +152,7 @@ public class NewDirectMessageActivity extends Activity {
 	/**
 	 * 
 	 */
-	protected void searchUser() {
+	protected void lookupUser() {
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
 		//
 		Intent intent = new Intent(this, FollowerListActivity.class);
@@ -161,7 +161,7 @@ public class NewDirectMessageActivity extends Activity {
 			FollowerListActivity.PARAM_KEY_USER,
 			new UserAccount(app.getAccessToken().getUsername()));
 		//
-		startActivityForResult(intent, REQUEST_SEARCH_USER);
+		startActivityForResult(intent, REQUEST_LOOKUP_USER);
 		//
 		tracker.trackEvent("/new_dm", "search_user", null, -1);
 	}
@@ -172,7 +172,7 @@ public class NewDirectMessageActivity extends Activity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode,
 		Intent data) {
-		if (resultCode == RESULT_OK && requestCode == REQUEST_SEARCH_USER) {
+		if (resultCode == RESULT_OK && requestCode == REQUEST_LOOKUP_USER) {
 			UserAccount user =
 				(UserAccount)data.getSerializableExtra(
 					FollowerListActivity.RETURN_KEY_PICK_USER);

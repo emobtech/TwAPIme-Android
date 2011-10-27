@@ -75,7 +75,7 @@
 		<activity android:name=".activity.FollowerListActivity"
 			android:label="@string/app_name" android:configChanges="orientation|keyboardHidden" />
 		<activity android:name=".activity.AboutActivity"
-			android:label="@string/app_name" android:configChanges="orientation|keyboardHidden" />
+			android:label="@string/about" android:configChanges="orientation|keyboardHidden" />
 		<activity android:name=".activity.EditListActivity"
 			android:label="@string/new_list" android:configChanges="orientation|keyboardHidden" />
 		<activity android:name=".activity.EditUserProfileActivity"

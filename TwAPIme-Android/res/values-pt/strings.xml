@@ -98,7 +98,7 @@
     <string name="retweeted_by">Retuitado por %1$s</string>
     <string name="in_reply_to">Em resposta a %1$s</string>
     <string name="following">Seguindo</string>
-    <string name="add_to_list">Adicionar a Lista</string>
+    <string name="add_to_list">Adicionar à Lista</string>
     <string name="remove">Remover</string>
     <string name="updating_wait">Atualizando. Por favor aguarde...</string>
     <string name="unsubscribing_wait">Cancelando assinatura. Por favor aguarde...</string>
@@ -116,4 +116,5 @@
     <string name="pick_user">Selecione um Usuário</string>
     <string name="confirm_block">Você tem certeza que deseja bloquear este usuário?</string>
     <string name="confirm_unfollow">Você tem certeza que deseja parar de seguir este usuário?</string>
+    <string name="lookup">Pesquisar</string>
 </resources>

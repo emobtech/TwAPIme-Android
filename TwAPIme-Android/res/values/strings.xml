@@ -116,4 +116,5 @@
     <string name="pick_user">Pick a User</string>
     <string name="confirm_block">Are you sure you want to block this user?</string>
     <string name="confirm_unfollow">Are you sure you want to unfollow this user?</string>
+    <string name="lookup">Lookup</string>
 </resources>
