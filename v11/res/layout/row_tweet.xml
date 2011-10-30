@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="wrap_content" style="@style/TwAPImeThemeRowLayout">
+	<ImageView android:src="@drawable/icon" android:id="@+id/tweet_row_img_avatar" android:layout_width="48dp" android:layout_height="48dp" style="@style/TwAPImeThemeAvatar.RowTweet"/>
+	<LinearLayout android:orientation="vertical"
+		android:layout_weight="1"
+		android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingLeft="4dp" android:paddingRight="4dp">
+		<LinearLayout android:layout_height="wrap_content"
+			android:layout_width="fill_parent" android:id="@+id/linearLayout1">
+			<TextView android:layout_weight="1" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="username" android:id="@+id/tweet_row_txtv_username" style="@style/TwAPImeThemeProfileName.RowTweet"></TextView>
+			<TextView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:text="3 hours" android:id="@+id/tweet_row_txtv_time" style="@style/TwAPImeThemeTweetTime.RowTweet"></TextView>
+		</LinearLayout>
+			<TextView android:layout_height="fill_parent"
+				android:text="text text text" android:layout_width="fill_parent" android:id="@+id/tweet_row_txtv_content" style="@style/TwAPImeThemeTweetContent.RowTweet"></TextView>
+			<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tweet_row_txtv_reply" android:text="in reply to" style="@style/TwAPImeThemeTweetReply.RowTweet"></TextView>
+	</LinearLayout>
+</LinearLayout>

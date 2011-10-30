@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/reply" android:id="@+id/menu_item_reply" android:icon="@drawable/reply"></item>
+    <item android:title="@string/retweet" android:id="@+id/menu_item_retweet" android:icon="@drawable/retweet"></item>
+    <item android:title="@string/comment" android:id="@+id/menu_item_comment" android:icon="@drawable/compose"></item>
+    <item android:title="@string/favorite" android:id="@+id/menu_item_favorite" android:icon="@drawable/favorite"></item>
+    <item android:title="@string/unfavorite" android:id="@+id/menu_item_unfavorite" android:icon="@drawable/favorite"></item>
+</menu>

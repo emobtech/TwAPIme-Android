@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:orientation="vertical"
+	android:id="@+id/edit_list" android:layout_height="fill_parent">
+	<ScrollView android:layout_width="fill_parent" android:id="@+id/scrollView1"
+		android:layout_weight="1" android:layout_height="wrap_content">
+		<LinearLayout android:layout_width="fill_parent"
+			android:id="@+id/linearLayout2" android:layout_height="fill_parent"
+			android:orientation="vertical">
+			<TextView android:id="@+id/edit_user_profile_txtv_name" android:text="@string/name" android:layout_width="wrap_content" android:layout_height="wrap_content" style="@style/TwAPImeThemeFieldTitle"></TextView>
+			<EditText android:maxLength="20" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="EditText" android:id="@+id/edit_user_profile_txtf_name"></EditText>
+			<TextView android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:text="@string/bio"
+				android:id="@+id/edit_user_profile_txtv_bio" style="@style/TwAPImeThemeFieldTitle"></TextView>
+			<EditText android:layout_width="fill_parent"
+				android:gravity="top" android:layout_height="wrap_content"
+				android:id="@+id/edit_user_profile_txtf_bio" android:maxLength="160" android:lines="4"></EditText>
+			<TextView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:text="@string/web"
+				android:id="@+id/edit_user_profile_txtv_web" style="@style/TwAPImeThemeFieldTitle"></TextView>
+			<EditText android:layout_height="wrap_content"
+				android:layout_width="fill_parent" android:id="@+id/edit_user_profile_txtf_web" android:inputType="textWebEditText" android:maxLength="100"></EditText>
+			<TextView android:layout_height="wrap_content"
+				android:layout_width="wrap_content" android:text="@string/location"
+				android:id="@+id/edit_user_profile_txtv_location" style="@style/TwAPImeThemeFieldTitle"></TextView>
+			<EditText android:layout_height="wrap_content"
+				android:layout_width="fill_parent" android:id="@+id/edit_user_profile_txtf_location" android:maxLength="30"></EditText>
+		</LinearLayout>
+	</ScrollView>
+	<LinearLayout android:layout_height="wrap_content"
+		android:layout_width="fill_parent" android:id="@+id/linearLayout1"
+		android:gravity="center" style="@style/TwAPImeThemePanelButton">
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="@string/done"
+			android:layout_weight="1" android:id="@+id/edit_user_profile_btn_done"></Button>
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" android:text="@string/cancel" android:layout_weight="1" android:id="@+id/edit_user_profile_btn_cancel"></Button>
+	</LinearLayout>
+</LinearLayout>

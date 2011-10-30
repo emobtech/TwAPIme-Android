@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="wrap_content" style="@style/TwAPImeThemeRowLayout">
+	<ImageView android:src="@drawable/icon" android:id="@+id/user_row_img_avatar" android:layout_height="48dp" android:layout_width="48dp" style="@style/TwAPImeThemeAvatar.RowUser"/>
+	<LinearLayout android:orientation="vertical"
+		android:layout_weight="1"
+		android:gravity="center_vertical" android:layout_height="wrap_content" android:layout_width="fill_parent" android:paddingLeft="4dp" android:paddingRight="4dp">
+		<TextView android:layout_width="fill_parent" android:id="@+id/user_row_txtv_name" style="@style/TwAPImeThemeProfileName.RowUser" android:layout_height="wrap_content" android:gravity="center_vertical" android:text="user name"></TextView>
+			<TextView android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="username" android:id="@+id/user_row_txtv_username" style="@style/TwAPImeThemeProfileUsername.RowUser"></TextView>
+	</LinearLayout>
+</LinearLayout>

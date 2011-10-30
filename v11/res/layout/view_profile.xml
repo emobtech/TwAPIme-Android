@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical" android:id="@+id/view_profile_layout">
+	<LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/linearLayout3" android:orientation="horizontal" style="@style/TwAPImeThemeRowLayout.ViewProfile">
+		<ImageView android:id="@+id/user_profile_imgv_avatar" android:layout_height="48dp" android:layout_width="48dp" style="@style/TwAPImeThemeAvatar.ViewProfile"></ImageView>
+		<LinearLayout android:layout_height="fill_parent" android:id="@+id/linearLayout2" android:orientation="vertical" android:paddingLeft="4dp" android:paddingRight="4dp" android:layout_width="fill_parent">
+			<TextView android:id="@+id/user_profile_txtv_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Name" style="@style/TwAPImeThemeProfileName.ViewProfile"></TextView>
+			<TextView android:id="@+id/user_profile_txtv_username" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="username" style="@style/TwAPImeThemeProfileUsername.ViewProfile"></TextView>
+		</LinearLayout>
+	</LinearLayout>
+	<ScrollView android:id="@+id/scrollView1" android:layout_height="wrap_content" android:layout_width="fill_parent">
+		<LinearLayout android:id="@+id/linearLayout1" android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical">
+			<LinearLayout android:orientation="vertical" android:paddingRight="4dp" android:paddingLeft="4dp" android:id="@+id/linearLayout4" android:layout_height="wrap_content" android:paddingTop="5dp" android:layout_width="fill_parent">
+				<TextView android:id="@+id/textView1" android:text="@string/bio" android:layout_height="wrap_content" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldTitle"></TextView>
+				<TextView android:id="@+id/user_profile_txtv_bio" android:text="TextView" android:layout_height="fill_parent" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldValue"></TextView>
+			</LinearLayout>
+			<LinearLayout android:orientation="vertical" android:paddingRight="4dp" android:paddingLeft="4dp" android:id="@+id/linearLayout4" android:layout_height="wrap_content" android:paddingTop="5dp" android:layout_width="fill_parent">
+				<TextView android:id="@+id/textView1" android:text="@string/web" android:layout_height="wrap_content" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldTitle"></TextView>
+				<TextView android:id="@+id/user_profile_txtv_web" android:text="TextView" android:layout_height="fill_parent" android:layout_width="fill_parent" android:autoLink="web" style="@style/TwAPImeThemeProfileInfoFieldValue"></TextView>
+			</LinearLayout>
+			<LinearLayout android:orientation="vertical" android:paddingRight="4dp" android:paddingLeft="4dp" android:id="@+id/LinearLayout01" android:layout_height="wrap_content" android:paddingTop="5dp" android:layout_width="fill_parent">
+				<TextView android:id="@+id/TextView02" android:text="@string/location" android:layout_height="wrap_content" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldTitle"></TextView>
+				<TextView android:id="@+id/user_profile_txtv_location" android:text="TextView" android:layout_height="wrap_content" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldValue"></TextView>
+			</LinearLayout>
+			<LinearLayout android:orientation="vertical" android:paddingRight="4dp" android:paddingLeft="4dp" android:id="@+id/linearLayout4" android:layout_height="wrap_content" android:paddingTop="5dp" android:layout_width="fill_parent">
+				<TextView android:id="@+id/textView1" android:text="@string/tweets" android:layout_height="wrap_content" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldTitle"></TextView>
+				<TextView android:id="@+id/user_profile_txtv_tweets" android:text="TextView" android:layout_height="wrap_content" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldValue"></TextView>
+			</LinearLayout>
+			<LinearLayout android:orientation="vertical" android:paddingRight="4dp" android:paddingLeft="4dp" android:id="@+id/linearLayout4" android:layout_height="wrap_content" android:paddingTop="5dp" android:layout_width="fill_parent">
+				<TextView android:id="@+id/textView1" android:text="@string/friends" android:layout_height="wrap_content" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldTitle"></TextView>
+				<TextView android:id="@+id/user_profile_txtv_friends" android:text="TextView" android:layout_height="wrap_content" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldValue"></TextView>
+			</LinearLayout>
+			<LinearLayout android:orientation="vertical" android:paddingRight="4dp" android:paddingLeft="4dp" android:id="@+id/linearLayout4" android:layout_height="wrap_content" android:paddingTop="5dp" android:layout_width="fill_parent">
+				<TextView android:id="@+id/textView1" android:text="@string/followers" android:layout_height="wrap_content" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldTitle"></TextView>
+				<TextView android:id="@+id/user_profile_txtv_followers" android:text="TextView" android:layout_height="wrap_content" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldValue"></TextView>
+			</LinearLayout>
+			<LinearLayout android:orientation="vertical" android:paddingRight="4dp" android:paddingLeft="4dp" android:id="@+id/linearLayout4" android:layout_height="wrap_content" android:paddingTop="5dp" android:layout_width="fill_parent">
+				<TextView android:id="@+id/textView1" android:text="@string/member_since" android:layout_height="wrap_content" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldTitle"></TextView>
+				<TextView android:id="@+id/user_profile_txtv_member_since" android:text="TextView" android:layout_height="wrap_content" android:layout_width="fill_parent" style="@style/TwAPImeThemeProfileInfoFieldValue"></TextView>
+			</LinearLayout>
+		</LinearLayout>
+	</ScrollView>
+</LinearLayout>
