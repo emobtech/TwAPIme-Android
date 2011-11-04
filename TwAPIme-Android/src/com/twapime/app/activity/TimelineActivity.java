@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -412,5 +413,17 @@ public class TimelineActivity extends ListActivity implements
 	    default:
 	        return super.onContextItemSelected(item);
 	    }
+	}
+	
+	/**
+	 * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (getParent() != null) {
+			return getParent().onKeyDown(keyCode, event);
+		} else {
+			return super.onKeyDown(keyCode, event);
+		}
 	}
 }

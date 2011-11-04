@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TabHost;
@@ -236,5 +237,30 @@ public class HomeActivity extends TabActivity {
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }
+	}
+	
+	/**
+	 * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+	    	onBackPressed();
+	    	//
+	    	return true;
+	    } else {
+	    	return super.onKeyDown(keyCode, event);	
+	    }
+	}
+	
+	/**
+	 * 
+	 */
+	public void onBackPressed() {
+		Intent i = new Intent(); 
+		i.setAction(Intent.ACTION_MAIN);
+		i.addCategory(Intent.CATEGORY_HOME);
+		//
+		startActivity(i); //Simulate Home button.
 	}
 }
