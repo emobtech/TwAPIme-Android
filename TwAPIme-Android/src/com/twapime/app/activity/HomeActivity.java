@@ -45,10 +45,21 @@ public class HomeActivity extends TabActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//
-		setContentView(R.layout.home);
-		//
 		TwAPImeApplication app = (TwAPImeApplication)getApplication();
+		//
+		if (app.getUserAccountManager() == null) {
+			//checking point to make sure user account manager is created.
+			//sometimes when the app is destroyed by the system, this object
+			//is set to null, because its state is not saved by designed.
+			startActivity(new Intent(this, TwAPImeActivity.class));
+			finish();
+			//
+			return;
+		}
+		//
 		final String username = app.getAccessToken().getUsername();
+		//
+		setContentView(R.layout.home);
 		//
 		setTitle(username);
 		//
