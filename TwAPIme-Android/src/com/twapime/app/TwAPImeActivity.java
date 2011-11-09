@@ -20,7 +20,6 @@ import com.twapime.app.activity.OAuthActivity;
 import com.twapime.app.service.VerifyCredentialAsyncServiceCall;
 import com.twitterapime.rest.Credential;
 import com.twitterapime.rest.UserAccountManager;
-import com.twitterapime.xauth.Token;
 
 /**
  * @author ernandes@gmail.com
@@ -71,17 +70,11 @@ public class TwAPImeActivity extends Activity {
     protected void verifyExistentAccount() {
     	TwAPImeApplication app = (TwAPImeApplication)getApplication();
     	//
-    	Token token = app.getAccessToken();
+    	Credential credential = app.getCredential();
 		//
-        if (token == null) {
+        if (credential == null) {
         	viewMain();
         } else {
-        	Credential credential =
-        		new Credential(
-        			app.getOAuthConsumerKey(), 
-        			app.getOAuthConsumerSecret(),
-        			token);
-        	//
         	new VerifyCredentialAsyncServiceCall(this) {
         		@Override
         		protected void onPostRun(UserAccountManager result) {

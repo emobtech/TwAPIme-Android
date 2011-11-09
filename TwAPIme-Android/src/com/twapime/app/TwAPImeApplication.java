@@ -19,8 +19,10 @@ import android.content.res.Resources;
 import android.util.Log;
 
 import com.twitterapime.model.MetadataSet;
+import com.twitterapime.rest.Credential;
 import com.twitterapime.rest.FriendshipManager;
 import com.twitterapime.rest.ListManager;
+import com.twitterapime.rest.Timeline;
 import com.twitterapime.rest.TweetER;
 import com.twitterapime.rest.UserAccount;
 import com.twitterapime.rest.UserAccountManager;
@@ -166,6 +168,20 @@ public class TwAPImeApplication extends Application {
 	}
 	
 	/**
+	 * @return
+	 */
+	public Credential getCredential() {
+		Token token = getAccessToken();
+		//
+		if (token != null) {
+			return new Credential(
+				getOAuthConsumerKey(), getOAuthConsumerSecret(), token);
+		} else {
+			return null;
+		}
+	}
+	
+	/**
 	 * @param token
 	 */
 	public void saveAccessToken(Token token) {
@@ -201,6 +217,20 @@ public class TwAPImeApplication extends Application {
 	 * @return
 	 */
 	public UserAccountManager getUserAccountManager() {
+		if (userAccountManager == null) {
+			Credential c = getCredential();
+			//
+			if (c != null) {
+				userAccountManager = UserAccountManager.getInstance(c);
+				//
+				try {
+					userAccountManager.verifyCredential();
+				} catch (Exception e) {
+					userAccountManager = null;
+				}
+			}
+		}
+		//
 		return userAccountManager;
 	}
 
@@ -208,20 +238,27 @@ public class TwAPImeApplication extends Application {
 	 * @return
 	 */
 	public ListManager getListManager() {
-		return ListManager.getInstance(userAccountManager);
+		return ListManager.getInstance(getUserAccountManager());
+	}
+	
+	/**
+	 * @return
+	 */
+	public Timeline getTimeline() {
+		return Timeline.getInstance(getUserAccountManager());
 	}
 
 	/**
 	 * @return
 	 */
 	public TweetER getTweetER() {
-		return TweetER.getInstance(userAccountManager);
+		return TweetER.getInstance(getUserAccountManager());
 	}
 
 	/**
 	 * @return
 	 */
 	public FriendshipManager getFriendshipManager() {
-		return FriendshipManager.getInstance(userAccountManager);
+		return FriendshipManager.getInstance(getUserAccountManager());
 	}
 }

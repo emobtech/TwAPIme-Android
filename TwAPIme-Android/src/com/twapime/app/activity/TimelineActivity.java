@@ -128,9 +128,7 @@ public class TimelineActivity extends ListActivity implements
 			}
 		};
 		//
-		TwAPImeApplication app = (TwAPImeApplication)getApplication();
-		//
-		timeline = Timeline.getInstance(app.getUserAccountManager());
+		timeline = ((TwAPImeApplication)getApplication()).getTimeline();
 		//
 //		String lastTweetId = loadSavedLastTweetId();
 //		if (lastTweetId != null) {
