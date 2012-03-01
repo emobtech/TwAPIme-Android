@@ -13,7 +13,7 @@
 		<item name="android:background">@color/blue</item>
 	</style>
 	
-	<style name="TwAPImeThemeWindowTitle" parent="@android:style/WindowTitle">
+	<style name="TwAPImeThemeWindowTitle" parent="@android:style/TextAppearance.WindowTitle">
         <item name="android:textAppearance">@style/TwAPImeThemeWindowWindowTitleTitleTextAppearance</item>
         <item name="android:shadowRadius">0</item>
         <item name="android:paddingLeft">4dp</item>
